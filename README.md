@@ -1,18 +1,9 @@
-# 심심해서 만든 Front & Backend(12월 18일 ~ 1월 18일까지)
+# 항해 플러스 9조 스켈레톤
 
-# 가제 : 찬반 논쟁 채팅방
+# 동물병원 예약 시스템 (vetty)
 
 # TODO
 
-  1. [ ] 소셜 로그인 passport -> 어드민 계정을 나눠야함 (채팅 및 게시물 삭제 권한)
-  2. [ ] PWA 설정 -> 데탑은 너무 큼
-  3. [ ] ERD 작성 및 게시판 만들기 -> 구성을 조금 생각해봐야함 
-  4. [ ] 채팅 socketio -> sendbird를 참조 ... 하지만 간단한 채팅
-  5. [ ] NESTJS test 코드 작성 
-  6. [ ] docker hub CI/CD
-  7. [ ] kubernetes deploy
-  8. [ ] auto scaling test  - https://youtu.be/QWweMlerTZY, https://omnious.ai/ko-kr/resources/keda-sqs-k8s-autoscaling/
-  9. [ ] artillery 트래픽 테스트
 
 ## 완료된 항목
   1. 기본 react, nestjs 셋팅 완료
@@ -70,6 +61,3 @@
 ## CICD
   1. git action
 
-## 배포
-  1. 어디다 할까.... AWS?
-  2. Nas?
