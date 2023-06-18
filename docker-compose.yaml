@@ -1,0 +1,76 @@
+# docker-compose.yaml
+version: "3.1"
+
+services:
+  mariadb:
+    container_name: mysql
+    image: mariadb:10
+    restart: always
+    env_file: ./.env
+    expose:
+      - "3306"
+    ports:
+      - $DB_PORT:$DB_PORT
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
+      - MYSQL_DATABASE=$DB_DATABASE
+      - "TZ=Asia/Seoul"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+  front:
+    depends_on:
+      - backend
+    build: ./chat_react
+    # dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $REACT_APP_LOCAL_PORT:$REACT_APP_DOCKER_PORT
+    volumes:
+      - ./chat_react:/app
+
+  backend:
+    depends_on:
+      - redis
+      - mariadb
+    build: ./chat_nest
+    restart: unless-stopped
+    env_file: ./.env
+    expose:
+      - $REACT_APP_NEST_LOCAL_PORT
+    ports:
+      - $REACT_APP_NEST_LOCAL_PORT:$REACT_APP_NEST_DOCKER_PORT
+    environment:
+      - DB_HOST=mariadb
+      - DB_USER=$DB_USERNAME
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_NAME=$DB_DATABASE
+      - DB_PORT=$DB_PORT
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./chat_nest:/app
+
+  redis:
+    image: redis:alpine
+    command: redis-server --port 6379
+    container_name: redis
+    env_file: ./.env
+    restart: unless-stopped
+    hostname: redis_boot
+    expose:
+      - $REACT_APP_REDIS_LOCAL_PORT
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    ports:
+      - $REACT_APP_REDIS_LOCAL_PORT:$REDIS_DOCKER_PORT
+
+volumes:
+  db:
+  
+
