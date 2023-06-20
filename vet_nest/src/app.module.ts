@@ -16,6 +16,7 @@ import { PhotoService } from './photo/photo.service';
 import { PhotoModule } from './photo/photo.module';
 import { photoProviders } from './photo/photo.provider';
 import { UsersController } from './users/users.controller';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -25,6 +26,11 @@ import { UsersController } from './users/users.controller';
       load: [config],
     }),
     MessageModule,
+    PrometheusModule.register({
+      pushgateway: {
+        url: 'http://127.0.0.1:9091',
+      },
+    }),
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
