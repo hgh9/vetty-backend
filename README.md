@@ -19,8 +19,8 @@
 2. git 클론해서 다운받는다
 
   ```bash
-  $ git clone https://github.com/diasm3/chatting_socket_io.git
-  $ cd chatting_socket_io
+  $ git clone git@github.com:hgh9/vetty-backend.git 
+  $ cd vetty-backend 
   ```
 
 3. docker compose 한다 (version 2.2.3)
@@ -30,8 +30,8 @@
   ```
 
 4. Docker환경에서 개발
-  - 레포에서 클론을 했다면 chat_nest, chat_react 폴더가 있을 것이다.
-  - docker compose 한 폴더에서 chat_nest와 chat_react가 도커로 마운팅 되어 있다.
+  - 레포에서 클론을 했다면 vet_nest, vet_react 폴더가 있을 것이다.
+  - docker compose 한 폴더에서 vet_nest와 vet_react가 도커로 마운팅 되어 있다.
   - vscode에서 docker extension을 이용해서 log를 확인하면서 코딩을 진행하면 된다.
 
 
@@ -49,6 +49,7 @@
   3. mariadb
   4. redis
   5. socketio
+  6. promethous
 
 
 ## docker compose
@@ -56,6 +57,7 @@
   2. nestjs
   3. redis
   4. mariadb
+  5. grafana
 
 
 ## CICD

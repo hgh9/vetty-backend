@@ -20,24 +20,28 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - backend
 
   front:
     depends_on:
       - backend
-    build: ./chat_react
+    build: ./vet_react
     # dockerfile: Dockerfile
     restart: unless-stopped
     env_file: ./.env
     ports:
       - $REACT_APP_LOCAL_PORT:$REACT_APP_DOCKER_PORT
     volumes:
-      - ./chat_react:/app
+      - ./vet_react:/app
+    networks:
+      - backend
 
   backend:
     depends_on:
       - redis
       - mariadb
-    build: ./chat_nest
+    build: ./vet_nest
     restart: unless-stopped
     env_file: ./.env
     expose:
@@ -53,7 +57,9 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./chat_nest:/app
+      - ./vet_nest:/app
+    networks:
+      - backend
 
   redis:
     image: redis:alpine
@@ -69,8 +75,22 @@ services:
       - "mode=standalone"
     ports:
       - $REACT_APP_REDIS_LOCAL_PORT:$REDIS_DOCKER_PORT
+    networks:
+      - backend
 
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3003:3000"
+    environment:
+      GF_RENDERING_SERVER_URL: http://renderer:8081/render
+      GF_RENDERING_CALLBACK_URL: http://grafana:3000/
+      GF_LOG_FILTERS: rendering:debug
+    networks:
+      - backend
 volumes:
   db:
-  
 
+networks:
+  backend:
+    driver: bridge
