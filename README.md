@@ -19,8 +19,8 @@
 2. git 클론해서 다운받는다
 
   ```bash
-  $ git clone https://github.com/diasm3/chatting_socket_io.git
-  $ cd chatting_socket_io
+  $ git clone git@github.com:hgh9/vetty-backend.git 
+  $ cd vetty-backend 
   ```
 
 3. docker compose 한다 (version 2.2.3)
