@@ -17,6 +17,7 @@ import { PhotoModule } from './photo/photo.module';
 import { photoProviders } from './photo/photo.provider';
 import { UsersController } from './users/users.controller';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { ReservationsModule } from './reservations/reservations.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
     DatabaseModule,
     PhotoModule,
     UsersModule,
+    ReservationsModule,
   ],
   controllers: [AppController, UsersController],
   providers: [...photoProviders, AppService, UsersService, PhotoService],
