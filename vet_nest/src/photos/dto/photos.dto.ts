@@ -1,17 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
 export class Photo {
-  // @ApiProperty({
-  //   required: false,
-  //   type: 'number',
-  //   name: 'id',
-  //   description: 'id',
-  // })
-  // @IsOptional()
-  @PrimaryGeneratedColumn()
+  @ApiProperty({
+    required: false,
+    type: 'number',
+    name: 'id',
+    description: 'id',
+  })
+  @IsOptional()
   id: number;
 
   @ApiProperty({
@@ -22,7 +19,6 @@ export class Photo {
     description: '사용자 이름',
   })
   @IsOptional()
-  @Column({ length: 500 })
   name: string;
 
   @ApiProperty({
@@ -33,7 +29,6 @@ export class Photo {
     description: '설명',
   })
   @IsOptional()
-  @Column('text')
   description: string;
 
   @ApiProperty({
@@ -44,7 +39,6 @@ export class Photo {
     description: '파일이름',
   })
   @IsOptional()
-  @Column()
   filename: string;
 
   @ApiProperty({
@@ -55,7 +49,6 @@ export class Photo {
     description: '조회수',
   })
   @IsOptional()
-  @Column('int')
   views: number;
 
   @ApiProperty({
@@ -66,6 +59,5 @@ export class Photo {
     description: '배포가 되었나요?',
   })
   @IsOptional()
-  @Column()
   isPublished: boolean;
 }
