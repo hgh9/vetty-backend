@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ReservationCancelationService } from '@/reservations/reservation-cancelation.service';
+import { ReservationCancelationService } from '../reservations/reservation-cancelation.service';
 
 @Controller('reservation-cancelation')
 export class ReservationCancelationController {

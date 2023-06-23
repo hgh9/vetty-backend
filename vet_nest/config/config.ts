@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm';
 import { Photo } from '../src/photos/entity/photos.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Logger } from '@nestjs/common';
+import { Reservation } from '@/reservations/entity/reservation.entity';
 
 export default () => ({
   DB: {
@@ -49,7 +50,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
   autoLoadEntities: true,
   logging: true,
   // entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
-  // entities: [Photo],
+  // entities: [Photo, Reservation,],
 };
 
 // export const databaseProviders = [

@@ -14,7 +14,7 @@ import {
 import { PhotoModule } from './photos/photos.module';
 import { UsersController } from './users/users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ReservationCancelationController } from './reservations/reservation-cancelation.controller';
+import { ReservationsModule } from './reservations/reservations.module';
 
 @Module({
   imports: [
@@ -47,8 +47,9 @@ import { ReservationCancelationController } from './reservations/reservation-can
     // DatabaseModule,
     PhotoModule,
     UsersModule,
+    ReservationsModule
   ],
-  controllers: [AppController, UsersController, ReservationCancelationController],
+  controllers: [AppController, UsersController],
   providers: [AppService, UsersService],
 })
 export class AppModule {}
