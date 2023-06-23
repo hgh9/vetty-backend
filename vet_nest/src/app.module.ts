@@ -11,13 +11,12 @@ import {
   WinstonModule,
   utilities as nestWinstonModuleUtilities,
 } from 'nest-winston';
-import { DatabaseModule } from './database/database.module';
-import { PhotoService } from './photo/photo.service';
-import { PhotoModule } from './photo/photo.module';
-import { photoProviders } from './photo/photo.provider';
+import { PhotoService } from './photos/photos.service';
+import { PhotoModule } from './photos/photos.module';
 import { UsersController } from './users/users.controller';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import { ReservationsModule } from './reservations/reservations.module';
+// import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -27,11 +26,11 @@ import { ReservationsModule } from './reservations/reservations.module';
       load: [config],
     }),
     MessageModule,
-    PrometheusModule.register({
-      pushgateway: {
-        url: 'http://127.0.0.1:9091',
-      },
-    }),
+    // PrometheusModule.register({
+    //   pushgateway: {
+    //     url: 'http://127.0.0.1:9091',
+    //   },
+    // }),
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
@@ -46,12 +45,12 @@ import { ReservationsModule } from './reservations/reservations.module';
         }),
       ],
     }),
-    DatabaseModule,
+    TypeOrmModule.forRoot(config().databaseConfig),
+    // DatabaseModule,
     PhotoModule,
     UsersModule,
-    ReservationsModule,
   ],
   controllers: [AppController, UsersController],
-  providers: [...photoProviders, AppService, UsersService, PhotoService],
+  providers: [AppService, UsersService],
 })
 export class AppModule {}

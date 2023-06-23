@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Photo } from './entity/photo.entity';
+import { Photo } from './entity/photos.entity';
 
 export const photoProviders = [
   {
