@@ -2,13 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 
 export class ReservastionsDto {
-  // @ApiProperty({
-  //   required: false,
-  //   type: 'number',
-  //   name: 'id',
-  //   description: 'id',
-  // })
-  // @IsOptional()
   id: number;
 
   @ApiProperty({

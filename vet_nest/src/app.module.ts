@@ -11,12 +11,10 @@ import {
   WinstonModule,
   utilities as nestWinstonModuleUtilities,
 } from 'nest-winston';
-import { PhotoService } from './photos/photos.service';
 import { PhotoModule } from './photos/photos.module';
 import { UsersController } from './users/users.controller';
-// import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { ReservationCancelationController } from './reservations/reservation-cancelation.controller';
 
 @Module({
   imports: [
@@ -50,7 +48,7 @@ import { DataSource } from 'typeorm';
     PhotoModule,
     UsersModule,
   ],
-  controllers: [AppController, UsersController],
+  controllers: [AppController, UsersController, ReservationCancelationController],
   providers: [AppService, UsersService],
 })
 export class AppModule {}

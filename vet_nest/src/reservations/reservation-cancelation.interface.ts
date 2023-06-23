@@ -1,3 +1,3 @@
-export interface IReservationsCancelation  {
-    cancelReservation(reservationId: number): boolean;
+export interface IReservationsCancelation {
+  cancelReservation(reservationId: number): Promise<boolean>;
 }
