@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Reservation } from '../reservations/entity/reservation.entity';
-import { ReservationService } from './reservation.service';
+import { ReservationService } from './reservations.service';
 import { IReservationsCancelation } from './reservation-cancelation.interface';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,7 +15,8 @@ export class ReservationCancelationService implements IReservationsCancelation {
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
     @Inject(ReservationService)
-    private reservationService: ReservationService) {}
+    private reservationService: ReservationService,
+  ) {}
 
   async cancelReservation(reservationId: number): Promise<boolean> {
     //1. 예약정보를 조회한다.
@@ -40,11 +41,10 @@ export class ReservationCancelationService implements IReservationsCancelation {
   }
 
   public async getTargetReservation(id: number): Promise<Reservation> {
-    
     const reservations = await this.reservationRepository.find({
-        relations: ['payments'], 
-        where: { id: id }
-      });
+      relations: ['payments'],
+      where: { id: id },
+    });
 
     if (reservations.length == 0) {
       throw Error('예약 정보를 찾을 수 없습니다.');
@@ -52,10 +52,12 @@ export class ReservationCancelationService implements IReservationsCancelation {
     return reservations[0];
   }
 
-  public async getCompletedPaymentsByReservationId(id: number): Promise<Payment[]> {
+  public async getCompletedPaymentsByReservationId(
+    id: number,
+  ): Promise<Payment[]> {
     return await this.paymentRepository.findBy({
-      reservationId: id, 
-      status: 'C'
+      reservationId: id,
+      status: 'C',
     });
   }
 }

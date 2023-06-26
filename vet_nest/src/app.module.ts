@@ -5,7 +5,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
-import config from '@configs';
 import * as winston from 'winston';
 import {
   WinstonModule,
@@ -15,6 +14,7 @@ import { PhotoModule } from './photos/photos.module';
 import { UsersController } from './users/users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReservationsModule } from './reservations/reservations.module';
+import config from '../config/config';
 
 @Module({
   imports: [
@@ -47,7 +47,7 @@ import { ReservationsModule } from './reservations/reservations.module';
     // DatabaseModule,
     PhotoModule,
     UsersModule,
-    ReservationsModule
+    ReservationsModule,
   ],
   controllers: [AppController, UsersController],
   providers: [AppService, UsersService],
