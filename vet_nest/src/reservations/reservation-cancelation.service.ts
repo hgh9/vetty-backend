@@ -55,9 +55,11 @@ export class ReservationCancelationService implements IReservationsCancelation {
   public async getCompletedPaymentsByReservationId(
     id: number,
   ): Promise<Payment[]> {
-    return await this.paymentRepository.findBy({
-      reservationId: id,
-      status: 'C',
+    return await this.paymentRepository.find({
+      where: {
+        reservationId: id,
+        status: 'C',
+      }
     });
   }
 }
