@@ -20,7 +20,7 @@ export class Payment {
 
   @Column()
   createdAt: Date;
-  
+
   @Column()
   canceledAt?: Date | null;
 

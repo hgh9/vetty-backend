@@ -1,0 +1,18 @@
+branch-defaults:
+  default:
+    environment: Testststst-env
+    group_suffix: null
+global:
+  application_name: testststst
+  branch: null
+  default_ec2_keyname: privateKeyPari
+  default_platform: Docker running on 64bit Amazon Linux 2
+  default_region: ap-northeast-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  repository: null
+  sc: null
+  workspace_type: Application

@@ -36,6 +36,7 @@ export default () => ({
 
   // databaseProviders: databaseProviders,
   databaseConfig,
+  testDbConfig,
 });
 
 export const databaseConfig: TypeOrmModuleOptions = {
@@ -53,27 +54,42 @@ export const databaseConfig: TypeOrmModuleOptions = {
   // entities: [Photo, Reservation,],
 };
 
-// export const databaseProviders = [
-//   {
-//     provide: 'DATA_SOURCE',
-//     useFactory: async () => {
-//       const dataSource = new DataSource({
-//         type: process.env.DB_TYPE === 'mariadb' ? 'mariadb' : 'mysql',
-//         host:
-//           process.env.REACT_APP_ENV === 'local'
-//             ? 'localhost'
-//             : process.env.DB_HOST,
-//         port: parseInt(process.env.DB_PORT),
-//         username: process.env.DB_USERNAME,
-//         password: process.env.DB_PASSWORD,
-//         database: process.env.DB_DATABASE,
-//         synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-//         // entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
-//         entities: [Photo],
-//         // migrationsTableName: "",
-//       });
+export const testDbConfig: TypeOrmModuleOptions = {
+  type: process.env.DB_TYPE === 'mariadb' ? 'mariadb' : 'mysql',
+  host:
+    process.env.REACT_APP_ENV === 'local' ? 'localhost' : process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT),
+  username: 'root',
+  password: 'root',
+  database: 'test',
+  synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
+  autoLoadEntities: true,
+  logging: true,
+  // entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+  // entities: [Photo, Reservation,],
+};
 
-//       return dataSource.initialize();
-//     },
-//   },
-// ];
+export const databaseProviders = [
+  {
+    provide: 'DATA_SOURCE',
+    useFactory: async () => {
+      const dataSource = new DataSource({
+        type: process.env.DB_TYPE === 'mariadb' ? 'mariadb' : 'mysql',
+        host:
+          process.env.REACT_APP_ENV === 'local'
+            ? 'localhost'
+            : process.env.DB_HOST,
+        port: parseInt(process.env.DB_PORT),
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE,
+        synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
+        // entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+        entities: [Photo],
+        // migrationsTableName: "",
+      });
+
+      return dataSource.initialize();
+    },
+  },
+];
