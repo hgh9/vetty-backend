@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReservationCancelationController } from '../reservation-cancelation.controller';
 import { TypeOrmModule, getDataSourceName, getDataSourcePrefix, getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
-import { ForbiddenException, INestApplication, InternalServerErrorException } from '@nestjs/common';
+import { ForbiddenException, HttpStatus, INestApplication, InternalServerErrorException } from '@nestjs/common';
 import { DatabaseModule } from '../../database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import * as request from 'supertest';
@@ -14,29 +14,16 @@ import { Reservation } from '../entity/reservation.entity';
 import { ReservationsController } from '../reservations.controller';
 
 
-describe('ReservationCancelationController', async () => {
-
+describe('ReservationCancelationController', () => {
+  let app: INestApplication;
   let controller: ReservationCancelationController;
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        DatabaseModule,
-        ReservationsModule
-      ],
-      controllers: [
-        ReservationCancelationController
-      ],
-      providers: [
-        ReservationCancelationService,
-        ReservationService, 
-        {
-          provide: getRepositoryToken(Reservation),
-          useClass: Repository<Reservation>
-        }
-      ]
-    }).compile();
 
-    controller = await module.get<ReservationCancelationController>(ReservationCancelationController);
+  beforeAll(async () => {
+    const module: TestingModule = await Test.createTestingModule({}).compile();
+
+    app = module.createNestApplication();
+    await app.init();
+
   });
 
   it('should be defined', () => {
@@ -46,43 +33,44 @@ describe('ReservationCancelationController', async () => {
   describe('예약취소', () => {
 
     it('예약 취소를 요청하고 결과를 반환한다.', async () => {
-      //Arrange 
-      const reservationId = 1;
-
-      //Act   
-      var result = await controller.cancelReservation(reservationId);
-      
-      console.log(`result: ${JSON.stringify(result)}`);
-      //Assert 
-      expect(result).toEqual({
-        result: true, 
-        message: '예약이 취소되었습니다.'
-      });
+      //Arrange
+      const reservationId = -2;
+ 
+      //Act 
+      request('http://localhost:3001')
+        .get(`/reservation-cancelation?id=${reservationId}`)
+        .then((res: request.Response) => {
+          
+          //Assert 
+          expect(res.statusCode).toEqual(HttpStatus.OK);
+          expect(res.body.result).toBeTruthy();
+          expect(res.body.message).toEqual('예약이 취소되었습니다.');
+        });
     });
 
     it('예약id에 해당하는 예약정보를 찾을 수 없는 경우 실패(400)에러를 반환한다. - cancelReservation', async () => {
-      
       //Arrange
-      const reservationId = -1;
-    
+      const reservationId = -2;
+
+      //Act 
+      request('http://localhost:3001')
+        .get(`/reservation-cancelation?id=${reservationId}`)
+        .then((res: request.Response) => {
+          //Assert 
+          expect(res.statusCode).toEqual(HttpStatus.NOT_FOUND)
+        });
+    });
+
+    it('예약 시간이 한 시간 이내로 남은 경우 실패(403) 에러를 반환한다. - cancelReservation', async () => {
+      //Arrange 
+      const reservationId = 1;
+
       //Act 
       const resultTask = controller.cancelReservation(reservationId);
-    
-      //   //Assert 
+
+      //Assert 
       await expect(resultTask)
         .toThrowError(new ForbiddenException('예약 취소는 한 시간 이상 남아 있을 경우에만 취소가 가능합니다.'));
     });
-
-    // it('예약 시간이 한 시간 이내로 남은 경우 실패(403) 에러를 반환한다. - cancelReservation', async () => {
-    //   //Arrange 
-    //   const reservationId = 1;
-
-    //   //Act 
-    //   const resultTask = controller.cancelReservation(reservationId);
-
-    //   //Assert 
-    //   await expect(resultTask)
-    //     .toThrowError(new ForbiddenException('예약 취소는 한 시간 이상 남아 있을 경우에만 취소가 가능합니다.'));
-    // });
   });
 });

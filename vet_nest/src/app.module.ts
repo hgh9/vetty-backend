@@ -39,7 +39,7 @@ import { DatabaseModule } from './database/database.module';
         }),
       ],
     }),
-    TypeOrmModule,
+    // TypeOrmModule,
     DatabaseModule,
     ReservationsModule,
   ],
