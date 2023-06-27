@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
+import { ReservationCancelationController } from './reservation-cancelation.controller';
+import { DatabaseModule } from '../database/database.module';
+import { ConfigModule } from '@nestjs/config';
+import config from '../../config/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Reservation } from './entity/reservation.entity';
-import { ReservationService } from './reservations.service';
-import { ReservationsController } from './reservations.controller';
-import { ReservationCancelationService } from './reservation-cancelation.service';
-import { ReservationCancelationController } from './reservation-cancelation.controller';
 import { Payment } from './entity/payment.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Reservation, Payment])],
-  providers: [ReservationService, ReservationCancelationService],
-  controllers: [ReservationsController, ReservationCancelationController],
-  exports: [ReservationService, ReservationCancelationService],
+  imports: [
+    DatabaseModule
+  ],
+  controllers: [ReservationCancelationController]
 })
 export class ReservationsModule {}

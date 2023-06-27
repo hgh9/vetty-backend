@@ -15,6 +15,7 @@ import { UsersController } from './users/users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReservationsModule } from './reservations/reservations.module';
 import config from '../config/config';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -24,11 +25,6 @@ import config from '../config/config';
       load: [config],
     }),
     MessageModule,
-    // PrometheusModule.register({
-    //   pushgateway: {
-    //     url: 'http://127.0.0.1:9091',
-    //   },
-    // }),
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
@@ -43,13 +39,11 @@ import config from '../config/config';
         }),
       ],
     }),
-    TypeOrmModule.forRoot(config().databaseConfig),
-    // DatabaseModule,
-    PhotoModule,
-    UsersModule,
+    TypeOrmModule,
+    DatabaseModule,
     ReservationsModule,
   ],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
