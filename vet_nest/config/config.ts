@@ -1,8 +1,9 @@
 import { DataSource } from 'typeorm';
 import { Photo } from '../src/photos/entity/photos.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { Reservation } from './../src/reservations/entity/reservation.entity';
+import { Reservation, ReservationStatus } from './../src/reservations/entity/reservation.entity';
 import { Payment } from './../src/reservations/entity/payment.entity';
+import * as moment from 'moment';
 
 export default () => ({
   DB: {
@@ -22,7 +23,6 @@ export default () => ({
         ? 'localhost'
         : process.env.REACT_APP_NEST_HOSTNAME,
   },
-
   REACT: {
     PORT: process.env.REACT_LOCAL_PORT,
   },
@@ -110,35 +110,35 @@ export const databaseProviders = [
           var reservationRepository = db.getRepository(Reservation);
           var paymentRepository = db.getRepository(Payment);
 
-          reservationRepository.save(<Reservation>{
+          const insertSuccessfulReservation = <Reservation>{
             id: 1,
             vetName: '바른병원',
-            vetPopo: 'popo', 
+            vetPopo: 'popo',
             isPublished: true,
-            status: 'C', 
+            status: ReservationStatus.COMPLETED,
             views: 100,
             vetHahah: 'haha',
+            reservedAt: moment().add(1, 'hours').toDate(),
             payments: [{
-              id: 1, 
-              amount: 1000, 
+              id: 1,
+              amount: 1000,
               appId: 'APP-1',
               createdAt: new Date(),
               method: 'CARD',
-              reservationId: 1,
               status: 'C'
             }]
-          });
+          };
+          const insertCancelableTimeOverReservation = Object.assign({}, insertSuccessfulReservation);
+          insertCancelableTimeOverReservation.reservedAt = moment().add(30, 'minutes').toDate();
+          insertCancelableTimeOverReservation.id = 2;
 
-          reservationRepository.save(<Reservation>{
-            id: 2,
-            vetName: '바른병원',
-            vetPopo: 'popo', 
-            isPublished: true,
-            status: 'R', 
-            views: 100,
-            vetHahah: 'haha'
-          });
-
+          const insertCanceledReservation = Object.assign({}, insertSuccessfulReservation);
+          insertCanceledReservation.id = 3;
+          insertCanceledReservation.status = ReservationStatus.CANCELED;
+          
+          reservationRepository.save(insertSuccessfulReservation);
+          reservationRepository.save(insertCancelableTimeOverReservation);
+          reservationRepository.save(insertCanceledReservation);
         }));
     }
   },

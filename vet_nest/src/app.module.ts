@@ -16,6 +16,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReservationsModule } from './reservations/reservations.module';
 import config from '../config/config';
 import { DatabaseModule } from './database/database.module';
+import { APP_FILTER } from '@nestjs/core';
+import { CustomAppExceptionFilter } from './filters/custom-app-exception.filter';
 
 @Module({
   imports: [
@@ -39,11 +41,16 @@ import { DatabaseModule } from './database/database.module';
         }),
       ],
     }),
-    // TypeOrmModule,
     DatabaseModule,
     ReservationsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: CustomAppExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

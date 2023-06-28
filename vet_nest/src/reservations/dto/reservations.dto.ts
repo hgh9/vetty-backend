@@ -1,6 +1,7 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 import { Payment } from '../entity/payment.entity';
+import { ReservationStatus } from '../entity/reservation.entity';
 
 export class ReservastionsDto {
   id: number;
@@ -37,13 +38,12 @@ export class ReservastionsDto {
 
   @ApiProperty({
     default: 'hello.jpg',
-    required: true,
-    type: 'string',
-    name: 'filename',
+    required: false,
+    type: 'int',
     description: '파일이름',
   })
   @IsOptional()
-  status: string;
+  status: ReservationStatus;
 
   @ApiProperty({
     default: 1,
@@ -64,6 +64,17 @@ export class ReservastionsDto {
   })
   @IsOptional()
   isPublished: boolean;
+
+  @ApiProperty({
+    default: true,
+    required: true,
+    type: 'boolean',
+    name: 'isPublished',
+    description: '배포가 되었나요?',
+  })
+  
+  
+  updatedAt?: Date | null;
 
   // @ApiProperty({
   //   default: true,

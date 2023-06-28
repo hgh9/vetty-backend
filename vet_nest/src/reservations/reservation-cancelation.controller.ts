@@ -13,15 +13,9 @@ export class ReservationCancelationController {
   async cancelReservation(@Query('id') id: number) {
     
     const result = await this.reservationCancelationService.cancelReservation(id);
-    if (!result) {
-      return {
-        result: false, 
-        message: '예약을 취소할 수 없습니다.'
-      };
-    }
     
     return {
-      result: true, 
+      result: result, 
       message: '예약이 취소되었습니다.'
     };
   }

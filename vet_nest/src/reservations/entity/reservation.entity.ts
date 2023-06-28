@@ -21,9 +21,24 @@ export class Reservation {
   @Column()
   isPublished: boolean;
 
+  @Column({
+    type: 'int'
+  })
+  status: ReservationStatus;
+  
   @Column()
-  status: string;
+  updatedAt?: Date | null;
+
+  @Column()
+  reservedAt: Date;
 
   @OneToMany(() => Payment, (payment) => payment.reservation)
   payments: Payment[];
+}
+
+export enum ReservationStatus {
+  COMPLETED = 1,
+  IN_TREATMENT = 2,
+  TREATMENT_COMPLETED = 3,
+  CANCELED  = -1,
 }
