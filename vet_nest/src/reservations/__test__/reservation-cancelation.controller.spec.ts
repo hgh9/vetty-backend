@@ -20,7 +20,7 @@ describe('ReservationCancelationController', () => {
 
     it('정상적으로 예약이 취소되면 취소된 결과 메시지를 받는다.', async () => {
       //Arrange
-      const reservationId = -2;
+      const reservationId = 1;
  
       //Act 
       request('http://localhost:3001')

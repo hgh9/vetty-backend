@@ -47,10 +47,10 @@ import { CustomAppExceptionFilter } from './filters/custom-app-exception.filter'
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_FILTER,
-      useClass: CustomAppExceptionFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: CustomAppExceptionFilter,
+    // },
   ],
 })
 export class AppModule {}
