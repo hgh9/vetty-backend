@@ -42,21 +42,22 @@ export class ReservationCancelationService implements IReservationsCancelation {
     }
 
 
-    const queryRunner = await this.dataSource.createQueryRunner();
-    await queryRunner.startTransaction();
+    // const queryRunner = await this.dataSource.createQueryRunner();
+    // await queryRunner.startTransaction();
 
-    await this.dataSource.transaction(async (entityManager) => {
+    // await this.dataSource.transaction(async (entityManager) => {
       reservation.status = ReservationStatus.CANCELED;
       reservation.updatedAt = new Date();
-      entityManager.save(reservation);
+      this.reservationRepository.save(reservation);
+      // entityManager.save(reservation);
       
-      await queryRunner.commitTransaction();
-    })
-    .catch((error) => {
-      console.log(`DB_ERROR: ${JSON.stringify(error)}`);
-      queryRunner.rollbackTransaction();
-      throw new HttpException('시스템 오류 입니다.(DB)', HttpStatus.INTERNAL_SERVER_ERROR);
-    });
+      // await queryRunner.commitTransaction();
+    // })
+    // .catch((error) => {
+      // console.log(`DB_ERROR: ${JSON.stringify(error)}`);
+      // queryRunner.rollbackTransaction();
+      // throw new HttpException('시스템 오류 입니다.(DB)', HttpStatus.INTERNAL_SERVER_ERROR);
+    // });
 
     //2. 결제를 취소 한다.
     const payments = reservation.payments?.filter((payment) => {
