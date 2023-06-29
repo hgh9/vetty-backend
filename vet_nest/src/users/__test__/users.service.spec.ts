@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users.service';
-import { CreateUserDto } from '../dto/createUser.dto';
+import { UserDto } from '../dto/user.dto';
 import { User } from '../entity/users.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -10,7 +10,7 @@ describe('Sign up', () => {
   let service: UsersService;
   let userRepositoryMock: jest.Mocked<Repository<User>>;
 
-  const createUserDto: CreateUserDto = {
+  const createUserDto: UserDto = {
     email: 'honggildong@gmail.com',
     userName: '하영',
     password: 'qwer1234',

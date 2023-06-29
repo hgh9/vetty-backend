@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Pet } from '../../reservations/entity/pet.entity';
+import { Reservation } from '../../reservations/entity/reservation.entity';
+import { Vet } from '../../reservations/entity/vet.entity';
 
 @Entity()
 export class User {
@@ -27,8 +30,16 @@ export class User {
   //hosppital introduce
   //depart
 
-
   // 펫 관계설정 petTable 에다가 연결
+
+  @OneToMany(() => Pet, (pet) => pet.user)
+  pet: Pet[];
+
+  @OneToMany(() => Reservation, (reservation) => reservation.user)
+  reservation: Reservation[];
+
+  @OneToMany(() => Vet, (vet) => vet.user)
+  vet: Vet[];
 }
 
 export enum UserLevel {
@@ -36,8 +47,7 @@ export enum UserLevel {
   CUSTOMER = 2,
 }
 
-export enum VetDepartments{
+export enum VetDepartments {
   HOSPITAL_MANAGER = 1,
   CUSTOMER = 2,
 }
-

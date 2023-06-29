@@ -1,8 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entity/users.entity';
-import { CreateUserDto } from './dto/createUser.dto';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -11,7 +11,7 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async signup(createUserDto: CreateUserDto) {
+  async signup(createUserDto: UserDto) {
     if (!this.isCreateUserDtoValid(createUserDto)) {
       throw new HttpException('Invalid user data', HttpStatus.BAD_REQUEST);
     }
@@ -28,7 +28,7 @@ export class UsersService {
     return !!(await this.userRepository.findOneBy({ email }));
   }
 
-  private isCreateUserDtoValid(body: CreateUserDto) {
+  private isCreateUserDtoValid(body: UserDto) {
     return (
       this.isEmailValid(body.email) &&
       this.isUserNameValid(body.userName) &&
