@@ -10,6 +10,18 @@ import {
 import { ReservationsModule } from './reservations/reservations.module';
 import config from '../config/config';
 import { DatabaseModule } from './database/database.module';
+import { PetsController } from './pets/pets.controller';
+import { PetsService } from './pets/pets.service';
+import { PetsModule } from './pets/pets.module';
+import { VetsController } from './vets/vets.controller';
+import { VetsService } from './vets/vets.service';
+import { VetsModule } from './vets/vets.module';
+import { BookingsService } from './bookings/bookings.service';
+import { BookingsController } from './bookings/bookings.controller';
+import { BookingsModule } from './bookings/bookings.module';
+import { PaymentsController } from './payments/payments.controller';
+import { PaymentsService } from './payments/payments.service';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -34,8 +46,12 @@ import { DatabaseModule } from './database/database.module';
     }),
     DatabaseModule,
     ReservationsModule,
+    PetsModule,
+    VetsModule,
+    BookingsModule,
+    PaymentsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, PetsController, VetsController, BookingsController, PaymentsController],
+  providers: [AppService, PetsService, VetsService, BookingsService, PaymentsService],
 })
 export class AppModule {}

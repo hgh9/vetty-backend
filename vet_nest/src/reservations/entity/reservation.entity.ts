@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Payment } from './payment.entity';
-import { Pet } from './pet.entity';
+import { Pet } from '../../pets/entity/pet.entity';
 import { User } from '../../users/entity/users.entity';
-import { Vet } from './vet.entity';
+import { Vet } from '../../vets/entity/vet.entity';
 
 //TODO:
 // 진료 과목, 진료 정보

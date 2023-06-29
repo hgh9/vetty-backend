@@ -1,6 +1,10 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
-import { PetCategories, PetGender, PetVaccinatedInfo } from '../entity/pet.entity';
+import {
+  PetCategories,
+  PetGender,
+  PetVaccinatedInfo,
+} from '../entity/pet.entity';
 
 export class PetDto {
   @ApiProperty({

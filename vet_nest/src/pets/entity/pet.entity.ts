@@ -5,9 +5,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Reservation } from './reservation.entity';
+import { Reservation } from '../../reservations/entity/reservation.entity';
 import { User } from '../../users/entity/users.entity';
-import { Vet } from './vet.entity';
+import { Vet } from '../../vets/entity/vet.entity';
 
 @Entity()
 export class Pet {

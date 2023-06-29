@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entity/users.entity';
 import { TimeSlot } from './timeslot.entity';
-import { Vet } from './vet.entity';
+import { Vet } from '../../vets/entity/vet.entity';
 
 @Entity()
 export class Booking {

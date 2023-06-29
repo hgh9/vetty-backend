@@ -5,10 +5,10 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Pet } from '../../reservations/entity/pet.entity';
+import { Pet } from '../../pets/entity/pet.entity';
 import { Reservation } from '../../reservations/entity/reservation.entity';
-import { Vet } from '../../reservations/entity/vet.entity';
-import { Booking } from '../../reservations/entity/booking.entity';
+import { Vet } from '../../vets/entity/vet.entity';
+import { Booking } from '../../bookings/entity/booking.entity';
 
 @Entity()
 export class User {
