@@ -29,61 +29,76 @@ export class ReservationCancelationService implements IReservationsCancelation {
     
     //1. 예약정보를 조회한다.
     const reservation = await this.getTargetReservation(reservationId);
-    if (reservation == null) 
+    
+    //2. 예약 취소 가능 조건을 만족하는지 확인한다. 
+    await this.checkCancelableStatus(reservation);
+
+    //3. 
+    const successfulCanceledReservationAndPayments = this.doReservationAndPaymentCancel(reservation);
+
+    //4. 예약 취소 알림 메시지를 송신한다.
+    
+
+    return Promise.resolve(true);
+  }
+
+  private async doReservationAndPaymentCancel(reservation: Reservation) {
+    
+    const reservationCancelResult = await this.doRepositoryUpdate(reservation);
+    const paymentCancelResult     = await this.doRequestPaymentCancel(reservation.payments);
+    
+    return {
+      reservation: reservationCancelResult,
+      payment: paymentCancelResult
+    }
+  }
+
+  private async doRequestPaymentCancel(payments: Payment[]): Promise<Payment[]> {
+    
+    const targetPayments = payments?.filter((payment) => payment.status == 'C'); 
+    const canceledPayments = await targetPayments.map(async (payment) => {
+      this.paymentService.cancelPayment(payment.appId);
+    });
+
+    //TODO: 일부 실패시 어떤 처리를 해야지?
+    console.log(targetPayments.length == canceledPayments.length 
+      ? '결제 취소 모두 성공'
+      : '결제 취소 일부 실패');
+    
+    //TODO: PayResult DTO 생성 
+    return Promise.resolve(targetPayments);
+  }
+
+  private async doRepositoryUpdate(reservation: Reservation): Promise<Reservation> {
+    const queryRunner = await this.dataSource.createQueryRunner();
+    await queryRunner.startTransaction();
+
+    try {
+      reservation.status = ReservationStatus.CANCELED;
+      reservation.updatedAt = new Date();
+      this.reservationRepository.save(reservation);
+      await queryRunner.commitTransaction();
+      return Promise.resolve(reservation);
+    }
+    catch(e) {
+      console.log(`DB_ERROR: ${JSON.stringify(e)}`);
+      queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException('DB 오류');
+    }
+  }
+
+  private checkCancelableStatus(reservation?: Reservation): void {
+    if (reservation == null)
       throw new HttpException('예약정보를 찾을 수 없습니다.', HttpStatus.NOT_FOUND);
 
     //1-1. 예약 상태를 확인한다.
-    if (reservation.status != ReservationStatus.COMPLETED) 
+    if (reservation.status != ReservationStatus.COMPLETED)
       throw new HttpException('예약 취소할 수 없는 상태 입니다.', HttpStatus.FORBIDDEN);
 
     //1-2. 예약 취소가능 시간인지 확인한다.
     if (!this.isReservationCancelableTime(reservation.reservedAt)) {
       throw new HttpException('예약 취소 가능 시간이 지났습니다.', HttpStatus.FORBIDDEN);
-    }
-
-
-    // const queryRunner = await this.dataSource.createQueryRunner();
-    // await queryRunner.startTransaction();
-
-    // await this.dataSource.transaction(async (entityManager) => {
-      reservation.status = ReservationStatus.CANCELED;
-      reservation.updatedAt = new Date();
-      this.reservationRepository.save(reservation);
-      // entityManager.save(reservation);
-      
-      // await queryRunner.commitTransaction();
-    // })
-    // .catch((error) => {
-      // console.log(`DB_ERROR: ${JSON.stringify(error)}`);
-      // queryRunner.rollbackTransaction();
-      // throw new HttpException('시스템 오류 입니다.(DB)', HttpStatus.INTERNAL_SERVER_ERROR);
-    // });
-
-    //2. 결제를 취소 한다.
-    const payments = reservation.payments?.filter((payment) => {
-      return payment.status == 'C';
-    });
-
-    console.log(`payments:${JSON.stringify(payments)}`);
-    let paymentCancelSuccessCnt = 0;
-    
-    payments.forEach(async (payment) => {
-      const result = await this.paymentService.cancelPayment(payment.appId);
-      console.log(`취소 결과[${payment.appId}]: ${result}}`);
-      if (result) {
-        paymentCancelSuccessCnt++;
-      }
-    });
-
-    //3. 성공 시, 결제 취소 알림 메시지를 송신한다.
-    if (paymentCancelSuccessCnt == payments.length) {
-      //TODO: Alarm 보내기 
-    }
-
-    //4. 예약 취소 알림 메시지를 송신한다.
-    // TODO: Alarm 보내기 
-
-    return Promise.resolve(true);
+    } 
   }
 
   private isReservationCancelableTime(reservedAt: Date): boolean 

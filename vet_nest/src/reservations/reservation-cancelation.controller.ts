@@ -11,12 +11,18 @@ export class ReservationCancelationController {
 
   @Get()
   async cancelReservation(@Query('id') id: number) {
-    
-    const result = await this.reservationCancelationService.cancelReservation(id);
-    
-    return {
-      result: result, 
-      message: '예약이 취소되었습니다.'
-    };
+    try {
+      const result = await this.reservationCancelationService.cancelReservation(id);
+      return {
+        result: result, 
+        message: '예약이 취소되었습니다.'
+      };
+    }
+    catch(e) {
+      return {
+        result: false, 
+        message: e.message
+      }
+    }
   }
 }

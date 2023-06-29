@@ -1,4 +1,4 @@
 
 export interface IPaymentService {
-    cancelPayment(appUuid: string);
+    cancelPayment(appUuid: string): Promise<boolean>;
 }
