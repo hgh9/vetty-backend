@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Logger,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ReservastionsDto, findByEmailDto } from './dto/reservations.dto';
 import { ReservationService } from './reservations.service';
 
@@ -6,8 +14,11 @@ import { ReservationService } from './reservations.service';
 export class ReservationsController {
   constructor(private reservationService: ReservationService) {}
   @Post()
+  @HttpCode(200)
   async createReservation(@Body() reservationInfo: ReservastionsDto) {
     try {
+      new Logger().verbose('create Reservations');
+
       // const result = await this.reservationService.create(reservationInfo);
 
       return {

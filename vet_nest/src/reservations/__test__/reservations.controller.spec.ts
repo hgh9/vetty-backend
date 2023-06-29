@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReservationsController } from '../reservations.controller';
 import * as request from 'supertest';
-import { HttpStatus, INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication, Body } from '@nestjs/common';
 import { ReservationService } from '../reservations.service';
 import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
 import config from '../../../config/config';
@@ -27,21 +27,7 @@ describe('ReservationsController', () => {
   }
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(config().testDbConfig)],
-      controllers: [ReservationsController],
-      providers: [
-        ReservationService,
-        {
-          provide: getRepositoryToken(Reservation),
-          useClass: MockUserRepository,
-        },
-        {
-          provide: getRepositoryToken(Payment),
-          useClass: MockUserRepository,
-        },
-      ],
-    }).compile();
+    const module: TestingModule = await Test.createTestingModule({}).compile();
 
     // const module: TestingModule = await Test.createTestingModule({}).compile();
 
@@ -54,12 +40,21 @@ describe('ReservationsController', () => {
     it('/reservations 예약저장 ', async () => {
       //Act
       request('http://localhost:3001')
-        .post(`/reservation`)
+        .post(`/reservations`)
+        .set({
+          id: 1,
+          vetName: 'hah',
+          vetHahah: 'diasm2@gmail.com',
+          vetPopo: 'popo',
+          views: 1,
+          isPublished: true,
+          status: 'haha',
+        })
         .then((res: request.Response) => {
           //Assert
           expect(res.statusCode).toEqual(HttpStatus.OK);
           expect(res.body.result).toBeTruthy();
-          expect(res.body.message).toEqual('예약이 완료 되었습니다.');
+          expect(res.body.message).toEqual('예약이 완료되었습니다.');
         });
     });
   });
