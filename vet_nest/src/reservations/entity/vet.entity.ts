@@ -9,6 +9,7 @@ import {
 import { Pet } from './pet.entity';
 import { User } from '../../users/entity/users.entity';
 import { Reservation } from './reservation.entity';
+import { Booking } from './booking.entity';
 
 @Entity()
 export class Vet {
@@ -22,10 +23,23 @@ export class Vet {
   phone: string;
 
   @Column()
+  address: string;
+
+  @Column('point')
+  location: string;
+
+  @Column('text')
+  introduce: string;
+
+  @Column()
   departments: DepartmentsCategory;
 
   @Column()
-  vetWorkingTime: [1, 31, 45, 0, 0, 0, 0];
+  type: vetType;
+
+  @Column('number')
+  @OneToMany(() => Booking, (booking) => booking.vet)
+  booking: Booking;
 
   @ManyToOne(() => User, (user) => user.vet)
   user: User;
@@ -37,16 +51,51 @@ export class Vet {
   reservation: Reservation;
 }
 
-export enum DepartmentsCategory {}
+// export interface Geometry {
+//   type: 'Point';
+//   coordinates: [Number, Number];
+// }
 
-// - 종합검진
-// - 영상의학과
-// - 심장센터
-// - 내과
-// - 외과
-// - 피부과
-// - 종양센터
-// - 줄기세포
-// - 치과
-// - 안과
-// - 예방 접종
+export enum DepartmentsCategory {
+  // 종합검진
+  COMPREHENSIVE_EXAMINATION = 1,
+
+  // 영상의학과
+  DEPARTMENT_OF_RADIOLOGY = 2,
+
+  // 심장센터
+  HEART_CENTER = 3,
+
+  // 내과
+  MEDICINE = 4,
+
+  // 외과
+  SURGICAL = 5,
+
+  // 피부과
+  DERMATOLOGY = 6,
+
+  // 종양센터
+  ONCOLOGY_CENTER = 7,
+
+  // 줄기세포
+  STEM_CELLS = 8,
+
+  // 치과
+  DENTIST = 9,
+
+  // 안과
+  OPHTHALMOLOGY = 10,
+
+  // 예방접종
+  VACCINATION = 11,
+}
+
+export enum vetType {
+  //24시간
+  ALL_DAYS = 1,
+  //야간
+  NIGHT_TIME = 2,
+  // 주간
+  DAY_TIME = 3,
+}

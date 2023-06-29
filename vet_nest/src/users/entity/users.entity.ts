@@ -1,7 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Pet } from '../../reservations/entity/pet.entity';
 import { Reservation } from '../../reservations/entity/reservation.entity';
 import { Vet } from '../../reservations/entity/vet.entity';
+import { Booking } from '../../reservations/entity/booking.entity';
 
 @Entity()
 export class User {
@@ -23,14 +30,9 @@ export class User {
   @Column()
   level: UserLevel;
 
-  //hospital name
-  //hospital phone
-  //hospital address
-  //hostpital geo
-  //hosppital introduce
-  //depart
-
-  // 펫 관계설정 petTable 에다가 연결
+  @Column()
+  @OneToOne(() => Booking, (booking) => booking.users)
+  bookings: Booking;
 
   @OneToMany(() => Pet, (pet) => pet.user)
   pet: Pet[];
