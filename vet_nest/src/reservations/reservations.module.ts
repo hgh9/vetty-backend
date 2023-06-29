@@ -1,12 +1,19 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Reservation } from './entity/reservations.entity';
-import { ReservationsService } from './reservations.service';
-import { ReservationsController } from './reservations.controller';
+import { ReservationCancelationController } from './reservation-cancelation.controller';
+import { DatabaseModule } from '../database/database.module';
+import { ReservationCancelationService } from './reservation-cancelation.service';
+import { FakePaymentService } from './fake-modules/fake-payment.service';
+import { PaymentFactoryService } from './fake-modules/payment-factory.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Reservation])],
-  providers: [ReservationsService],
-  controllers: [ReservationsController],
+  imports: [
+    DatabaseModule
+  ],
+  controllers: [ReservationCancelationController],
+  providers: [
+    ReservationCancelationService,
+    PaymentFactoryService,
+    FakePaymentService
+  ]
 })
 export class ReservationsModule {}
