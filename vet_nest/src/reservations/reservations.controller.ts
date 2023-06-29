@@ -21,8 +21,7 @@ export class ReservationsController {
 
       const result = await this.reservationService.create(reservationInfo);
 
-
-      return result
+      return result;
       // return {
       //   result: true,
       //   message: '예약이 완료되었습니다.',

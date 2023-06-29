@@ -22,6 +22,7 @@ describe('ReservationsController', () => {
     isPublished: true,
     updatedAt: new Date(Date.now()),
     reservedAt: new Date(Date.now()),
+    // payments: [{id: appId, method}],
   };
 
   class MockUserRepository {
@@ -49,8 +50,15 @@ describe('ReservationsController', () => {
   });
 
   describe('예약 저장', () => {
+    // 이미  pet, hospital, 진료과목, 진료정보 선택이 되어 있다.
+    // 프론트에서 내용들이 넘어오니까
+
+    // pet 저장 api 수정 삭제 불러오기
+    // hospital 저장 수정 삭제 불러오기
+
     it('/reservations, 예약저장 ', async () => {
-      //Act
+      //pet id ,reservation date, hospital id,  user id , reservation info
+
       request('http://localhost:3001')
         .post(`/reservations`)
         .send(mockData)
