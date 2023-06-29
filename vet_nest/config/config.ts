@@ -1,5 +1,4 @@
 import { DataSource } from 'typeorm';
-import { Photo } from '../src/photos/entity/photos.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import {
   Reservation,
@@ -7,6 +6,10 @@ import {
 } from './../src/reservations/entity/reservation.entity';
 import { Payment } from './../src/reservations/entity/payment.entity';
 import * as moment from 'moment';
+import { Pet } from '../src/pets/entity/pet.entity';
+import { Vet } from '../src/vets/entity/vet.entity';
+import { Booking } from '../src/bookings/entity/booking.entity';
+import { TimeSlot } from '../src/bookings/entity/timeslot.entity';
 
 export default () => ({
   DB: {
@@ -87,7 +90,7 @@ export const databaseProviders = [
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
         synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-        entities: [Photo, Reservation, Payment],
+        entities: [Reservation, Payment, Pet, Vet, Booking, TimeSlot],
       });
 
       return dataSource.initialize();

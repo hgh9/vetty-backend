@@ -51,7 +51,19 @@ import { PaymentsModule } from './payments/payments.module';
     BookingsModule,
     PaymentsModule,
   ],
-  controllers: [AppController, PetsController, VetsController, BookingsController, PaymentsController],
-  providers: [AppService, PetsService, VetsService, BookingsService, PaymentsService],
+  controllers: [
+    AppController,
+    PetsController,
+    VetsController,
+    BookingsController,
+    PaymentsController,
+  ],
+  providers: [
+    AppService,
+    PetsService,
+    VetsService,
+    BookingsService,
+    PaymentsService,
+  ],
 })
 export class AppModule {}

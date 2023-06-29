@@ -39,3 +39,4 @@ lerna-debug.log*
 /react-pwa/build
 
 .local.env
+vet_nest/.elasticbeanstalk/config.yml
