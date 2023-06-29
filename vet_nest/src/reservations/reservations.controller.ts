@@ -19,12 +19,14 @@ export class ReservationsController {
     try {
       new Logger().verbose('create Reservations');
 
-      // const result = await this.reservationService.create(reservationInfo);
+      const result = await this.reservationService.create(reservationInfo);
 
-      return {
-        result: true,
-        message: '예약이 완료되었습니다.',
-      };
+
+      return result
+      // return {
+      //   result: true,
+      //   message: '예약이 완료되었습니다.',
+      // };
     } catch (err) {
       throw new Error(err);
     }

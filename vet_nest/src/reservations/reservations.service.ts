@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from './entity/reservation.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -11,14 +11,21 @@ export class ReservationService {
   private paymentRepository: Repository<Payment>;
   constructor(
     @Inject('DATA_SOURCE')
-    private readonly dataSource: DataSource, // @InjectRepository(Reservation) // private readonly reservationReposiotory: Repository<Reservation>, // @InjectRepository(Payment)
-  ) // private readonly paymentReposiotory: Repository<Payment>,
-  {
+    private readonly dataSource: DataSource, // @InjectRepository(Reservation) // private readonly reservationReposiotory: Repository<Reservation>, // @InjectRepository(Payment) // private readonly paymentReposiotory: Repository<Payment>,
+  ) {
     this.reservationRepository = this.dataSource.getRepository(Reservation);
   }
 
   async create(data: ReservastionsDto): Promise<any> {
-    return this.reservationRepository.save(data);
+    new Logger().verbose('create Reservations in repo', JSON.stringify(data));
+
+    const result = await this.reservationRepository.save(data);
+    console.log(result);
+    return {
+      result: true,
+      data: result,
+      message: '예약이 완료되었습니다.',
+    };
   }
 
   async findAll(): Promise<Reservation[]> {

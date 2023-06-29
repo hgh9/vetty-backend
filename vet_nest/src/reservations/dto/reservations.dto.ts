@@ -4,7 +4,8 @@ import { Payment } from '../entity/payment.entity';
 import { ReservationStatus } from '../entity/reservation.entity';
 
 export class ReservastionsDto {
-  id: number;
+  @IsOptional()
+  id?: number;
 
   @ApiProperty({
     default: '얌느',
@@ -69,12 +70,30 @@ export class ReservastionsDto {
     default: true,
     required: true,
     type: 'boolean',
-    name: 'isPublished',
+    name: 'updatedAt',
     description: '배포가 되었나요?',
   })
-  
-  
+  @IsOptional()
   updatedAt?: Date | null;
+
+  @ApiProperty({
+    default: '2023-01-02',
+    required: true,
+    type: 'Date',
+    name: 'reservedAt',
+    description: '예약날짜',
+  })
+  @IsOptional()
+  reservedAt?: Date | null;
+
+  // @ApiProperty({
+  //   default: true,
+  //   required: true,
+  //   type: 'Date',
+  //   name: 'createdAt',
+  //   description: '생성 날짜',
+  // })
+  // createdAt?: Date | null;
 
   // @ApiProperty({
   //   default: true,
