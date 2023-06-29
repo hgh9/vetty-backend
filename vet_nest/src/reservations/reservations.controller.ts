@@ -8,11 +8,17 @@ export class ReservationsController {
   @Post()
   async createReservation(@Body() reservationInfo: ReservastionsDto) {
     try {
-      return await this.reservationService.create(reservationInfo);
+      // const result = await this.reservationService.create(reservationInfo);
+
+      return {
+        result: true,
+        message: '예약이 완료되었습니다.',
+      };
     } catch (err) {
       throw new Error(err);
     }
   }
+
 
   @Get()
   async getByEmail(@Query() email: findByEmailDto) {

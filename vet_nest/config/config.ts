@@ -108,45 +108,46 @@ export const databaseProviders = [
         entities: [Photo, Reservation, Payment],
       });
 
-      return dataSource.initialize().then((db) => {
-        const reservationRepository = db.getRepository(Reservation);
-        const paymentRepository = db.getRepository(Payment);
+      return dataSource.initialize();
+      // .then((db) => {
+      //   const reservationRepository = db.getRepository(Reservation);
+      //   const paymentRepository = db.getRepository(Payment);
 
-        const insertSuccessfulReservation = <Reservation>{
-          id: 1,
-          vetName: '바른병원',
-          vetPopo: 'popo',
-          isPublished: true,
-          status: ReservationStatus.COMPLETED,
-          views: 100,
-          vetHahah: 'haha',
-          reservedAt: moment().add(1, 'hours').toDate(),
-          payments: [
-            {
-              id: 1,
-              amount: 1000,
-              appId: 'APP-1',
-              createdAt: new Date(),
-              method: 'CARD',
-              status: 'C',
-            },
-          ],
-        };
-        const insertCancelableTimeOverReservation = Object.assign({}, insertSuccessfulReservation);
-        insertCancelableTimeOverReservation.reservedAt = moment().add(30, 'minutes').toDate();
-        insertCancelableTimeOverReservation.id = 2;
+      //   const insertSuccessfulReservation = <Reservation>{
+      //     id: 1,
+      //     vetName: '바른병원',
+      //     vetPopo: 'popo',
+      //     isPublished: true,
+      //     status: ReservationStatus.COMPLETED,
+      //     views: 100,
+      //     vetHahah: 'haha',
+      //     reservedAt: moment().add(1, 'hours').toDate(),
+      //     payments: [
+      //       {
+      //         id: 1,
+      //         amount: 1000,
+      //         appId: 'APP-1',
+      //         createdAt: new Date(),
+      //         method: 'CARD',
+      //         status: 'C',
+      //       },
+      //     ],
+      //   };
+      //   const insertCancelableTimeOverReservation = Object.assign({}, insertSuccessfulReservation);
+      //   insertCancelableTimeOverReservation.reservedAt = moment().add(30, 'minutes').toDate();
+      //   insertCancelableTimeOverReservation.id = 2;
 
-        const insertCanceledReservation = Object.assign(
-          {},
-          insertSuccessfulReservation,
-        );
-        insertCanceledReservation.id = 3;
-        insertCanceledReservation.status = ReservationStatus.CANCELED;
+      //   const insertCanceledReservation = Object.assign(
+      //     {},
+      //     insertSuccessfulReservation,
+      //   );
+      //   insertCanceledReservation.id = 3;
+      //   insertCanceledReservation.status = ReservationStatus.CANCELED;
 
-        reservationRepository.save(insertSuccessfulReservation);
-        reservationRepository.save(insertCancelableTimeOverReservation);
-        reservationRepository.save(insertCanceledReservation);
-      });
+      //   reservationRepository.save(insertSuccessfulReservation);
+      //   reservationRepository.save(insertCancelableTimeOverReservation);
+      //   reservationRepository.save(insertCanceledReservation);
+      // });
     },
   },
 ];
