@@ -42,7 +42,7 @@ describe('ReservationCancelationController', () => {
         .get(`/reservation-cancelation?id=${reservationId}`)
         .then((res: request.Response) => {
           //Assert 
-          expect(res.statusCode).toEqual(200);
+          expect(res.statusCode).toEqual(HttpStatus.NOT_FOUND);
           expect(res.body.message).toEqual('예약정보를 찾을 수 없습니다.')
         });
     });
