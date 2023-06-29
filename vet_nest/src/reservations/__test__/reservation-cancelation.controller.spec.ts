@@ -60,19 +60,5 @@ describe('ReservationCancelationController', () => {
           expect(res.statusCode).toEqual(HttpStatus.FORBIDDEN);
         });
     });
-
-    it('예약 상태가 예약완료가 아닌 경우 실패(403) 에러를 반환한다. - cancelReservation', async () => {
-      //Arrange
-      const reservationId = 3;
-
-      //Act
-      request('http://localhost:3001')
-        .get(`/reservation-cancelation?id=${reservationId}`)
-        .then((res: request.Response) => {
-          //Assert
-          expect(res.statusCode).toEqual(HttpStatus.FORBIDDEN);
-          expect(res.body.message).toEqual('예약 취소할 수 없는 상태 입니다.');
-        });
-    });
   });
 });

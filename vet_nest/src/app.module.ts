@@ -11,9 +11,6 @@ import {
 import { ReservationsModule } from './reservations/reservations.module';
 import config from '../config/config';
 import { DatabaseModule } from './database/database.module';
-import { AuthController } from './auth/auth.controller';
-import { AuthService } from './auth/auth.service';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -39,9 +36,8 @@ import { AuthModule } from './auth/auth.module';
     }),
     DatabaseModule,
     ReservationsModule,
-    AuthModule,
   ],
-  controllers: [AppController, AuthController],
-  providers: [AppService, AuthService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -22,10 +22,10 @@ export class Reservation {
   isPublished: boolean;
 
   @Column({
-    type: 'int'
+    type: 'int',
   })
   status: ReservationStatus;
-  
+
   @Column()
   updatedAt?: Date | null;
 
@@ -40,5 +40,5 @@ export enum ReservationStatus {
   COMPLETED = 1,
   IN_TREATMENT = 2,
   TREATMENT_COMPLETED = 3,
-  CANCELED  = -1,
+  CANCELED = -1,
 }

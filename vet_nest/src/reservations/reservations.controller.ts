@@ -19,7 +19,6 @@ export class ReservationsController {
     }
   }
 
-
   @Get()
   async getByEmail(@Query() email: findByEmailDto) {
     try {
