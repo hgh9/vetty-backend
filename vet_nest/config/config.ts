@@ -1,5 +1,4 @@
 import { DataSource } from 'typeorm';
-import { Photo } from '../src/photos/entity/photos.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import {
   Reservation,
@@ -87,7 +86,7 @@ export const databaseProviders = [
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
         synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-        entities: [Photo, Reservation, Payment],
+        entities: [Reservation, Payment],
       });
 
       return dataSource.initialize();
@@ -105,7 +104,7 @@ export const databaseProviders = [
         database: 'test',
         synchronize: true,
         logging: true,
-        entities: [Photo, Reservation, Payment],
+        entities: [Reservation, Payment],
       });
 
       return dataSource.initialize();

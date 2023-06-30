@@ -10,6 +10,7 @@ import {
 import { ReservationsModule } from './reservations/reservations.module';
 import config from '../config/config';
 import { DatabaseModule } from './database/database.module';
+import { CheckModule } from './check/check.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { DatabaseModule } from './database/database.module';
     }),
     DatabaseModule,
     ReservationsModule,
+    CheckModule,
   ],
   controllers: [AppController],
   providers: [AppService],

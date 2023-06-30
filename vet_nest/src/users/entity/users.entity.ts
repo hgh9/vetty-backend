@@ -35,8 +35,8 @@ export class User {
   @OneToMany(() => Pet, (pet) => pet.user)
   pet: Pet[];
 
-  @OneToMany(() => Reservation, (reservation) => reservation.user)
-  reservation: Reservation[];
+  // @OneToMany(() => Reservation, (reservation) => reservation.user)
+  // reservation: Reservation[];
 
   @OneToMany(() => Vet, (vet) => vet.user)
   vet: Vet[];

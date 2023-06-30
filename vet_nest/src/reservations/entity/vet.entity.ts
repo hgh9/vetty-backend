@@ -33,8 +33,8 @@ export class Vet {
   @OneToMany(() => Pet, (pet) => pet.vet)
   pet: Pet[];
 
-  @OneToOne(() => Vet, (vet) => vet.reservation)
-  reservation: Reservation;
+  // @OneToOne(() => Vet, (vet) => vet.reservation)
+  // reservation: Reservation;
 }
 
 export enum DepartmentsCategory {}

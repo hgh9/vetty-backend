@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Payment } from './payment.entity';
-import { Pet } from './pet.entity';
-import { User } from '../../users/entity/users.entity';
+// import { Pet } from './pet.entity';
+// import { User } from '../../users/entity/users.entity';
 import { Vet } from './vet.entity';
 
 //TODO:
@@ -67,23 +67,23 @@ export class Reservation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @Column({ length: 500 })
-  // vetName: string;
+  @Column({ length: 500 })
+  vetName: string;
 
-  // @Column('text')
-  // vetHahah: string;
+  @Column('text')
+  vetHahah: string;
 
-  // @Column()
-  // vetPopo: string;
+  @Column()
+  vetPopo: string;
 
-  // @Column('int')
-  // views: number;
+  @Column('int')
+  views: number;
 
-  // @Column()
-  // isPublished: boolean;
+  @Column()
+  isPublished: boolean;
 
-  // @Column()
-  // re?: DignosisCategory;
+  @Column()
+  re?: DignosisCategory;
   // - vetWorkingTime : [ 1,31, 45 ,0, 0, 0,0] 슬롯 0~23까지
 
   @Column({
@@ -110,14 +110,14 @@ export class Reservation {
   @OneToMany(() => Payment, (payment) => payment.reservation)
   payments: Payment[];
 
-  @ManyToOne(() => Pet, (pet) => pet.reservation)
-  pet: Pet;
+  // @ManyToOne(() => Pet, (pet) => pet.reservation)
+  // pet: Pet;
 
-  @ManyToOne(() => User, (user) => user.reservation)
-  user: User;
+  // @ManyToOne(() => User, (user) => user.reservation)
+  // user: User;
 
-  @OneToOne(() => Vet, (vet) => vet.reservation)
-  vet: Vet;
+  // @OneToOne(() => Vet, (vet) => vet.reservation)
+  // vet: Vet;
 }
 
 export enum ReservationStatus {

@@ -47,8 +47,8 @@ export class Pet {
   @ManyToOne(() => User, (user) => user.pet)
   user: User;
 
-  @OneToMany(() => Reservation, (reservation) => reservation.pet)
-  reservation: Reservation[];
+  // @OneToMany(() => Reservation, (reservation) => reservation.pet)
+  // reservation: Reservation[];
 
   @OneToMany(() => Vet, (vet) => vet.pet)
   vet: Vet;
