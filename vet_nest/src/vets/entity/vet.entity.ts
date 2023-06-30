@@ -37,7 +37,6 @@ export class Vet {
   @Column()
   type: vetType;
 
-  @Column('number')
   @OneToMany(() => Booking, (booking) => booking.vet)
   booking: Booking;
 

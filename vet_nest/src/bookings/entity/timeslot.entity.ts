@@ -6,14 +6,13 @@ export class TimeSlot {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('date')
+  @Column()
   date: Date;
 
   //0~24
-  @Column('number')
+  @Column()
   time: number;
 
-  @Column()
   @ManyToOne(() => Booking, (booking) => booking.timeSlot)
   booking: Booking;
 }

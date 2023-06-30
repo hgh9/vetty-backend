@@ -29,8 +29,8 @@ export class Pet {
   @Column()
   age: number;
 
-  @Column()
-  birth: Date | string;
+  @Column('date')
+  birth: Date;
 
   @Column()
   gender: PetGender;
@@ -42,13 +42,16 @@ export class Pet {
   vaccinate: PetVaccinatedInfo;
 
   @Column()
-  extraInfo: object;
+  extraInfo: string;
 
   @ManyToOne(() => User, (user) => user.pet)
   user: User;
 
   @OneToMany(() => Reservation, (reservation) => reservation.pet)
   reservation: Reservation[];
+
+  @OneToMany(() => Reservation, (reservation) => reservation.pet)
+  Reservation: Reservation[];
 
   @OneToMany(() => Vet, (vet) => vet.pet)
   vet: Vet;

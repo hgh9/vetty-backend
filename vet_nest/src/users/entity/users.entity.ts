@@ -30,9 +30,9 @@ export class User {
   @Column()
   level: UserLevel;
 
-  @Column()
-  @OneToOne(() => Booking, (booking) => booking.users)
-  bookings: Booking;
+  // @Column()
+  @OneToOne(() => Booking, (booking) => booking.user)
+  booking: Booking;
 
   @OneToMany(() => Pet, (pet) => pet.user)
   pet: Pet[];

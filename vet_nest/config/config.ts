@@ -10,6 +10,7 @@ import { Pet } from '../src/pets/entity/pet.entity';
 import { Vet } from '../src/vets/entity/vet.entity';
 import { Booking } from '../src/bookings/entity/booking.entity';
 import { TimeSlot } from '../src/bookings/entity/timeslot.entity';
+import { User } from '../src/users/entity/users.entity';
 
 export default () => ({
   DB: {
@@ -90,67 +91,31 @@ export const databaseProviders = [
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
         synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-        entities: [Reservation, Payment, Pet, Vet, Booking, TimeSlot],
+        // autoLoadEntities: true,
+        logging: false,
+        // entities: [Reservation, Payment],
+        entities: [Reservation, Payment, Pet, Vet, Booking, TimeSlot, User],
       });
 
       return dataSource.initialize();
     },
   },
-  {
-    provide: 'TEST_DATA_SOURCE',
-    useFactory: async () => {
-      const dataSource = new DataSource({
-        type: 'mariadb',
-        host: 'mariadb',
-        port: 3306,
-        username: 'root',
-        password: 'root',
-        database: 'test',
-        synchronize: true,
-        logging: true,
-        entities: [Photo, Reservation, Payment],
-      });
+  // {
+  //   provide: 'TEST_DATA_SOURCE',
+  //   useFactory: async () => {
+  //     const dataSource = new DataSource({
+  //       type: 'mariadb',
+  //       host: 'mariadb',
+  //       port: 3306,
+  //       username: 'root',
+  //       password: 'root',
+  //       database: 'test',
+  //       synchronize: true,
+  //       logging: true,
+  //       entities: [Reservation, Payment],
+  //     });
 
-      return dataSource.initialize();
-      // .then((db) => {
-      //   const reservationRepository = db.getRepository(Reservation);
-      //   const paymentRepository = db.getRepository(Payment);
-
-      //   const insertSuccessfulReservation = <Reservation>{
-      //     id: 1,
-      //     vetName: '바른병원',
-      //     vetPopo: 'popo',
-      //     isPublished: true,
-      //     status: ReservationStatus.COMPLETED,
-      //     views: 100,
-      //     vetHahah: 'haha',
-      //     reservedAt: moment().add(1, 'hours').toDate(),
-      //     payments: [
-      //       {
-      //         id: 1,
-      //         amount: 1000,
-      //         appId: 'APP-1',
-      //         createdAt: new Date(),
-      //         method: 'CARD',
-      //         status: 'C',
-      //       },
-      //     ],
-      //   };
-      //   const insertCancelableTimeOverReservation = Object.assign({}, insertSuccessfulReservation);
-      //   insertCancelableTimeOverReservation.reservedAt = moment().add(30, 'minutes').toDate();
-      //   insertCancelableTimeOverReservation.id = 2;
-
-      //   const insertCanceledReservation = Object.assign(
-      //     {},
-      //     insertSuccessfulReservation,
-      //   );
-      //   insertCanceledReservation.id = 3;
-      //   insertCanceledReservation.status = ReservationStatus.CANCELED;
-
-      //   reservationRepository.save(insertSuccessfulReservation);
-      //   reservationRepository.save(insertCancelableTimeOverReservation);
-      //   reservationRepository.save(insertCanceledReservation);
-      // });
-    },
-  },
+  //     return dataSource.initialize();
+  //   },
+  // },
 ];

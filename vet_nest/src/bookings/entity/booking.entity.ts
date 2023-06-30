@@ -18,15 +18,16 @@ export class Booking {
   @Column()
   date: Date;
 
-  @Column()
-  @OneToOne(() => User, (user) => user.bookings)
-  users: User;
+  // @Column()
+  // @OneToOne(() => User, (user) => user.booking)
+  // user: User;
 
-  @Column()
   @ManyToOne(() => Vet, (vet) => vet.booking)
   vet: Vet;
 
-  @Column()
-  @OneToMany(() => TimeSlot, (timeSlot) => timeSlot)
+  @OneToMany(() => TimeSlot, (timeSlot) => timeSlot.booking)
   timeSlot: TimeSlot;
+
+  @OneToOne(() => User, (user) => user.booking)
+  user: User;
 }

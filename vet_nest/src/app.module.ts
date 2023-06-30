@@ -22,6 +22,9 @@ import { BookingsModule } from './bookings/bookings.module';
 import { PaymentsController } from './payments/payments.controller';
 import { PaymentsService } from './payments/payments.service';
 import { PaymentsModule } from './payments/payments.module';
+import { UsersModule } from './users/users.module';
+import { UsersController } from './users/users.controller';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [
@@ -50,6 +53,7 @@ import { PaymentsModule } from './payments/payments.module';
     VetsModule,
     BookingsModule,
     PaymentsModule,
+    UsersModule,
   ],
   controllers: [
     AppController,
@@ -57,6 +61,7 @@ import { PaymentsModule } from './payments/payments.module';
     VetsController,
     BookingsController,
     PaymentsController,
+    UsersController,
   ],
   providers: [
     AppService,
@@ -64,6 +69,7 @@ import { PaymentsModule } from './payments/payments.module';
     VetsService,
     BookingsService,
     PaymentsService,
+    UsersService,
   ],
 })
 export class AppModule {}
