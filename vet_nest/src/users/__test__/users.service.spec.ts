@@ -2,11 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../dto/createUser.dto';
-import { User } from '../entity/users.entity';
+import { User, UserLevel } from '../entity/users.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { LoginUserDto } from '@/users/dto/loginUser.dto';
+import { LoginSimpleDto, LoginUserDto, UserDto } from '../dto/user.dto';
 
 describe('Sign up', () => {
   let service: UsersService;
@@ -18,12 +18,13 @@ describe('Sign up', () => {
     password: 'qwer1234',
     phoneNumber: '01012345678',
   };
-  const createdUser: User = {
+  const createdUser: LoginUserDto = {
     id: 1,
     email: 'honggildong@gmail.com',
     userName: '하영',
     password: 'qwer1234',
     phoneNumber: '01012345678',
+    level: UserLevel.CUSTOMER,
   };
 
   beforeEach(async () => {
@@ -251,6 +252,7 @@ describe('Sign up', () => {
       password: '12345678!',
       userName: '테스',
       phoneNumber: '01012345678',
+      level: UserLevel.CUSTOMER,
     };
 
     // PASS
@@ -331,12 +333,13 @@ describe('Login', () => {
   });
 
   test('invalid user data fail', async () => {
-    const findUserData = {
+    const findUserData: LoginUserDto = {
       id: 1,
       email: 'honggildong@gmail.com',
       userName: '홍길동',
       password: '12345678!',
       phoneNumber: '01012345678',
+      level: UserLevel.CUSTOMER,
     };
     const loginReturnData = {
       id: 1,
@@ -347,7 +350,7 @@ describe('Login', () => {
     };
 
     // PASS
-    const correctLoginData: LoginUserDto = {
+    const correctLoginData: LoginSimpleDto = {
       email: 'honggildong@gmail.com',
       password: 'qwer1234',
     };
@@ -356,7 +359,7 @@ describe('Login', () => {
     expect(loginUser).toEqual(loginReturnData);
 
     // FAIL
-    const falseEmailLoginData: LoginUserDto = {
+    const falseEmailLoginData: LoginSimpleDto = {
       email: 'hayashasong@gmail.com',
       password: 'qwer1234',
     };
@@ -367,7 +370,7 @@ describe('Login', () => {
       expect(error).toBeInstanceOf(Error);
     }
 
-    const falsePasswordLoginData: LoginUserDto = {
+    const falsePasswordLoginData: LoginSimpleDto = {
       email: 'honggildong@gmail.com',
       password: '4321rewq',
     };

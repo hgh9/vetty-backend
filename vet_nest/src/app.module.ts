@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { MessageModule } from './message-events/message.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as winston from 'winston';
@@ -11,6 +10,21 @@ import {
 import { ReservationsModule } from './reservations/reservations.module';
 import config from '../config/config';
 import { DatabaseModule } from './database/database.module';
+import { PetsController } from './pets/pets.controller';
+import { PetsService } from './pets/pets.service';
+import { PetsModule } from './pets/pets.module';
+import { VetsController } from './vets/vets.controller';
+import { VetsService } from './vets/vets.service';
+import { VetsModule } from './vets/vets.module';
+import { BookingsService } from './bookings/bookings.service';
+import { BookingsController } from './bookings/bookings.controller';
+import { BookingsModule } from './bookings/bookings.module';
+import { PaymentsController } from './payments/payments.controller';
+import { PaymentsService } from './payments/payments.service';
+import { PaymentsModule } from './payments/payments.module';
+import { UsersModule } from './users/users.module';
+import { UsersController } from './users/users.controller';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [
@@ -19,7 +33,6 @@ import { DatabaseModule } from './database/database.module';
       isGlobal: true,
       load: [config],
     }),
-    MessageModule,
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
@@ -36,10 +49,27 @@ import { DatabaseModule } from './database/database.module';
     }),
     DatabaseModule,
     ReservationsModule,
+    PetsModule,
+    VetsModule,
+    BookingsModule,
+    PaymentsModule,
+    UsersModule,
   ],
-  controllers: [AppController],
+  controllers: [
+    AppController,
+    PetsController,
+    VetsController,
+    BookingsController,
+    PaymentsController,
+    UsersController,
+  ],
   providers: [
-    AppService
+    AppService,
+    PetsService,
+    VetsService,
+    BookingsService,
+    PaymentsService,
+    UsersService,
   ],
 })
 export class AppModule {}

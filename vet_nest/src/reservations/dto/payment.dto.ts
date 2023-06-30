@@ -1,6 +1,6 @@
 
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Reservation } from './reservation.entity';
+import { Reservation } from '../entity/reservation.entity';
 import { ApiProperty } from "@nestjs/swagger";
 import { IsOptional } from "class-validator";
 

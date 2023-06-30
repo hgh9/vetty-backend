@@ -8,7 +8,7 @@ import { addPetDto } from '@/pets/dto/addPet.dto';
 describe('add pet', () => {
   let service: PetsService;
   let petRepositoryMock: jest.Mocked<Repository<Pet>>;
-  
+
   const addPetDto: addPetDto = {
     species: 'cat',
     petName: 'goyangyi',
@@ -58,14 +58,14 @@ describe('add pet', () => {
     // PASS
     const newPet = service.addPet(addPetDto);
     expect(newPet).toEqual(addedPet);
-    
+
     // FAIL
     const missingData = (key) => {
       const copied = Object.assign({}, addPetDto);
       copied[key] = '';
       return copied;
     };
-    
+
     const no_species = missingData('species');
     try {
       await service.addPet(no_species);

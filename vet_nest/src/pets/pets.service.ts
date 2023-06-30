@@ -10,23 +10,29 @@ export class PetsService {
     @InjectRepository(Pet)
     private readonly petRepository: Repository<Pet>,
   ) {}
-  
+
   async addPet(addPetDto: addPetDto) {
     if (!this.isAddPetDtoValid(addPetDto)) {
       throw new Error('invalid data');
     }
-    
+
     const newPet = this.petRepository.create(addPetDto);
     await this.petRepository.save(newPet);
     return newPet;
   }
-  
-  async modifyPet() {}
-  
-  async deletePet() {}
-  
-  async listPet() {}
-  
+
+  async modifyPet() {
+    return false;
+  }
+
+  async deletePet() {
+    return false;
+  }
+
+  async listPet() {
+    return false;
+  }
+
   private isAddPetDtoValid(addPetDto: addPetDto) {
     return true;
   }

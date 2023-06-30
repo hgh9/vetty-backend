@@ -1,18 +1,21 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { User } from './entity/users.entity';
+import { UserDto } from './dto/user.dto';
+import { LoginUserDto } from './dto/loginUser.dto';
 import { CreateUserDto } from './dto/createUser.dto';
-import { LoginUserDto } from '@/users/dto/loginUser.dto';
-import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
+  private userRepository: Repository<User>;
+  jwtService: any;
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-    private readonly jwtService: JwtService,
-  ) {}
+    @Inject('DATA_SOURCE')
+    private readonly dataSource: DataSource, // @InjectRepository(Reservation) // private readonly reservationReposiotory: Repository<Reservation>, // @InjectRepository(Payment) // private readonly paymentReposiotory: Repository<Payment>,
+  ) {
+    this.userRepository = this.dataSource.getRepository(User);
+  }
 
   async signup(createUserDto: CreateUserDto) {
     if (!this.isCreateUserDtoValid(createUserDto)) {
