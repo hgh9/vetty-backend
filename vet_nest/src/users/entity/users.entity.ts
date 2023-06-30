@@ -32,16 +32,16 @@ export class User {
 
   // @Column()
   @OneToOne(() => Booking, (booking) => booking.user)
-  booking: Booking;
+  booking?: Booking;
 
   @OneToMany(() => Pet, (pet) => pet.user)
-  pet: Pet[];
+  pet?: Pet[];
 
   @OneToMany(() => Reservation, (reservation) => reservation.user)
-  reservation: Reservation[];
+  reservation?: Reservation[];
 
   @OneToMany(() => Vet, (vet) => vet.user)
-  vet: Vet[];
+  vet?: Vet[];
 }
 
 export enum UserLevel {
