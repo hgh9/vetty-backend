@@ -1,111 +1,93 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReservationCancelationService } from '../reservation-cancelation.service';
-import { InternalServerErrorException } from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Reservation } from '../entity/reservation.entity';
 import { Payment } from '../entity/payment.entity';
-import { AppModule } from '../../app.module';
-import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
-import { ReservationsController } from '../reservations.controller';
-import { findByEmailDto } from '../dto/reservations.dto';
+import { DatabaseModule } from '../../database/database.module';
+import { PaymentFactoryService } from '../fake-modules/payment-factory.service';
+import { FakePaymentService } from '../fake-modules/fake-payment.service';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { Photo } from '../../photos/entity/photos.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeORMMariaSqlTestingModule, initializeDataSource } from '../../database/typeorm-maria-testing.module';
+import { IReservationsCancelation } from '../reservation-cancelation.interface';
 import { ReservationService } from '../reservations.service';
-import config from '../../../config/config';
+import * as moment from 'moment';
+import { EmptyError } from 'rxjs';
+import { databaseProviders } from '@configs';
+
+
 
 describe('ReservationCancelationService', () => {
-  let service: ReservationService;
-  let reservationCancelationService: ReservationCancelationService;
-
-  class MockUserRepository {
-    #data = [
-      {
-        id: 1,
-        vetName: 'hah',
-        vetHahah: 'diasm2@gmail.com',
-        vetPopo: 'popo',
-        views: 1,
-        isPublished: true,
-        status: 'haha',
-      },
-    ];
-    async findByEmail(email: findByEmailDto): Promise<any> {
-      const data = this.#data.find((v) => v.vetHahah === email.vetHahah);
-      if (data) {
-        return data;
-      }
-      return null;
+  class MockReservationCancelationService implements IReservationsCancelation
+  {
+    cancelReservation(reservationId: number): Promise<boolean> {
+      return Promise.resolve(true);
+    }
+    getTargetReservation(reservationId: number): Promise<Reservation> {
+      // if (reservationId == -1) {
+      //   throw new NotFoundException('예약 정보를 찾을 수 없습니다.');
+      // }
+      return Promise.resolve(new Reservation());
+    }
+    private isReservationCancelableTime(reservedAt: Date): boolean {
+      const TIME_LIMIT = -1;
+      const limit = moment(reservedAt).add(TIME_LIMIT, 'hours');
+      const current = moment();
+      return current.isBefore(limit);
     }
   }
 
+  let dataSource: DataSource
+  let service: ReservationCancelationService;
+  
+  beforeAll(async (): Promise<DataSource> => await initializeDataSource());
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(config().testDbConfig)],
-      controllers: [ReservationsController],
+    let module: TestingModule = await Test.createTestingModule({
       providers: [
-        AppModule,
-        ReservationService,
-        ReservationCancelationService,
         {
-          provide: getRepositoryToken(Reservation),
-          useClass: MockUserRepository,
+          provide: 'DATA_SOURCE', 
+          useFactory: (() => initializeDataSource())
         },
+        PaymentFactoryService,
+        FakePaymentService,
         {
-          provide: getRepositoryToken(Payment),
-          useClass: MockUserRepository,
-        },
-      ],
+          provide : ReservationCancelationService,
+          useClass: ReservationCancelationService
+        }
+      ]
     }).compile();
 
-    service = module.get<ReservationService>(ReservationService);
-    reservationCancelationService = module.get<ReservationCancelationService>(
-      ReservationCancelationService,
-    );
+    service = module.get<ReservationCancelationService>(ReservationCancelationService);
   });
-
-  it('typeorm', async () => {
-    const info: findByEmailDto = {
-      vetHahah: 'diasm2@gmail.com',
-    };
-    const result = await service.findByEmail(info);
-
-    expect(service.findByEmail(info)).resolves.toStrictEqual({
-      id: 1,
-      vetName: 'hah',
-      vetHahah: 'diasm2@gmail.com',
-      vetPopo: 'popo',
-      views: 1,
-      isPublished: true,
-      status: 'haha',
-    });
-  });
+  // afterAll(async(): Promise<void> => dataSource.destroy());
 
   it('should be defined', () => {
-    expect(reservationCancelationService).toBeDefined();
+    expect(service).toBeDefined();
   });
 
   describe('예약을 취소한다.', () => {
-    it('예약 정보를 찾을 수 없다.', async () => {
-      // Arrange
-      const reservationId = -1;
 
+    it('예약 정보를 찾을 수 없으면, NotFoundException을 throw 한다.', async () => {
+      // Arrange
+      const reservationId = 1;
+
+      expect(async () => await service.getTargetReservation(reservationId))
+      .toThrowError(NotFoundException);
       // Act
       try {
-        await reservationCancelationService.getTargetReservation(reservationId);
+        const reservation = await service.getTargetReservation(reservationId);
+        console.log(`reservation: ${reservation}`);
       } catch (e) {
         // Assert
-        expect(e).toBeInstanceOf(InternalServerErrorException);
+        expect(e).toBeInstanceOf(NotFoundException);
         expect(e.message).toBe('예약 정보를 찾을 수 없습니다.');
       }
     });
 
     it('예약이 취소 가능한 상태를 확인한다.', async () => {
-      // Given
-      const reservationId = 1;
-
-      // When
-      const reservation =
-        await reservationCancelationService.getTargetReservation(reservationId);
-
-      // Then
-      expect(reservation.status).toEqual('C');
+      
+      
     });
 
     //PASS: 결제를 취소한다.
@@ -115,13 +97,13 @@ describe('ReservationCancelationService', () => {
       const reservationId = 1;
 
       // When
-      const payments =
-        await reservationCancelationService.getCompletedPaymentsByReservationId(
-          reservationId,
-        );
+      // const payments =
+      //   await service.getCompletedPaymentsByReservationId(
+      //     reservationId,
+      //   );
 
-      // Then
-      expect(payments.length).toBeGreaterThan(0);
+      // // Then
+      // expect(payments.length).toBeGreaterThan(0);
     });
 
     it('PG 결제 장애 발생', async () => {

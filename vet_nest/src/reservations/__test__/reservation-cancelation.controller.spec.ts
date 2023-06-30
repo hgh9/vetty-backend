@@ -73,5 +73,6 @@ describe('ReservationCancelationController', () => {
           expect(res.body.message).toEqual('예약 취소할 수 없는 상태 입니다.');
         });
     });
+    
   });
 });
