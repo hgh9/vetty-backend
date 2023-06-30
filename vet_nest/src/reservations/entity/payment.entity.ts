@@ -31,5 +31,5 @@ export class Payment {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  reservation?: Reservation;
+  reservation: Reservation;
 }

@@ -12,6 +12,8 @@ import { Payment } from './payment.entity';
 import { Pet } from '../../pets/entity/pet.entity';
 import { User } from '../../users/entity/users.entity';
 import { Vet } from '../../vets/entity/vet.entity';
+import { TimeSlot } from './timeslot.entity';
+import { ReservationTime } from './reservationTime.entity';
 
 //TODO:
 // 진료 과목, 진료 정보
@@ -96,8 +98,11 @@ export class Reservation {
   @Column()
   reservedAt: Date;
 
-  @OneToMany(() => Payment, (payment) => payment.reservation)
-  payments?: Payment[];
+  @OneToMany(() => Payment, (payment) => payment.reservation, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  payments: Payment[];
 
   @ManyToOne(() => Pet, (pet) => pet.reservation, {
     nullable: false,
@@ -113,6 +118,15 @@ export class Reservation {
 
   @OneToOne(() => Vet, (vet) => vet.reservation)
   vet?: Vet;
+
+  @OneToMany(() => TimeSlot, (timeSlot) => timeSlot.reservation)
+  timeSlot: TimeSlot;
+
+  @OneToOne(
+    () => ReservationTime,
+    (reservationTime) => reservationTime.reservation,
+  )
+  reservationTime: ReservationTime;
 }
 
 export enum ReservationStatus {

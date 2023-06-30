@@ -8,9 +8,9 @@ import { Payment } from './../src/reservations/entity/payment.entity';
 import * as moment from 'moment';
 import { Pet } from '../src/pets/entity/pet.entity';
 import { Vet } from '../src/vets/entity/vet.entity';
-import { Booking } from '../src/bookings/entity/booking.entity';
-import { TimeSlot } from '../src/bookings/entity/timeslot.entity';
+import { TimeSlot } from '../src/reservations/entity/timeslot.entity';
 import { User } from '../src/users/entity/users.entity';
+import { ReservationTime } from '../src/reservations/entity/reservationTime.entity';
 
 export default () => ({
   DB: {
@@ -92,7 +92,15 @@ export const databaseProviders = [
         // autoLoadEntities: true,
         logging: false,
         // entities: [Reservation, Payment],
-        entities: [Reservation, Payment, Pet, Vet, Booking, TimeSlot, User],
+        entities: [
+          Reservation,
+          Payment,
+          Pet,
+          Vet,
+          TimeSlot,
+          User,
+          ReservationTime,
+        ],
       });
 
       return dataSource.initialize();

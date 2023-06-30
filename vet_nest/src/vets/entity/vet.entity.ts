@@ -9,7 +9,7 @@ import {
 import { Pet } from '../../pets/entity/pet.entity';
 import { User } from '../../users/entity/users.entity';
 import { Reservation } from '../../reservations/entity/reservation.entity';
-import { Booking } from '../../bookings/entity/booking.entity';
+import { TimeSlot } from '../../reservations/entity/timeslot.entity';
 
 @Entity()
 export class Vet {
@@ -37,9 +37,6 @@ export class Vet {
   @Column()
   type: vetType;
 
-  @OneToMany(() => Booking, (booking) => booking.vet)
-  booking?: Booking;
-
   @ManyToOne(() => User, (user) => user.vet, {
     nullable: false,
     onDelete: 'CASCADE',
@@ -51,6 +48,9 @@ export class Vet {
 
   @OneToOne(() => Vet, (vet) => vet.reservation)
   reservation?: Reservation;
+
+  @OneToMany(() => TimeSlot, (timeSlot) => timeSlot.vet)
+  timeSlot: TimeSlot[];
 }
 
 // export interface Geometry {

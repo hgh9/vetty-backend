@@ -8,7 +8,6 @@ import {
 import { Pet } from '../../pets/entity/pet.entity';
 import { Reservation } from '../../reservations/entity/reservation.entity';
 import { Vet } from '../../vets/entity/vet.entity';
-import { Booking } from '../../bookings/entity/booking.entity';
 
 @Entity()
 export class User {
@@ -29,10 +28,6 @@ export class User {
 
   @Column()
   level: UserLevel;
-
-  // @Column()
-  @OneToOne(() => Booking, (booking) => booking.user)
-  booking?: Booking;
 
   @OneToMany(() => Pet, (pet) => pet.user)
   pet?: Pet[];
