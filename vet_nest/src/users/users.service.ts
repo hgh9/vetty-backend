@@ -1,15 +1,18 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { DataSource, Repository } from 'typeorm';
 import { User } from './entity/users.entity';
-import { CreateUserDto } from './dto/createUser.dto';
+import { CreateUserDto, LoginUserDto, UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
+  private userRepository: Repository<User>;
+  jwtService: any;
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {}
+    @Inject('DATA_SOURCE')
+    private readonly dataSource: DataSource, // @InjectRepository(Reservation) // private readonly reservationReposiotory: Repository<Reservation>, // @InjectRepository(Payment) // private readonly paymentReposiotory: Repository<Payment>,
+  ) {
+    this.userRepository = this.dataSource.getRepository(User);
+  }
 
   async signup(createUserDto: CreateUserDto) {
     if (!this.isCreateUserDtoValid(createUserDto)) {
@@ -24,8 +27,35 @@ export class UsersService {
     return newUser;
   }
 
+  async login(loginUserDto: LoginUserDto) {
+    const loginUser: User = await this.userRepository.findOneBy({
+      email: loginUserDto.email,
+      password: loginUserDto.password,
+    });
+
+    if (!loginUser) {
+      throw new Error('Wrong user data');
+    }
+
+    return {
+      id: loginUser.id,
+      email: loginUser.email,
+      userName: loginUser.userName,
+      phoneNumber: loginUser.phoneNumber,
+      token: this.generateToken(loginUser.email),
+    };
+  }
+
+  public verifyToken(token: string) {
+    return !!this.jwtService.verify(token);
+  }
+
   private async isUserDuplicate(email) {
     return !!(await this.userRepository.findOneBy({ email }));
+  }
+
+  private generateToken(email) {
+    return this.jwtService.sign(email);
   }
 
   private isCreateUserDtoValid(body: CreateUserDto) {

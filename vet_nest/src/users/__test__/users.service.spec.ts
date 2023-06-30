@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users.service';
+import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../dto/createUser.dto';
-import { User } from '../entity/users.entity';
+import { User, UserLevel } from '../entity/users.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { LoginSimpleDto, LoginUserDto, UserDto } from '../dto/user.dto';
 
 describe('Sign up', () => {
   let service: UsersService;
@@ -16,18 +18,20 @@ describe('Sign up', () => {
     password: 'qwer1234',
     phoneNumber: '01012345678',
   };
-  const createdUser: User = {
+  const createdUser: LoginUserDto = {
     id: 1,
     email: 'honggildong@gmail.com',
     userName: '하영',
     password: 'qwer1234',
     phoneNumber: '01012345678',
+    level: UserLevel.CUSTOMER,
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
+        JwtService,
         {
           provide: getRepositoryToken(User),
           useFactory: () => ({
@@ -248,6 +252,7 @@ describe('Sign up', () => {
       password: '12345678!',
       userName: '테스',
       phoneNumber: '01012345678',
+      level: UserLevel.CUSTOMER,
     };
 
     // PASS
@@ -295,5 +300,85 @@ describe('Sign up', () => {
 
     const TOTAL_ASSERTIONS = 5;
     expect.assertions(TOTAL_ASSERTIONS);
+  });
+});
+
+describe('Login', () => {
+  let service: UsersService;
+  let jwtService: JwtService;
+  let userRepositoryMock: jest.Mocked<Repository<User>>;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        UsersService,
+        {
+          provide: JwtService,
+          useValue: {
+            sign: jest.fn(),
+          },
+        },
+        {
+          provide: getRepositoryToken(User),
+          useFactory: () => ({
+            findOneBy: jest.fn(),
+          }),
+        },
+      ],
+    }).compile();
+
+    service = module.get<UsersService>(UsersService);
+    userRepositoryMock = module.get(getRepositoryToken(User));
+    jwtService = module.get<JwtService>(JwtService);
+  });
+
+  test('invalid user data fail', async () => {
+    const findUserData: LoginUserDto = {
+      id: 1,
+      email: 'honggildong@gmail.com',
+      userName: '홍길동',
+      password: '12345678!',
+      phoneNumber: '01012345678',
+      level: UserLevel.CUSTOMER,
+    };
+    const loginReturnData = {
+      id: 1,
+      email: 'honggildong@gmail.com',
+      userName: '홍길동',
+      phoneNumber: '01012345678',
+      token: jwtService.sign('honggildong@gmail.com'),
+    };
+
+    // PASS
+    const correctLoginData: LoginSimpleDto = {
+      email: 'honggildong@gmail.com',
+      password: 'qwer1234',
+    };
+    userRepositoryMock.findOneBy.mockResolvedValue(findUserData);
+    const loginUser = await service.login(correctLoginData);
+    expect(loginUser).toEqual(loginReturnData);
+
+    // FAIL
+    const falseEmailLoginData: LoginSimpleDto = {
+      email: 'hayashasong@gmail.com',
+      password: 'qwer1234',
+    };
+    try {
+      userRepositoryMock.findOneBy.mockResolvedValue(undefined);
+      await service.login(falseEmailLoginData);
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+    }
+
+    const falsePasswordLoginData: LoginSimpleDto = {
+      email: 'honggildong@gmail.com',
+      password: '4321rewq',
+    };
+    try {
+      userRepositoryMock.findOneBy.mockResolvedValue(undefined);
+      await service.login(falsePasswordLoginData);
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+    }
   });
 });
