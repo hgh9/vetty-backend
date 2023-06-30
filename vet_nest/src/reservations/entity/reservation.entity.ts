@@ -13,6 +13,7 @@ import { Pet } from '../../pets/entity/pet.entity';
 import { User } from '../../users/entity/users.entity';
 import { Vet } from '../../vets/entity/vet.entity';
 import { TimeSlot } from './timeslot.entity';
+import { ReservationTime } from './reservationTime.entity';
 
 //TODO:
 // 진료 과목, 진료 정보
@@ -120,6 +121,12 @@ export class Reservation {
 
   @OneToMany(() => TimeSlot, (timeSlot) => timeSlot.reservation)
   timeSlot: TimeSlot;
+
+  @OneToOne(
+    () => ReservationTime,
+    (reservationTime) => reservationTime.reservation,
+  )
+  reservationTime: ReservationTime;
 }
 
 export enum ReservationStatus {

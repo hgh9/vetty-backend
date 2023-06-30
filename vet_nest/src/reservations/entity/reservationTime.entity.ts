@@ -2,34 +2,36 @@ import {
   Column,
   Entity,
   ManyToOne,
-  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Reservation } from './reservation.entity';
 import { Vet } from '../../vets/entity/vet.entity';
-import { ReservationTime } from './reservationTime.entity';
+import { TimeSlot } from './timeslot.entity';
 
 @Entity()
-export class TimeSlot {
+export class ReservationTime {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  reservationId: number;
 
   @Column()
   date: Date;
 
   @Column()
-  time: number;
-  //slot
+  timSlotId: number;
+
+  @Column()
+  vetId: number;
 
   @ManyToOne(() => Vet, (vet) => vet.timeSlot)
   vet: Vet;
 
-  @OneToMany(
-    () => ReservationTime,
-    (reservationTime) => reservationTime.timeSlot,
-  )
-  reservationTime: ReservationTime;
+  @ManyToOne(() => TimeSlot, (timeSlot) => timeSlot.reservationTime)
+  timeSlot: TimeSlot;
 
-  @ManyToOne(() => Reservation, (reservation) => reservation.timeSlot)
+  @OneToOne(() => Reservation, (reservation) => reservation.reservationTime)
   reservation: Reservation;
 }
