@@ -96,8 +96,11 @@ export class Reservation {
   @Column()
   reservedAt: Date;
 
-  @OneToMany(() => Payment, (payment) => payment.reservation)
-  payments?: Payment[];
+  @OneToMany(() => Payment, (payment) => payment.reservation, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  payments: Payment[];
 
   @ManyToOne(() => Pet, (pet) => pet.reservation, {
     nullable: false,

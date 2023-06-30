@@ -1,7 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { addPetDto } from '@/pets/dto/addPet.dto';
 import { AddPetDto, Pet } from './entity/pet.entity';
 
 @Injectable()

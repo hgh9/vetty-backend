@@ -1,8 +1,7 @@
-
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Reservation } from '../entity/reservation.entity';
-import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 
 @Entity()
 export class Payment {
