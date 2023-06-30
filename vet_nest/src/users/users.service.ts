@@ -1,14 +1,17 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entity/users.entity';
 import { CreateUserDto } from './dto/createUser.dto';
+import { LoginUserDto } from '@/users/dto/loginUser.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signup(createUserDto: CreateUserDto) {
@@ -24,8 +27,35 @@ export class UsersService {
     return newUser;
   }
 
+  async login(loginUserDto: LoginUserDto) {
+    const loginUser: User = await this.userRepository.findOneBy({
+      email: loginUserDto.email,
+      password: loginUserDto.password,
+    });
+
+    if (!loginUser) {
+      throw new Error('Wrong user data');
+    }
+
+    return {
+      id: loginUser.id,
+      email: loginUser.email,
+      userName: loginUser.userName,
+      phoneNumber: loginUser.phoneNumber,
+      token: this.generateToken(loginUser.email),
+    };
+  }
+
+  public verifyToken(token: string) {
+    return !!this.jwtService.verify(token);
+  }
+
   private async isUserDuplicate(email) {
     return !!(await this.userRepository.findOneBy({ email }));
+  }
+
+  private generateToken(email) {
+    return this.jwtService.sign(email);
   }
 
   private isCreateUserDtoValid(body: CreateUserDto) {
