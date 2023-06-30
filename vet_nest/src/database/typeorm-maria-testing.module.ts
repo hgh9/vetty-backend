@@ -4,6 +4,8 @@ import {
   Reservation,
   ReservationStatus,
 } from './../reservations/entity/reservation.entity';
+import { Payment } from './../reservations/entity/payment.entity';
+import { Reservation, ReservationStatus } from './../reservations/entity/reservation.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as moment from 'moment';
 
