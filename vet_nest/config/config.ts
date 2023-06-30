@@ -72,8 +72,6 @@ export const testDbConfig: TypeOrmModuleOptions = {
   synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
   autoLoadEntities: true,
   logging: true,
-  // entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
-  // entities: [Photo, Reservation,],
 };
 
 export const databaseProviders = [

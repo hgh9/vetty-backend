@@ -6,6 +6,7 @@ import {
   INestApplication,
 } from '@nestjs/common';
 import * as request from 'supertest';
+import { ReservastionsDto } from '../dto/reservations.dto';
 
 describe('ReservationCancelationController', () => {
   let app: INestApplication;
@@ -58,6 +59,28 @@ describe('ReservationCancelationController', () => {
         .then((res: request.Response) => {
           //Assert
           expect(res.statusCode).toEqual(HttpStatus.FORBIDDEN);
+        });
+    });
+  });
+
+  describe('예약정보 조회', () => {
+    it('예약정보를 조회 한다.', async () => {
+      //Arrange
+      const customerId = '1';
+      const startDate = '2023-06-19';
+      const endDate = '2023-06-30';
+      const param = `customerId=${customerId}&startDate=${startDate}&endDate=${endDate}`;
+
+      //TODO: -> merge 후 reservation-controller에 요청하도록 변경
+
+      // Act
+      request('http://localhost:3001')
+        .get(`/reservation-cancelation?${param}`)
+        .then((reservations: request.Response) => {
+          //Assert
+          expect(reservations.statusCode).toEqual(HttpStatus.OK);
+          expect(typeof reservations).toEqual(Array);
+          // expect(reservations.length).toEqual(2);
         });
     });
   });

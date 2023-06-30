@@ -1,0 +1,6 @@
+{
+    "testExplorer.onReload": "reset",
+    "jestTestExplorer.flattenExplorer": true,
+    "testExplorer.showOnRun": true,
+    "testExplorer.useNativeTesting": true
+}
