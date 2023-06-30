@@ -89,6 +89,7 @@ export class LoginUserDto extends PickType(UserDto, [
 ]) {}
 
 export class LoginSimpleDto extends PickType(UserDto, ['password', 'email']) {}
+
 export class CreateUserDto extends PickType(UserDto, [
   'password',
   'email',
