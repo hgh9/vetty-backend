@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Booking } from './booking.entity';
+import { Reservation } from './reservation.entity';
 
 @Entity()
 export class TimeSlot {
@@ -9,13 +9,10 @@ export class TimeSlot {
   @Column()
   date: Date;
 
-  //0~24
   @Column()
   time: number;
+  //slot
 
-  @ManyToOne(() => Booking, (booking) => booking.timeSlot, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  booking?: Booking;
+  @ManyToOne(() => Reservation, (reservation) => reservation.timeSlot)
+  reservation: Reservation;
 }

@@ -16,9 +16,6 @@ import { PetsModule } from './pets/pets.module';
 import { VetsController } from './vets/vets.controller';
 import { VetsService } from './vets/vets.service';
 import { VetsModule } from './vets/vets.module';
-import { BookingsService } from './bookings/bookings.service';
-import { BookingsController } from './bookings/bookings.controller';
-import { BookingsModule } from './bookings/bookings.module';
 import { PaymentsController } from './payments/payments.controller';
 import { PaymentsService } from './payments/payments.service';
 import { PaymentsModule } from './payments/payments.module';
@@ -53,7 +50,6 @@ import { CheckModule } from './check/check.module';
     CheckModule,
     PetsModule,
     VetsModule,
-    BookingsModule,
     PaymentsModule,
     UsersModule,
   ],
@@ -61,7 +57,6 @@ import { CheckModule } from './check/check.module';
     AppController,
     PetsController,
     VetsController,
-    BookingsController,
     PaymentsController,
     UsersController,
   ],
@@ -69,7 +64,6 @@ import { CheckModule } from './check/check.module';
     AppService,
     PetsService,
     VetsService,
-    BookingsService,
     PaymentsService,
     UsersService,
   ],

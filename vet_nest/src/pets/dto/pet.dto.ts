@@ -89,7 +89,7 @@ export class PetDto extends BaseEntity {
   gender: PetGender;
 
   @ApiProperty({
-    default: 'skin' ,
+    default: 'skin',
     required: true,
     type: 'string',
     name: 'allergi',

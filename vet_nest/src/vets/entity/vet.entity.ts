@@ -9,7 +9,6 @@ import {
 import { Pet } from '../../pets/entity/pet.entity';
 import { User } from '../../users/entity/users.entity';
 import { Reservation } from '../../reservations/entity/reservation.entity';
-import { Booking } from '../../bookings/entity/booking.entity';
 
 @Entity()
 export class Vet {
@@ -37,8 +36,6 @@ export class Vet {
   @Column()
   type: vetType;
 
-  @OneToMany(() => Booking, (booking) => booking.vet)
-  booking?: Booking;
 
   @ManyToOne(() => User, (user) => user.vet, {
     nullable: false,
