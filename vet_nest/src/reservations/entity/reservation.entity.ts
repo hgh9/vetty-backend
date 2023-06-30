@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Payment } from './payment.entity';
 import { Pet } from '../../pets/entity/pet.entity';
@@ -67,25 +69,6 @@ export class Reservation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @Column({ length: 500 })
-  // vetName: string;
-
-  // @Column('text')
-  // vetHahah: string;
-
-  // @Column()
-  // vetPopo: string;
-
-  // @Column('int')
-  // views: number;
-
-  // @Column()
-  // isPublished: boolean;
-
-  // @Column()
-  // re?: DignosisCategory;
-  // - vetWorkingTime : [ 1,31, 45 ,0, 0, 0,0] 슬롯 0~23까지
-
   @Column({
     type: 'int',
   })
@@ -101,23 +84,35 @@ export class Reservation {
   })
   status: ReservationStatus;
 
-  @Column()
-  updatedAt?: Date | null;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt!: Date;
+
+  // @Column()
+  // updatedAt?: Date | null;
 
   @Column()
   reservedAt: Date;
 
   @OneToMany(() => Payment, (payment) => payment.reservation)
-  payments: Payment[];
+  payments?: Payment[];
 
-  @ManyToOne(() => Pet, (pet) => pet.reservation)
-  pet: Pet;
+  @ManyToOne(() => Pet, (pet) => pet.reservation, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  pet?: Pet;
 
-  @ManyToOne(() => User, (user) => user.reservation)
-  user: User;
+  @ManyToOne(() => User, (user) => user.reservation, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  user?: User;
 
   @OneToOne(() => Vet, (vet) => vet.reservation)
-  vet: Vet;
+  vet?: Vet;
 }
 
 export enum ReservationStatus {

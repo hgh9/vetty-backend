@@ -44,17 +44,20 @@ export class Pet {
   @Column()
   extraInfo: string;
 
-  @ManyToOne(() => User, (user) => user.pet)
-  user: User;
+  @Column()
+  createdAt: Date;
+
+  @ManyToOne(() => User, (user) => user.pet, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  user?: User;
 
   @OneToMany(() => Reservation, (reservation) => reservation.pet)
-  reservation: Reservation[];
-
-  @OneToMany(() => Reservation, (reservation) => reservation.pet)
-  Reservation: Reservation[];
+  reservation?: Reservation[];
 
   @OneToMany(() => Vet, (vet) => vet.pet)
-  vet: Vet;
+  vet?: Vet;
 }
 
 export enum PetCategories {

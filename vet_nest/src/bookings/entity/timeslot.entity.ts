@@ -13,6 +13,9 @@ export class TimeSlot {
   @Column()
   time: number;
 
-  @ManyToOne(() => Booking, (booking) => booking.timeSlot)
-  booking: Booking;
+  @ManyToOne(() => Booking, (booking) => booking.timeSlot, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  booking?: Booking;
 }

@@ -5,8 +5,9 @@ import {
   PetGender,
   PetVaccinatedInfo,
 } from '../entity/pet.entity';
+import { BaseEntity } from 'typeorm';
 
-export class PetDto {
+export class PetDto extends BaseEntity {
   @ApiProperty({
     default: '1',
     required: false,
@@ -116,6 +117,7 @@ export class PetDto {
   })
   @IsOptional()
   extraInfo: object;
+
 
   //   @ManyToOne(() => User, (user) => user.pet)
   //   user: User;

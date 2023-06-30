@@ -60,3 +60,11 @@ export class GetUserDto extends PickType(UserDto, [
   'phoneNumber',
   'email',
 ]) {}
+
+
+export class ReservationUserDto extends PickType(UserDto, [
+  'id',
+  'phoneNumber',
+  'email',
+  'userName'
+]) {}

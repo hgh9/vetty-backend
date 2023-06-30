@@ -1,61 +1,41 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReservationsController } from '../reservations.controller';
 import * as request from 'supertest';
-import { HttpStatus, INestApplication, Body } from '@nestjs/common';
-import { ReservationService } from '../reservations.service';
-import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
-import config from '../../../config/config';
-import { Reservation, ReservationStatus } from '../entity/reservation.entity';
-import { Payment } from '../entity/payment.entity';
+import { HttpStatus, INestApplication } from '@nestjs/common';
+import {
+  DignosisCategory,
+  ReservationStatus,
+} from '../entity/reservation.entity';
 import { ReservastionsDto } from '../dto/reservations.dto';
+import {
+  PetCategories,
+  PetGender,
+  PetVaccinatedInfo,
+} from '../../pets/entity/pet.entity';
 
 describe('ReservationsController', () => {
   let controller: ReservationsController;
   let app: INestApplication;
-  let mockData: ReservastionsDto = {
+  const mockData: ReservastionsDto = {
     id: 1,
-    vetName: 'hah',
-    vetHahah: 'diasm2@gmail.com',
-    vetPopo: 'popo',
+    firstVisit: DignosisCategory.NORMAL,
     status: ReservationStatus.COMPLETED,
-    views: 1,
-    isPublished: true,
     updatedAt: new Date(Date.now()),
     reservedAt: new Date(Date.now()),
-    // payments: [{id: appId, method}],
+    paymentId: 1,
+    petId: 1,
+    userId: 1,
+    vetId: 3,
   };
-
-  class MockUserRepository {
-    #data = [
-      {
-        id: 1,
-        vetName: 'hah',
-        vetHahah: 'diasm2@gmail.com',
-        vetPopo: 'popo',
-        views: 1,
-        isPublished: true,
-        status: 'haha',
-      },
-    ];
-  }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({}).compile();
 
-    // const module: TestingModule = await Test.createTestingModule({}).compile();
-
     app = module.createNestApplication();
     await app.init();
-    // controller = module.get<ReservationsController>(ReservationsController);
   });
 
   describe('예약 저장', () => {
-    // 이미  pet, hospital, 진료과목, 진료정보 선택이 되어 있다.
-    // 프론트에서 내용들이 넘어오니까
-
-    // pet 저장 api 수정 삭제 불러오기
-    // hospital 저장 수정 삭제 불러오기
-
     it('/reservations, 예약저장 ', async () => {
       //pet id ,reservation date, hospital id,  user id , reservation info
 

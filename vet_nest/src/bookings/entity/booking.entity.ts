@@ -22,12 +22,15 @@ export class Booking {
   // @OneToOne(() => User, (user) => user.booking)
   // user: User;
 
-  @ManyToOne(() => Vet, (vet) => vet.booking)
+  @ManyToOne(() => Vet, (vet) => vet.booking, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   vet: Vet;
 
   @OneToMany(() => TimeSlot, (timeSlot) => timeSlot.booking)
-  timeSlot: TimeSlot;
+  timeSlot?: TimeSlot;
 
   @OneToOne(() => User, (user) => user.booking)
-  user: User;
+  user?: User;
 }

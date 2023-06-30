@@ -38,16 +38,19 @@ export class Vet {
   type: vetType;
 
   @OneToMany(() => Booking, (booking) => booking.vet)
-  booking: Booking;
+  booking?: Booking;
 
-  @ManyToOne(() => User, (user) => user.vet)
-  user: User;
+  @ManyToOne(() => User, (user) => user.vet, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  user?: User;
 
   @OneToMany(() => Pet, (pet) => pet.vet)
-  pet: Pet[];
+  pet?: Pet[];
 
   @OneToOne(() => Vet, (vet) => vet.reservation)
-  reservation: Reservation;
+  reservation?: Reservation;
 }
 
 // export interface Geometry {
