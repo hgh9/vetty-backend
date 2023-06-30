@@ -5,14 +5,16 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Reservation } from './reservation.entity';
+import { Reservation } from '../../reservations/entity/reservation.entity';
 import { User } from '../../users/entity/users.entity';
-import { Vet } from './vet.entity';
+import { Vet } from '../../vets/entity/vet.entity';
+import { PickType } from '@nestjs/swagger';
+import { PetDto } from '../dto/pet.dto';
 
 @Entity()
 export class Pet {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({ length: 500 })
   name: string;
@@ -29,11 +31,14 @@ export class Pet {
   @Column()
   age: number;
 
-  @Column()
-  birth: Date | string;
+  @Column('date')
+  birth: Date;
 
   @Column()
   gender: PetGender;
+
+  @Column()
+  neutered: boolean;
 
   @Column()
   allergi: string;
@@ -42,16 +47,22 @@ export class Pet {
   vaccinate: PetVaccinatedInfo;
 
   @Column()
-  extraInfo: object;
+  extraInfo: string;
 
-  @ManyToOne(() => User, (user) => user.pet)
-  user: User;
+  @Column()
+  createdAt?: Date;
 
-  // @OneToMany(() => Reservation, (reservation) => reservation.pet)
-  // reservation: Reservation[];
+  @ManyToOne(() => User, (user) => user.pet, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  user?: User;
+
+  @OneToMany(() => Reservation, (reservation) => reservation.pet)
+  reservation?: Reservation[];
 
   @OneToMany(() => Vet, (vet) => vet.pet)
-  vet: Vet;
+  vet?: Vet;
 }
 
 export enum PetCategories {
@@ -72,3 +83,17 @@ export enum PetVaccinatedInfo {
   VACCINATING = 3,
   UNKNOWN_VACCINATED = 3,
 }
+
+export class AddPetDto extends PickType(PetDto, [
+  'age',
+  'name',
+  'birth',
+  'weightKg',
+  'gender',
+  'allergi',
+  'vaccinate',
+  'breed',
+  'category',
+  'extraInfo',
+  'neutered',
+]) {}

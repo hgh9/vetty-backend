@@ -2,7 +2,7 @@ import { DataSource, Repository } from 'typeorm';
 import { Reservation } from '../reservations/entity/reservation.entity';
 import { Inject, Injectable } from '@nestjs/common';
 import { PaymentFactoryService } from '@/reservations/fake-modules/payment-factory.service';
-import { Pet } from '@/reservations/entity/pet.entity';
+import { Pet } from '../pets/entity/pet.entity';
 
 // 예약정보를 조회하는 비지니스 로직 담당
 @Injectable()

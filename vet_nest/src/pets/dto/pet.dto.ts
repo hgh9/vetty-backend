@@ -1,8 +1,13 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
-import { PetCategories, PetGender, PetVaccinatedInfo } from '../entity/pet.entity';
+import {
+  PetCategories,
+  PetGender,
+  PetVaccinatedInfo,
+} from '../entity/pet.entity';
+import { BaseEntity } from 'typeorm';
 
-export class PetDto {
+export class PetDto extends BaseEntity {
   @ApiProperty({
     default: '1',
     required: false,
@@ -71,7 +76,7 @@ export class PetDto {
     description: '펫의 생일',
   })
   @IsOptional()
-  birth: Date | string;
+  birth: Date;
 
   @ApiProperty({
     default: '2023-01-02',
@@ -111,8 +116,17 @@ export class PetDto {
     description: '기타 정보',
   })
   @IsOptional()
-  extraInfo: object;
+  extraInfo: string;
 
+  @ApiProperty({
+    default: '중성화',
+    required: true,
+    type: 'string',
+    name: 'neutered',
+    description: '중성화',
+  })
+  @IsOptional()
+  neutered: boolean;
   //   @ManyToOne(() => User, (user) => user.pet)
   //   user: User;
 

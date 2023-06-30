@@ -1,70 +1,47 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 import { Payment } from '../entity/payment.entity';
-import { ReservationStatus } from '../entity/reservation.entity';
+import {
+  DignosisCategory,
+  ReservationStatus,
+} from '../entity/reservation.entity';
+import { PetDto } from '../../pets/dto/pet.dto';
+import { VetDto } from '../../vets/dto/vet.dto';
+import { ReservationUserDto, UserDto } from '../../users/dto/user.dto';
 
 export class ReservastionsDto {
   @IsOptional()
   id?: number;
 
   @ApiProperty({
-    default: '얌느',
-    required: true,
-    type: 'string',
-    name: 'name',
-    description: '사용자 이름',
-  })
-  @IsOptional()
-  vetName: string;
-
-  @ApiProperty({
-    default: 'diasm2@gmail.com',
-    required: true,
-    type: 'string',
-    name: 'vetHahah',
-    description: '사용자 이름',
-  })
-  @IsOptional()
-  vetHahah: string;
-
-  @ApiProperty({
-    default: '얌느',
-    required: true,
-    type: 'string',
-    name: 'name',
-    description: '사용자 이름',
-  })
-  @IsOptional()
-  vetPopo: string;
-
-  @ApiProperty({
-    default: 'hello.jpg',
+    default: '',
     required: false,
-    type: 'int',
-    description: '파일이름',
+    type: 'string',
+    name: 'firstVisit',
+    description: '초진',
+  })
+  @IsOptional()
+  firstVisit?: DignosisCategory;
+
+  @ApiProperty({
+    default: '',
+    required: false,
+    type: 'string',
+    name: 'reVisit',
+    description: '재방문자',
+  })
+  @IsOptional()
+  reVisit?: DignosisCategory;
+
+  @ApiProperty({
+    default: '얌느',
+    required: true,
+    type: 'string',
+    name: 'name',
+    description: '사용자 이름',
   })
   @IsOptional()
   status: ReservationStatus;
-
-  @ApiProperty({
-    default: 1,
-    required: true,
-    type: 'number',
-    name: 'views',
-    description: '조회수',
-  })
-  @IsOptional()
-  views: number;
-
-  @ApiProperty({
-    default: true,
-    required: true,
-    type: 'boolean',
-    name: 'isPublished',
-    description: '배포가 되었나요?',
-  })
-  @IsOptional()
-  isPublished: boolean;
 
   @ApiProperty({
     default: true,
@@ -86,24 +63,45 @@ export class ReservastionsDto {
   @IsOptional()
   reservedAt?: Date | null;
 
-  // @ApiProperty({
-  //   default: true,
-  //   required: true,
-  //   type: 'Date',
-  //   name: 'createdAt',
-  //   description: '생성 날짜',
-  // })
-  // createdAt?: Date | null;
+  @ApiProperty({
+    default: '',
+    required: true,
+    type: 'array',
+    name: 'payments',
+    description: '결제정보',
+  })
+  @IsOptional()
+  paymentId: number;
 
-  // @ApiProperty({
-  //   default: true,
-  //   required: true,
-  //   type: 'boolean',
-  //   name: 'isPublished',
-  //   description: '배포가 되었나요?',
-  // })
-  // @IsOptional()
-  // payments: Payment[];
+  @ApiProperty({
+    default: '',
+    required: true,
+    type: 'object',
+    name: 'pet',
+    description: 'Pet정보',
+  })
+  @IsOptional()
+  petId: number;
+
+  @ApiProperty({
+    default: '',
+    required: true,
+    type: 'number',
+    name: 'vet',
+    description: 'vet정보',
+  })
+  @IsOptional()
+  vetId: number;
+
+  @ApiProperty({
+    default: '',
+    required: true,
+    type: 'object',
+    name: 'user',
+    description: 'user정보',
+  })
+  @IsOptional()
+  userId: number;
 }
 
-export class findByEmailDto extends PickType(ReservastionsDto, ['vetHahah']) {}
+// export class findByEmailDto extends PickType(ReservastionsDto, ['vetHahah']) {}

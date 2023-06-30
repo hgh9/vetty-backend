@@ -27,6 +27,9 @@ export class Payment {
   @Column()
   reservationId: number;
 
-  @ManyToOne(() => Reservation, (reservation) => reservation.payments)
-  reservation: Reservation;
+  @ManyToOne(() => Reservation, (reservation) => reservation.payments, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  reservation?: Reservation;
 }
