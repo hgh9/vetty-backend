@@ -70,9 +70,6 @@ export class ReservationCancelationService implements IReservationsCancelation {
     const TIME_LIMIT = -1;
     const limit = moment(reservedAt).add(TIME_LIMIT, 'hours');
     const current = moment();
-    console.log(`limit->${limit.toISOString()}`);
-    console.log(`current->${current.toISOString()}`);
-    console.log(`current is before than limit->${current.isBefore(limit)}`);
     return current.isBefore(limit);
   }
 

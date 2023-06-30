@@ -120,7 +120,7 @@ export const databaseProviders = [
           status: ReservationStatus.COMPLETED,
           views: 100,
           vetHahah: 'haha',
-          reservedAt: moment().add(1, 'hours').toDate(),
+          reservedAt: moment().add(2, 'hours').toDate(),
           payments: [
             {
               id: 1,
