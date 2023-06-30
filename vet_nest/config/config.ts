@@ -68,6 +68,7 @@ export const testDbConfig: TypeOrmModuleOptions = {
   synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
   autoLoadEntities: true,
   logging: true,
+
 };
 
 export const databaseProviders = [
@@ -90,14 +91,13 @@ export const databaseProviders = [
 
       return dataSource.initialize();
     },
-    inject: ['DATA_SOURCE']
   },
   {
     provide: 'TEST_DATA_SOURCE',
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'mariadb',
-        host: '127.0.0.1',
+        host: 'mariadb',
         port: 3306,
         username: 'root',
         password: 'root',

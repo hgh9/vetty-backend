@@ -69,7 +69,11 @@ export class ReservationCancelationService implements IReservationsCancelation {
   {
     const TIME_LIMIT = -1;
     const limit = moment(reservedAt).add(TIME_LIMIT, 'hours');
-    const current = moment();
+    const current = moment(new Date());
+    console.log(`예약시간: ${reservedAt.toISOString()}`);
+    console.log(`취소가능 최대시간: ${limit.toISOString()}`);
+    console.log(`현재시간: ${current.toISOString()}`);
+    console.log(`취소가능여부: ${current.isBefore(limit)}`);
     return current.isBefore(limit);
   }
 
