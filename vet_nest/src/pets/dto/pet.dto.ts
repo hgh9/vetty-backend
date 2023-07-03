@@ -92,11 +92,11 @@ export class PetDto extends BaseEntity {
     default: 'skin',
     required: true,
     type: 'string',
-    name: 'allergi',
+    name: 'allergy',
     description: '알러지유무',
   })
   @IsOptional()
-  allergi: string;
+  allergy: string;
 
   @ApiProperty({
     default: 1,
@@ -121,7 +121,7 @@ export class PetDto extends BaseEntity {
   @ApiProperty({
     default: '중성화',
     required: true,
-    type: 'string',
+    type: 'boolean',
     name: 'neutered',
     description: '중성화',
   })

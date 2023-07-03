@@ -41,7 +41,7 @@ export class Pet {
   neutered: boolean;
 
   @Column()
-  allergi: string;
+  allergy: string;
 
   @Column()
   vaccinate: PetVaccinatedInfo;
@@ -90,7 +90,7 @@ export class AddPetDto extends PickType(PetDto, [
   'birth',
   'weightKg',
   'gender',
-  'allergi',
+  'allergy',
   'vaccinate',
   'breed',
   'category',
