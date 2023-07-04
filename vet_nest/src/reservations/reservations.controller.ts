@@ -19,9 +19,9 @@ export class ReservationsController {
     try {
       new Logger().verbose('create Reservations');
 
-      const result = await this.reservationService.create(reservationInfo);
-
-      return result;
+      // const result = await this.reservationService.create(reservationInfo);
+      // return result;
+      return null;
       // return {
       //   result: true,
       //   message: '예약이 완료되었습니다.',

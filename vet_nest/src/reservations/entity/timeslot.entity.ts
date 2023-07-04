@@ -1,13 +1,14 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Reservation } from './reservation.entity';
 import { Vet } from '../../vets/entity/vet.entity';
-import { ReservationTime } from './reservationTime.entity';
+// import { ReservationTime } from './reservationTime.entity';
 
 @Entity()
 export class TimeSlot {
@@ -15,21 +16,28 @@ export class TimeSlot {
   id: number;
 
   @Column()
-  date: Date;
+  startDate: Date;
 
   @Column()
   time: number;
-  //slot
 
-  @ManyToOne(() => Vet, (vet) => vet.timeSlot)
-  vet: Vet;
+  @Column({
+    type: 'timestamp'
+  })
+  startTime: Date
 
-  @OneToMany(
-    () => ReservationTime,
-    (reservationTime) => reservationTime.timeSlot,
-  )
-  reservationTime: ReservationTime;
+  @Column({
+    type: 'timestamp'
+  })
+  endTime: Date
 
-  @ManyToOne(() => Reservation, (reservation) => reservation.timeSlot)
+  @Column()
+  vetId: number;
+
+  @ManyToOne(() => Vet, (vet) => vet)
+  @JoinColumn({name: 'vetId'})
+  vet: Vet;;
+
+  @ManyToOne(() => Reservation, (reservation) => reservation.slotInfo)
   reservation: Reservation;
 }

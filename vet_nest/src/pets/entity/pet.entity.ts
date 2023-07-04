@@ -1,9 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  RelationId,
 } from 'typeorm';
 import { Reservation } from '../../reservations/entity/reservation.entity';
 import { User } from '../../users/entity/users.entity';
@@ -13,9 +16,12 @@ import { PetDto } from '../dto/pet.dto';
 
 @Entity()
 export class Pet {
-  @PrimaryGeneratedColumn()
-  id?: number;
+  @PrimaryGeneratedColumn('uuid')
+  petId: string;
 
+  @Column()
+  userId: number;
+  
   @Column({ length: 500 })
   name: string;
 
@@ -49,20 +55,15 @@ export class Pet {
   @Column()
   extraInfo: string;
 
-  @Column()
-  createdAt?: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.pet, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  user?: User;
+  @ManyToOne(type => User, (user) => user)
+  @JoinColumn({name: 'userId'})
+  userInfo?: User;
 
-  @OneToMany(() => Reservation, (reservation) => reservation.pet)
-  reservation?: Reservation[];
-
-  @OneToMany(() => Vet, (vet) => vet.pet)
-  vet?: Vet;
+  @OneToMany(type => Reservation, (reservation) => reservation.petInfo)
+  reservations?: Reservation[];
 }
 
 export enum PetCategories {

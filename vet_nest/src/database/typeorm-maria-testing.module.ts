@@ -2,6 +2,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { Payment } from './../reservations/entity/payment.entity';
 import { Reservation } from './../reservations/entity/reservation.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User, UserLevel, UserStatus } from '../users/entity/users.entity';
 
 export const testDbDataSource: DataSourceOptions = {
   type: 'mariadb',
