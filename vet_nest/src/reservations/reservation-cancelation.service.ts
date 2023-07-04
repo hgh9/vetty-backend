@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import {
   Reservation,
-  ReservationStatus,
+  TreatmentStatus,
 } from '../reservations/entity/reservation.entity';
 import { ReservationService } from './reservations.service';
 import { IReservationsCancelation } from './reservation-cancelation.interface';
@@ -19,6 +19,7 @@ import { Payment } from './entity/payment.entity';
 import * as moment from 'moment';
 import { PaymentFactoryService } from './fake-modules/payment-factory.service';
 import { IPaymentService } from './fake-modules/payment-service.interface';
+import { User } from '@/users/entity/users.entity';
 
 @Injectable()
 // -> ReservationCancelationRepositoryService
@@ -69,7 +70,7 @@ export class ReservationCancelationService implements IReservationsCancelation {
       );
 
     //1-1. 예약 상태를 확인한다.
-    if (reservation.status != ReservationStatus.COMPLETED)
+    if (reservation.status != TreatmentStatus.RESERVATION_COMPLETED)
       throw new HttpException(
         '예약 취소할 수 없는 상태 입니다.',
         HttpStatus.FORBIDDEN,
@@ -114,7 +115,7 @@ export class ReservationCancelationService implements IReservationsCancelation {
     await queryRunner.startTransaction();
 
     try {
-      reservation.status = ReservationStatus.CANCELED;
+      reservation.status = TreatmentStatus.RESERVATION_CANCELED;
       reservation.updatedAt = new Date();
       this.reservationRepository.save(reservation);
       await queryRunner.commitTransaction();

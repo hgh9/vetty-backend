@@ -1,21 +1,23 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  RelationId,
+  RelationOptions,
+  TableForeignKey,
 } from 'typeorm';
 import { Pet } from '../../pets/entity/pet.entity';
 import { Reservation } from '../../reservations/entity/reservation.entity';
-import { Vet } from '../../vets/entity/vet.entity';
+import { Vet } from '@/vets/entity/vet.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  email: string;
 
   @Column()
   password: string;
@@ -24,27 +26,46 @@ export class User {
   userName: string;
 
   @Column()
+  kakaoId?: string;
+
+  @Column()
+  email: string;
+
+  @Column()
   phoneNumber: string;
 
+  @Column({
+    type: 'int'
+  })
+  status: UserStatus
+  
   @Column()
   level: UserLevel;
 
-  @OneToMany(() => Pet, (pet) => pet.user)
-  pet?: Pet[];
+  @Column({
+    nullable: true
+  })
+  vetId: number | null;
 
-  @OneToMany(() => Reservation, (reservation) => reservation.user)
-  reservation?: Reservation[];
+  @ManyToOne((type) => Vet, (vet) => vet)
+  @JoinColumn({name: 'vetId'})
+  vetInfo: Vet;
 
-  @OneToMany(() => Vet, (vet) => vet.user)
-  vet?: Vet[];
+  @OneToMany((type) => Pet, (pet) => pet.userInfo)
+  @JoinColumn({name: 'userId'})
+  pets?: Pet[];
+
+  @OneToMany(() => Reservation, (reservation: Reservation) => reservation.userInfo)
+  @JoinColumn({name: 'userId'})
+  reservations?: Reservation[];
+}
+
+export enum UserStatus {
+  USE = 1,
+  DELETE = 4
 }
 
 export enum UserLevel {
-  HOSPITAL_MANAGER = 1,
-  CUSTOMER = 2,
-}
-
-export enum VetDepartments {
   HOSPITAL_MANAGER = 1,
   CUSTOMER = 2,
 }
