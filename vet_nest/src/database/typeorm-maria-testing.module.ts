@@ -1,13 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Payment } from './../reservations/entity/payment.entity';
-import {
-  Reservation,
-  ReservationStatus,
-} from './../reservations/entity/reservation.entity';
-import { Payment } from './../reservations/entity/payment.entity';
-import { Reservation, ReservationStatus } from './../reservations/entity/reservation.entity';
+import { Reservation } from './../reservations/entity/reservation.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as moment from 'moment';
 
 export const testDbDataSource: DataSourceOptions = {
   type: 'mariadb',
