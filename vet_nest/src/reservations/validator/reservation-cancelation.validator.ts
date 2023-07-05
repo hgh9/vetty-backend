@@ -16,7 +16,7 @@ export default class ReservationCancelationValidator {
         }
 
         if (reservation?.status != TreatmentStatus.RESERVATION_COMPLETED) {
-            throw new BadRequestException('취소 가능 상태가 아닙니다.');
+            throw new ForbiddenException('취소 가능 상태가 아닙니다.');
         }
         return true;
     }

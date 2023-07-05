@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ReservastionsDto } from './dto/reservations.dto';
 import { ReservationService } from './reservations.service';
+import { Reservation } from './entity/reservation.entity';
 
 @Controller('reservations')
 export class ReservationsController {
@@ -28,6 +29,17 @@ export class ReservationsController {
       // };
     } catch (err) {
       throw new Error(err);
+    }
+  }
+
+  @Get()
+  @HttpCode(200)
+  async getReservations(): Promise<Reservation[]> {
+    try {
+      return Promise.resolve([]);
+    }
+    catch(e) {
+      
     }
   }
 

@@ -2,8 +2,10 @@ import {
   Controller,
   Get,
   HttpException,
+  HttpStatus,
   Inject,
   NotFoundException,
+  Param,
   Query,
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
@@ -16,8 +18,8 @@ export class ReservationCancelationController {
     private reservationCancelationService: ReservationCancelationService,
   ) {}
 
-  @Get()
-  async cancelReservation(@Query('id') id: number) {
+  @Get(':id')
+  async cancelReservation(@Param('id') id: number) {
     try {
       const result = await this.reservationCancelationService.cancelReservation(
         id,
@@ -27,27 +29,15 @@ export class ReservationCancelationController {
         message: '예약이 취소되었습니다.',
       };
     } catch (e) {
-      //TODO: ErrorHandler(Filter | interceptor) 구현
-      // -> Feedback : 서비스에서는 HttpException이 아닌 일반적인 Exception throw
-      // -> CommonResponse class 구현하고, 해당 class 사용할 것.
-      // -> 회사 -> CustomAppException 과 같은 역할
       switch (e.name) {
-        case 'HttpException':
-          throw new HttpException(
-            {
-              result: false,
-              message: e.response,
-            },
-            e.status,
-          );
+        case 'NotFoundException':
+          throw new HttpException(e.message, HttpStatus.NOT_FOUND);
+        case 'BadRequestException':
+          throw new HttpException(e.message, HttpStatus.BAD_REQUEST);  
+        case 'ForbiddenException':
+          throw new HttpException(e.message, HttpStatus.FORBIDDEN);  
         default:
-          throw new HttpException(
-            {
-              result: false,
-              message: e.message,
-            },
-            500,
-          );
+          throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
   }

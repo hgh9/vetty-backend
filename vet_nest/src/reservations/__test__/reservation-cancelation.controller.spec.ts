@@ -11,7 +11,6 @@ import { TreatmentStatus } from '../entity/reservation.entity';
 
 describe('ReservationCancelationController', () => {
   let app: INestApplication;
-  let controller: ReservationCancelationController;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({}).compile();
@@ -20,70 +19,47 @@ describe('ReservationCancelationController', () => {
     await app.init();
   });
 
-  describe('예약취소', () => {
-    it('정상적으로 예약이 취소되면 취소된 결과 메시지를 받는다.', async () => {
+  describe('GET /reservation-cancelation/${reservationId} - 예약취소 요청 e2e', () => {
+
+    it('정상적으로 취소된 경우 200을 반환한다.', async () => {
       //Arrange
       const reservationId = 1;
-
       //Act
-      request('http://localhost:3001')
-        .get(`/reservation-cancelation?id=${reservationId}`)
-        .then((res: request.Response) => {
-          
-          //TODO: ReservationDto
-          const canceledReservation = res.body;
-          //Assert
-          expect(res.statusCode).toEqual(HttpStatus.OK);
-          expect(canceledReservation.status).toEqual(TreatmentStatus.RESERVATION_CANCELED);
-          // expect(res.body.result).toBeTruthy();
-          // expect(res.body.message).toEqual('예약이 취소되었습니다.');
-        });
+      const res = 
+        await request('http://localhost:3001')
+              .get(`/reservation-cancelation/${reservationId}`);
+      //Assert 
+      expect(res.status).toBe(HttpStatus.OK);
     });
 
-    it('예약 id에 해당하는 예약정보가 없으면, 404 오류 메시지를 받는다. cancelReservation', async () => {
+    it('예약정보가 없으면 404을 반환한다.', async () => {
       //Arrange
       const reservationId = -1;
-
       //Act
-      request('http://localhost:3001')
-        .get(`/reservation-cancelation?id=${reservationId}`)
-        .then((res: request.Response) => {
-          //Assert
-          expect(res.statusCode).toEqual(HttpStatus.NOT_FOUND);
-        });
+      const res = await request('http://localhost:3001')
+        .get(`/reservation-cancelation/${reservationId}`);  
+      //Assert
+      expect(res.status).toEqual(HttpStatus.NOT_FOUND);
     });
 
-    it('예약시간까지 남은시간이 한시간 미만이면, 실패(403) 에러를 반환한다. - cancelReservation', async () => {
+    it('예약시간까지 남은시간이 한시간 이내면 403을 반환한다.', async () => {
       //Arrange
       const reservationId = 2;
-
       //Act
-      request('http://localhost:3001')
-        .get(`/reservation-cancelation?id=${reservationId}`)
-        .then((res: request.Response) => {
-          //Assert
-          expect(res.statusCode).toEqual(HttpStatus.FORBIDDEN);
-        });
+      const res = await request('http://localhost:3001')
+        .get(`/reservation-cancelation/${reservationId}`);
+      //Assert
+      expect(res.status).toBe(HttpStatus.FORBIDDEN);
     });
-  });
 
-  describe('예약정보 조회', () => {
-    it('예약정보를 조회 한다.', async () => {
+    it('예약상태가 예약완료가 아닌경우 403을 반환한다.', async () => {
       //Arrange
-      const customerId = '1';
-      const startDate = '2023-06-19';
-      const endDate = '2023-06-30';
-      const param = `customerId=${customerId}&startDate=${startDate}&endDate=${endDate}`;
-
-      //TODO: -> merge 후 reservation-controller에 요청하도록 변경
-
-      // Act
-      request('http://localhost:3001')
-        .get(`/reservation-cancelation?${param}`)
-        .then((reservations: request.Response) => {
-          //Assert
-          expect(reservations.statusCode).toEqual(HttpStatus.OK);
-        });
+      const reservationId = 3;
+      //Act
+      const res = await request('http://localhost:3001')
+        .get(`/reservation-cancelation/${reservationId}`);
+      //Assert
+      expect(res.status).toBe(HttpStatus.FORBIDDEN);
     });
   });
 });
