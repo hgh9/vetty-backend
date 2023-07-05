@@ -5,6 +5,7 @@ import { Logger } from "winston";
 
 export default class ReservationCancelationValidator {
 
+    // TODO: unit test 작성
     static validate(reservation?: Reservation): boolean {
         if (!reservation) {
             throw new NotFoundException('예약정보를 찾을 수 없습니다.');
@@ -24,11 +25,6 @@ export default class ReservationCancelationValidator {
         const reservedAt = moment(reservationDate);
         const limit = reservedAt.add(-1, 'hours');
         const current = moment();
-        console.log(`currentIsUtc: ${current.utcOffset()}`);
-        console.log(`limitIsUtc: ${limit.utcOffset()}`);
-        console.log(`current: ${current.toISOString()}`);
-        console.log(`limit: ${limit.toISOString()}`);
-        console.log(`isCancelableTime: ${current.isBefore(limit)}`);
         return current.isBefore(limit);
     }
 }

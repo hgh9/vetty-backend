@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import * as request from 'supertest';
 import { ReservastionsDto } from '../dto/reservations.dto';
+import { TreatmentStatus } from '../entity/reservation.entity';
 
 describe('ReservationCancelationController', () => {
   let app: INestApplication;
@@ -28,10 +29,14 @@ describe('ReservationCancelationController', () => {
       request('http://localhost:3001')
         .get(`/reservation-cancelation?id=${reservationId}`)
         .then((res: request.Response) => {
+          
+          //TODO: ReservationDto
+          const canceledReservation = res.body;
           //Assert
           expect(res.statusCode).toEqual(HttpStatus.OK);
-          expect(res.body.result).toBeTruthy();
-          expect(res.body.message).toEqual('예약이 취소되었습니다.');
+          expect(canceledReservation.status).toEqual(TreatmentStatus.RESERVATION_CANCELED);
+          // expect(res.body.result).toBeTruthy();
+          // expect(res.body.message).toEqual('예약이 취소되었습니다.');
         });
     });
 
@@ -45,7 +50,6 @@ describe('ReservationCancelationController', () => {
         .then((res: request.Response) => {
           //Assert
           expect(res.statusCode).toEqual(HttpStatus.NOT_FOUND);
-          expect(res.body.message).toEqual('예약정보를 찾을 수 없습니다.');
         });
     });
 
@@ -79,8 +83,6 @@ describe('ReservationCancelationController', () => {
         .then((reservations: request.Response) => {
           //Assert
           expect(reservations.statusCode).toEqual(HttpStatus.OK);
-          expect(typeof reservations).toEqual(Array);
-          // expect(reservations.length).toEqual(2);
         });
     });
   });

@@ -39,8 +39,8 @@ describe('ReservationCancelationService', () => {
 
     it('예약 취소가 성공하면, 진료 상태가 취소 완료 상태를 반환한다.', async () => {
       const reservationId = 1;
-      const reservation = await service.cancelReservation(reservationId);
-      expect(reservation.status).toEqual(TreatmentStatus.RESERVATION_CANCELED);
+      const canceledReservation = await service.cancelReservation(reservationId);
+      expect(canceledReservation.status).toEqual(TreatmentStatus.RESERVATION_CANCELED);
     });
   });
 });

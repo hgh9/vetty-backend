@@ -16,7 +16,9 @@ import ReservationCancelationValidator from './validator/reservation-cancelation
 @Injectable()
 // -> ReservationCancelationRepositoryService
 export class ReservationCancelationService implements IReservationsCancelation {
+  //TODO: Repository<Reservation> ->customReservationRepository 
   private reservationRepository: Repository<Reservation>;
+  //TODO: paymentService -> paymentApiCaller
   private paymentRepository: Repository<Payment>;
   private paymentService: IPaymentService;
   constructor(
@@ -29,24 +31,19 @@ export class ReservationCancelationService implements IReservationsCancelation {
     this.paymentService = this.paymentFactory.getService('test');
   }
 
-  async cancelReservation(reservationId: number): Promise<boolean> {
-    const reservation = await this.getTargetReservation(reservationId);
+  async cancelReservation(reservationId: number): Promise<Reservation> {
+    const reservation = await this.reservationRepository.findOneBy({ id: reservationId });
     try {
       const isValid = await ReservationCancelationValidator.validate(reservation);
-      if (!isValid) {
-        Promise.reject(false);
+      if (isValid) {
+        reservation.cancel();  
+        this.reservationRepository.save(reservation);
       }
-      reservation.cancel();
-      this.reservationRepository.save(reservation);
-      return Promise.resolve(true);
+      return Promise.resolve(reservation);
     }
     catch(e) {
+      //TODO: CommonResponse class 생성 후 감싸서 보낼 것
       throw e;
     }
-  }
-
-  public async getTargetReservation(id: number): Promise<Reservation> {
-    const reservations = await this.reservationRepository.findOneBy({ id: id });
-    return reservations;
   }
 }
