@@ -225,9 +225,4 @@ export async function dbInitializeCallback(db: DataSource) {
     },
   ]
   );
-
-  const reservationIndfo = await reservationRepo.find({
-    relations: ['vetInfo', 'petInfo', 'slotInfo']
-  });
-  console.log(`slotInfo:${JSON.stringify(reservationIndfo)}`);
 }
