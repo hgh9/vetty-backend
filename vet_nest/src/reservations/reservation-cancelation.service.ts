@@ -1,25 +1,20 @@
 import {
-  BadRequestException,
   HttpException,
   HttpStatus,
   Inject,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 import {
   Reservation,
   TreatmentStatus,
 } from '../reservations/entity/reservation.entity';
-import { ReservationService } from './reservations.service';
 import { IReservationsCancelation } from './reservation-cancelation.interface';
 import { DataSource, EntityManager, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Payment } from './entity/payment.entity';
 import * as moment from 'moment';
 import { PaymentFactoryService } from './fake-modules/payment-factory.service';
 import { IPaymentService } from './fake-modules/payment-service.interface';
-import { User } from '@/users/entity/users.entity';
 
 @Injectable()
 // -> ReservationCancelationRepositoryService
