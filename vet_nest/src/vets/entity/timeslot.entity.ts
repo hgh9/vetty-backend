@@ -40,6 +40,6 @@ export class TimeSlot {
   @JoinColumn({name: 'vetId'})
   vet?: Vet;
 
-  @ManyToOne(() => Reservation, (reservation) => reservation.slotInfo)
-  reservation?: Reservation;
+  @OneToMany(() => Reservation, (reservation) => reservation.slotInfo)
+  reservations?: Reservation[];
 }
