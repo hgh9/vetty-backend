@@ -10,7 +10,7 @@ import {
   TreatmentStatus,
 } from '../reservations/entity/reservation.entity';
 import { IReservationsCancelation } from './reservation-cancelation.interface';
-import { DataSource, EntityManager, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Payment } from './entity/payment.entity';
 import * as moment from 'moment';
 import { PaymentFactoryService } from './fake-modules/payment-factory.service';
