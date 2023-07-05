@@ -6,7 +6,7 @@ import {
 import { Payment } from './../src/reservations/entity/payment.entity';
 import { Pet, PetCategories, PetGender, PetVaccinatedInfo } from '../src/pets/entity/pet.entity';
 import { Vet, VetStatus } from '../src/vets/entity/vet.entity';
-import { TimeSlot } from '../src/reservations/entity/timeslot.entity';
+import { TimeSlot } from '../src/vets/entity/timeslot.entity';
 import { User, UserLevel, UserStatus } from '../src/users/entity/users.entity';
 import { Logger } from 'winston';
 

@@ -6,8 +6,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Reservation } from './reservation.entity';
-import { Vet } from '../../vets/entity/vet.entity';
+import { Reservation } from '../../reservations/entity/reservation.entity';
+import { Vet } from './vet.entity';
 // import { ReservationTime } from './reservationTime.entity';
 
 @Entity()

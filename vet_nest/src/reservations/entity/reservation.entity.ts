@@ -13,7 +13,7 @@ import { Payment } from './payment.entity';
 import { Pet } from '../../pets/entity/pet.entity';
 import { User } from '../../users/entity/users.entity';
 import { Vet } from '../../vets/entity/vet.entity';
-import { TimeSlot } from './timeslot.entity';
+import { TimeSlot } from '../../vets/entity/timeslot.entity';
 
 
 @Entity()
@@ -74,8 +74,6 @@ export class Reservation {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt?: Date;
 
-  // @
-
   @ManyToOne(() => User, (user) => user)
   @JoinColumn({name: 'userId'})
   userInfo: User;
@@ -86,29 +84,17 @@ export class Reservation {
   })
   payments: Payment[];
 
-  // @ManyToOne(() => Pet, (pet) => pet.reservation, {
-  //   nullable: false,
-  //   onDelete: 'CASCADE',
-  // })
-  // pet?: Pet;
 
-  // @ManyToOne(() => User, (user) => user.reservation, {
-  //   nullable: false,
-  //   onDelete: 'CASCADE',
-  // })
-  // user?: User;
+  constructor() {
+    
+  }
 
-  // @OneToOne(() => Vet, (vet) => vet.reservation)
-  // vet?: Vet;
+  cancel(): void 
+  {
+    this.status = TreatmentStatus.RESERVATION_CANCELED;
+    this.updatedAt = new Date();
+  }
 
-  // @OneToMany(() => TimeSlot, (timeSlot) => timeSlot.reservation)
-  // timeSlot: TimeSlot;
-
-  // @OneToOne(
-  //   () => ReservationTime,
-  //   (reservationTime) => reservationTime.reservation,
-  // )
-  // reservationTime: ReservationTime;
 }
 
 export enum TreatmentStatus {
