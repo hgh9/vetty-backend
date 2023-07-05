@@ -80,7 +80,21 @@ describe('ReservationsController', () => {
               .get(`/reservations?${param}`);
 
       expect(res.status).toBe(HttpStatus.BAD_REQUEST);
-    })
+    });
+
+    it('조회 기간이 1년을 초과하면 400을 반환한다.', async () => {
+      const today = new Date();
+      const monthDayString = `${today.getMonth()+1}-${today.getDay()}`;
+      const startDate = `${today.getFullYear()-1}-${monthDayString}`;
+      const endDate = `${today.getFullYear()}-${monthDayString}`;
+      const param = `startDate=${startDate}&endDate=${endDate}`;
+      
+      const res = 
+        await request('http://localhost:3001')
+              .get(`/reservations?${param}`);
+
+      expect(res.status).toBe(HttpStatus.BAD_REQUEST);
+    });
   });
 
   // 예약건들의 조회

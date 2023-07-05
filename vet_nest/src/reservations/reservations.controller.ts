@@ -1,15 +1,19 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
   HttpCode,
   Logger,
+  Param,
   Post,
   Query,
 } from '@nestjs/common';
 import { ReservastionsDto } from './dto/reservations.dto';
 import { ReservationService } from './reservations.service';
 import { Reservation } from './entity/reservation.entity';
+import { ReservationSearchDto } from './dto/reservation-search.dto';
+import moment from 'moment';
 
 @Controller('reservations')
 export class ReservationsController {
@@ -34,12 +38,19 @@ export class ReservationsController {
 
   @Get()
   @HttpCode(200)
-  async getReservations(): Promise<Reservation[]> {
+  async getReservations(@Param() param: ReservationSearchDto): Promise<Reservation[]> {
     try {
+      const start_date = moment(param.startDate);
+      if (!start_date.isValid())
+        throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
+      
+      if (!moment().add(-5).isBefore(start_date))
+        throw new BadRequestException('최대 5년 이전까지만 조회가 가능합니다.');
+      
       return Promise.resolve([]);
     }
     catch(e) {
-      
+
     }
   }
 
