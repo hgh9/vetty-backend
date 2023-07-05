@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { Pet } from '../../pets/entity/pet.entity';
 import { Reservation } from '../../reservations/entity/reservation.entity';
-import { Vet } from '@/vets/entity/vet.entity';
+import { Vet } from '../../vets/entity/vet.entity';
 
 @Entity()
 export class User {

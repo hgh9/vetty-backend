@@ -15,29 +15,31 @@ export class TimeSlot {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    type: 'date'
+  })
   startDate: Date;
 
   @Column()
   time: number;
 
   @Column({
-    type: 'timestamp'
+    type: 'time'
   })
-  startTime: Date
+  startTime: string
 
   @Column({
-    type: 'timestamp'
+    type: 'time'
   })
-  endTime: Date
+  endTime: string
 
   @Column()
   vetId: number;
 
   @ManyToOne(() => Vet, (vet) => vet)
   @JoinColumn({name: 'vetId'})
-  vet: Vet;;
+  vet?: Vet;
 
   @ManyToOne(() => Reservation, (reservation) => reservation.slotInfo)
-  reservation: Reservation;
+  reservation?: Reservation;
 }

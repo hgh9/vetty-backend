@@ -56,40 +56,40 @@ export class Reservation {
   })
   amount: number;
 
-  @ManyToOne(() => TimeSlot, (slot) => slot)
-  @JoinColumn({name: 'slotId'})
-  slotInfo: TimeSlot;
-
-  @ManyToOne(() => Pet, (pet) => pet)
-  @JoinColumn({name: 'petId'})
-  petInfo: Pet
-
-  @ManyToOne(() => Vet, (vet) => vet)
-  @JoinColumn({ name : 'vetId'})
-  vetInfo?: Vet;
-
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt?: Date;
 
+  @ManyToOne(() => TimeSlot, (slot) => slot)
+  @JoinColumn({name: 'slotId'})
+  slotInfo?: TimeSlot;
+
+  @ManyToOne(() => Pet, (pet) => pet)
+  @JoinColumn({name: 'petId'})
+  petInfo?: Pet
+
+  @ManyToOne(() => Vet, (vet) => vet)
+  @JoinColumn({ name : 'vetId'})
+  vetInfo?: Vet;
+
   @ManyToOne(() => User, (user) => user)
   @JoinColumn({name: 'userId'})
-  userInfo: User;
+  userInfo?: User;
 
   @OneToMany(() => Payment, (payment) => payment.reservation, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  payments: Payment[];
+  payments?: Payment[];
 
 
   constructor() {
     
   }
 
-  cancel(): void 
+  public cancel(): void 
   {
     this.status = TreatmentStatus.RESERVATION_CANCELED;
     this.updatedAt = new Date();
