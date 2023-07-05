@@ -17,15 +17,15 @@ export class ReservationService {
   }
 
   async create(data: ReservastionsDto): Promise<any> {
-    new Logger().verbose('create Reservations in repo', JSON.stringify(data));
+    // new Logger().verbose('create Reservations in repo', JSON.stringify(data));
 
-    const result = await this.reservationRepository.save(data);
-    console.log(result);
-    return {
-      result: true,
-      data: result,
-      message: '예약이 완료되었습니다.',
-    };
+    // const result = await this.reservationRepository.save(data);
+    // console.log(result);
+    // return {
+    //   result: true,
+    //   data: result,
+    //   message: '예약이 완료되었습니다.',
+    // };
   }
 
   async findAll(): Promise<Reservation[]> {

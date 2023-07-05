@@ -5,7 +5,7 @@ import {
   ReservationStatus,
 } from './../reservations/entity/reservation.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as moment from 'moment';
+import { User, UserLevel, UserStatus } from '../users/entity/users.entity';
 
 export const testDbDataSource: DataSourceOptions = {
   type: 'mariadb',

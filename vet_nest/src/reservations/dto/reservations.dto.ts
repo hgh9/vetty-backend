@@ -3,7 +3,7 @@ import { IsOptional } from 'class-validator';
 import { Payment } from '../entity/payment.entity';
 import {
   DignosisCategory,
-  ReservationStatus,
+  TreatmentStatus,
 } from '../entity/reservation.entity';
 import { PetDto } from '../../pets/dto/pet.dto';
 import { VetDto } from '../../vets/dto/vet.dto';
@@ -45,7 +45,7 @@ export class ReservastionsDto {
     description: '사용자 이름',
   })
   @IsOptional()
-  status: ReservationStatus;
+  status: TreatmentStatus;
 
   @ApiProperty({
     default: true,

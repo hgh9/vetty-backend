@@ -8,14 +8,14 @@ export class PetsService {
 
   constructor(
     @Inject('DATA_SOURCE')
-    private readonly dataSource: DataSource, // @InjectRepository(Reservation) // private readonly reservationReposiotory: Repository<Reservation>, // @InjectRepository(Payment) // private readonly paymentReposiotory: Repository<Payment>,
+    private readonly dataSource: DataSource,
   ) {
     this.petRepository = this.dataSource.getRepository(Pet);
   }
 
   async addPet(addPetDto: AddPetDto) {
     if (!this.isAddPetDtoValid(addPetDto)) {
-      throw new Error('invalid data');
+      throw new Error('valid pet data are required');
     }
 
     const newPet = this.petRepository.create(addPetDto);
@@ -23,19 +23,31 @@ export class PetsService {
     return newPet;
   }
 
-  async modifyPet() {
-    return false;
+  async updatePet(petDto) {
+    if (!this.isUpdatePetDtoValid(petDto) || petDto.species === null) {
+      throw new Error('valid pet data are required');
+    }
+
+    const updatedPet = await this.petRepository.update(petDto.petId, petDto);
+    return updatedPet;
   }
 
-  async deletePet() {
-    return false;
+  async deletePet(petId) {
+    return true;
   }
 
-  async listPet() {
-    return false;
+  async listPet(userId) {
+    if (!userId) {
+      throw Error('userId is required');
+    }
+    return [];
   }
 
   private isAddPetDtoValid(addPetDto: AddPetDto) {
+    return true;
+  }
+
+  private isUpdatePetDtoValid(addPetDto: AddPetDto) {
     return true;
   }
 }
