@@ -14,6 +14,10 @@ export class ReservastionsDto {
   id?: number;
 
   @ApiProperty({
+    name: 'status',
+    type: ReservationStatus,
+  })
+  @ApiProperty({
     default: '',
     required: false,
     type: 'string',

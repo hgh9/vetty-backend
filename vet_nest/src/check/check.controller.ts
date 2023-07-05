@@ -15,14 +15,12 @@ import { Reservation } from '@/reservations/entity/reservation.entity';
 @Controller('check')
 export class CheckController {
   constructor(private readonly checkService: CheckService) {}
-
+  //기본적인 로직을 완성해두고, 에러가 날 수 있는 가능한 모든 경우들을 생각해 test code를 작성하고 동작하는 코드에서 예외처리를 하는 방식으로 코드를 작성해 나갈 수 있습니다.
   @Get()
   async getAllReservation() {
-    //전체 예약정보조회인지 보호자와반려견을 일치시킨 예약조회인지
-    // return 'hello world';
+    // 예약정보를 조회한다.
     try {
-      const result = await this.checkService.getAllReservations(); // checkService안에 있는 함수 값을 return 한다.
-      console.log('결과 조회', result);
+      const result = await this.checkService.getAllReservations();
       return {
         result: result,
         message: '예약조회가 완료되었습니다.',
@@ -30,13 +28,9 @@ export class CheckController {
     } catch (e) {}
   }
 
-  // 진료목록,진료정보를 조회한다.
-
-  // 고객의 진료 목록을 조회한다.
-  // 고객의상세 정보를 조회한다.
-  // 예약상태변경
   @Post(':id')
   async updateUserState(@Param() param: { id: number }, @Body() updateinfo) {
+    // 예약상태변경
     try {
       const result = await this.checkService.updateUserState(param, updateinfo);
       console.log('body', updateinfo);
@@ -48,3 +42,10 @@ export class CheckController {
     } catch (e) {}
   }
 }
+
+/**
+ * @Post()
+    addMenu(@Param('storeId') storeId: number, @Body() createMenuDto: CreateMenuDto) {
+        return this.menuService.addMenu(storeId, createMenuDto);
+    }
+ */

@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import * as request from 'supertest';
 import { CheckController } from '../check.controller';
+import exp from 'constants';
 
 describe('CheckController', () => {
   let app: INestApplication;
-  // let controller: CheckController;
 
   beforeAll(async () => {
     //앱모듈을 실행
@@ -20,26 +20,31 @@ describe('CheckController', () => {
   });
 
   describe('예약조회', () => {
-    it('예약정보가 전체 조회된다.', async () => {
+    it('예약정보가 전체 목록을 불러온다.', () => {
+      //테스트가 성공하는 상황
       request('http://localhost:3001')
         .get('/check')
         .then((res: request.Response) => {
-          expect(res.statusCode).toBe(200);
-          expect(res.body.result).not.toBeUndefined(); //예약정보가 없을 경우도 true
-          expect(res.body.message).toEqual('예약조회가 완료되었습니다.');
+          expect(res.body.result).toEqual([]); // 성공케이스 배열값이 return되었을 때
+          expect(res.body.result).toBeUndefined(); // 실패케이스 값이 undefined일 경우(예약목록을 불러오지 못했을경우)
+          //404에러가 뜰 경우(서버 연결오류)
+          //어드민이 아닐 경우 -> user값 안에서 어드민인지 확인
         });
     });
   });
 });
 
 describe('예약상태 변경', () => {
-  it('예약 상태 변경 정상 반영된다.', async () => {
+  it('예약 상태 변경이 정상 반영된다.', async () => {
     request('http://localhost:3001')
       .put('check/:id')
       .then((res: request.Response) => {
         console.log('res', res);
-        expect(res.statusCode).toBe(201);
-        expect(res.body.message).toEqual('상태변경이 완료 되었습니다.');
+        expect(res.statusCode).toEqual({}); // 성공케이스 객체(엔티티값)가 반환 되었을 때
+        //실패케이스
+        // 상태값이 동일할 때 -> 새로바뀐값이랑 기존값이랑 같을 때
+        // 아이디값이 일치하지 않을 경우
+        // paramr값이 정상적으로 들어오지 않을 경우
       });
   });
 

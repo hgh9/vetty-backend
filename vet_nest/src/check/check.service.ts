@@ -17,8 +17,10 @@ export class CheckService {
     this.petRepository = this.dataSource.getRepository(Pet);
   }
 
+  // 예약을 조회한다.
   public async getAllReservations() {
     const getAllReservation = await this.reservationRepository.find();
+    // 값을 불러오지 못했을 경우의 에러처리 필요
     return getAllReservation;
   }
 
