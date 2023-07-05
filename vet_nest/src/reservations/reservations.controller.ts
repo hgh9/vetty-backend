@@ -42,6 +42,7 @@ export class ReservationsController {
   @HttpCode(200)
   async getReservations(@Query() param: ReservationSearchDto): Promise<Reservation[]> {
     try {
+      //TODO: validation -> dto or dto validator 
       console.log(`param: ${JSON.stringify(param)}`);
       const startDate = moment(param.startDate, 'YYYY-MM-DD');
       if (!startDate.isValid())
