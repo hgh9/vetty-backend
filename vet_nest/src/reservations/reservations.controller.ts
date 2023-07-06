@@ -43,7 +43,6 @@ export class ReservationsController {
   async getReservations(@Query() param: ReservationSearchDto): Promise<Reservation[]> {
     try {
       //TODO: validation -> dto or dto validator 
-      console.log(`param: ${JSON.stringify(param)}`);
       const startDate = moment(param.startDate, 'YYYY-MM-DD');
       if (!startDate.isValid())
         throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
@@ -59,8 +58,9 @@ export class ReservationsController {
       console.log(`diffDays - ${diffDays}`);
       if (diffDays > 365)
         throw new BadRequestException('조회 범위는 최대 1년 입니다.');
-      
-      return await Promise.resolve([]);
+    
+      const userId = 1;
+      return await this.reservationService.getReservationsByUserId(userId, param);
     }
     catch(e) {
       switch (e.name) {
