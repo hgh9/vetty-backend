@@ -32,17 +32,14 @@ jobs:
           file: ./vet_nest/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/vetty-backend-backend:latest
+      - name: docker-compose up -d 
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: sudo docker-compose --project-directory ./app --env-file ./app/.env up -d 
+          host: ${{ secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USERNAME}}   
+          password: ${{ secrets.SSH_PASSWORD}}   
 
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - name: ls -a via ssh
-      uses: garygrossgarten/github-action-ssh@release
-      with:
-        command: ls -a
-        host: ${{ secrets.SSH_HOST}}
-        username: ${{ secrets.SSH_USERNAME}}   
-        password: ${{ secrets.SSH_PASSWORD}}   
   # if_merged:
   #   if: ${{ github.event.pull_request.merged }}
   #   name: build docker images
