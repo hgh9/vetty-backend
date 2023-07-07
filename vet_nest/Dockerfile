@@ -1,15 +1,14 @@
 FROM node:18-alpine
 
 WORKDIR /app
-RUN 
-    
+RUN npm install -g yarn
 
 COPY . /app/
 
 COPY package*.json /app/
 
-RUN npm install \
-    && npm run build 
+RUN yarn \
+    && yarn run build 
 
 COPY ./ ./
 
