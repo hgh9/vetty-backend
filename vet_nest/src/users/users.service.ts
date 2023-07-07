@@ -1,37 +1,30 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 import { User } from './entity/users.entity';
 import { CreateUserDto, LoginUserDto, UserDto } from './dto/user.dto';
+import { UsersRepository } from './repository/users.repository';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
-  private userRepository: Repository<User>;
-  jwtService: any;
   constructor(
-    @Inject('DATA_SOURCE')
-    private readonly dataSource: DataSource, // @InjectRepository(Reservation) // private readonly reservationReposiotory: Repository<Reservation>, // @InjectRepository(Payment) // private readonly paymentReposiotory: Repository<Payment>,
-  ) {
-    this.userRepository = this.dataSource.getRepository(User);
-  }
+    private readonly usersRepository: UsersRepository,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async signup(createUserDto: CreateUserDto) {
     if (!this.isCreateUserDtoValid(createUserDto)) {
-      throw new HttpException('Invalid user data', HttpStatus.BAD_REQUEST);
+      throw new Error('invalid user data');
     }
-    if (await this.isUserDuplicate(createUserDto.email)) {
-      throw new HttpException('Duplicate user data', HttpStatus.BAD_REQUEST);
+    if (await this.usersRepository.isUserDuplicate(createUserDto.email)) {
+      throw new Error('Duplicate user data');
     }
 
-    const newUser = this.userRepository.create(createUserDto);
-    await this.userRepository.save(newUser);
-    return newUser;
+    return await this.usersRepository.createUser(createUserDto);
   }
 
   async login(loginUserDto: LoginUserDto) {
-    const loginUser: User = await this.userRepository.findOneBy({
-      email: loginUserDto.email,
-      password: loginUserDto.password,
-    });
+    const loginUser: User =
+      await this.usersRepository.findOneByEmailAndPassword(loginUserDto);
 
     if (!loginUser) {
       throw new Error('Wrong user data');
@@ -48,10 +41,6 @@ export class UsersService {
 
   public verifyToken(token: string) {
     return !!this.jwtService.verify(token);
-  }
-
-  private async isUserDuplicate(email) {
-    return !!(await this.userRepository.findOneBy({ email }));
   }
 
   private generateToken(email) {

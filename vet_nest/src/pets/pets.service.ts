@@ -1,16 +1,18 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
-import { AddPetDto, Pet } from './entity/pet.entity';
+import { Injectable } from '@nestjs/common';
+import { AddPetDto } from './entity/pet.entity';
+import { PetsRepository } from './repository/pets.repository';
 
 @Injectable()
 export class PetsService {
-  private petRepository: Repository<Pet>;
+  constructor(private readonly petsRepository: PetsRepository) {}
 
-  constructor(
-    @Inject('DATA_SOURCE')
-    private readonly dataSource: DataSource,
-  ) {
-    this.petRepository = this.dataSource.getRepository(Pet);
+  async listPet(userId) {
+    if (!userId) {
+      throw Error('userId is required');
+    }
+
+    // TODO: common response, undefined => empty array
+    return await this.petsRepository.findByUserId(userId);
   }
 
   async addPet(addPetDto: AddPetDto) {
@@ -18,36 +20,35 @@ export class PetsService {
       throw new Error('valid pet data are required');
     }
 
-    const newPet = this.petRepository.create(addPetDto);
-    await this.petRepository.save(newPet);
-    return newPet;
+    return await this.petsRepository.addPet(addPetDto);
   }
 
-  async updatePet(petDto) {
-    if (!this.isUpdatePetDtoValid(petDto) || petDto.species === null) {
+  async updatePet(updatePetDto) {
+    if (!this.isUpdatePetDtoValid(updatePetDto)) {
       throw new Error('valid pet data are required');
     }
 
-    const updatedPet = await this.petRepository.update(petDto.petId, petDto);
-    return updatedPet;
+    return await this.petsRepository.updatePet(updatePetDto);
   }
 
-  async deletePet(petId) {
-    return true;
-  }
-
-  async listPet(userId) {
-    if (!userId) {
-      throw Error('userId is required');
+  async deletePet(petId, userId) {
+    const isPetUsers = await this.petsRepository.isPetUsers(petId, userId);
+    if (!isPetUsers) {
+      throw new Error('the pet is not users');
     }
-    return [];
+    return await this.petsRepository.deletePet(petId);
   }
 
-  private isAddPetDtoValid(addPetDto: AddPetDto) {
-    return true;
+  private isAddPetDtoValid(addPetDto) {
+    return addPetDto.userId && addPetDto.name && addPetDto.category;
   }
 
-  private isUpdatePetDtoValid(addPetDto: AddPetDto) {
-    return true;
+  private isUpdatePetDtoValid(updatePetDto) {
+    return (
+      updatePetDto.userId &&
+      updatePetDto.name &&
+      updatePetDto.category &&
+      updatePetDto.petId
+    );
   }
 }

@@ -49,8 +49,8 @@ export class PetsController {
   }
 
   @Delete()
-  async deletePets(@Query('petId') petId: number) {
-    const result = await this.PetsService.deletePet(petId).catch((error) => {
+  async deletePets(@Query('petId') petId, @Query('userId') userId) {
+    const result = await this.PetsService.deletePet(petId, userId).catch((error) => {
       if (error.message === 'petId is required') {
         throw new HttpException({ result: false, message: error.message }, 400);
       }
