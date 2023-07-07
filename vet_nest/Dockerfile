@@ -8,7 +8,8 @@ COPY . /app/
 
 COPY package*.json /app/
 
-RUN npm \
+
+RUN npm install \
     && npm run build 
 
 COPY ./ ./
