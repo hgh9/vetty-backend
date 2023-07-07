@@ -10,6 +10,7 @@ COPY package*.json /app/
 RUN yarn \
     && yarn run build 
 
+
 COPY ./ ./
 
 EXPOSE 3001 
