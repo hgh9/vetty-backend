@@ -16,7 +16,7 @@ export const testDbDataSource: DataSourceOptions = {
   database: 'test',
   synchronize: true,
   logging: true,
-  timezone: 'z',
+  timezone: '+09:00',
   entities: [Reservation, Payment, Vet, TimeSlot, Pet, User],
 };
 

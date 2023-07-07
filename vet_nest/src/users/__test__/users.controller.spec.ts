@@ -4,7 +4,7 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { JwtService } from '@nestjs/jwt';
 
-describe('UserController', () => {
+describe('SIGN UP', () => {
   let app: INestApplication;
   let jwtService: JwtService;
 
@@ -41,7 +41,7 @@ describe('UserController', () => {
       phoneNumber: '01012345678',
     };
 
-    request('http://localhost:3001')
+    request('http://localhost:3001/users')
       .post(`/signup`)
       .send(createUserDto)
       .then((res: request.Response) => {
@@ -59,13 +59,36 @@ describe('UserController', () => {
       phoneNumber: '01012345678',
     };
 
-    request('http://localhost:3001')
+    request('http://localhost:3001/users')
       .post(`/signup`)
       .send(createUserDto)
       .then((res: request.Response) => {
         expect(res.statusCode).toEqual(HttpStatus.BAD_REQUEST);
         expect(res.body.message).toEqual('Invalid user data');
       });
+  });
+});
+
+describe('LOG IN', () => {
+  let app: INestApplication;
+  let jwtService: JwtService;
+
+  beforeAll(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        JwtService,
+        {
+          provide: JwtService,
+          useValue: {
+            sign: jest.fn(),
+          },
+        },
+      ],
+    }).compile();
+
+    app = module.createNestApplication();
+    jwtService = module.get<JwtService>(JwtService);
+    await app.init();
   });
 
   test('정상적으로 로그인 성공하면 결과 메시지를 받는다', async () => {
@@ -81,7 +104,7 @@ describe('UserController', () => {
       token: jwtService.sign('honggildong@gmai.com'),
     };
 
-    request('http://localhost:3001')
+    request('http://localhost:3001/users')
       .post('/login')
       .send(loginUserDto)
       .then((res: request.Response) => {
@@ -97,7 +120,7 @@ describe('UserController', () => {
       password: '12345678!',
     };
 
-    request('http://localhost:3001')
+    request('http://localhost:3001/users')
       .post('/login')
       .send(loginUserDto)
       .then((res: request.Response) => {

@@ -23,6 +23,9 @@ import { UsersModule } from './users/users.module';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
 import { CheckModule } from './check/check.module';
+import { PetsRepository } from './pets/repository/pets.repository';
+import { UsersRepository } from './users/repository/users.repository';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -63,9 +66,12 @@ import { CheckModule } from './check/check.module';
   providers: [
     AppService,
     PetsService,
+    PetsRepository,
     VetsService,
     PaymentsService,
     UsersService,
+    UsersRepository,
+    JwtService,
   ],
 })
 export class AppModule {}

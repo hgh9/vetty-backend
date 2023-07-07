@@ -10,7 +10,6 @@ import {
 } from 'typeorm';
 import { Reservation } from '../../reservations/entity/reservation.entity';
 import { User } from '../../users/entity/users.entity';
-import { Vet } from '../../vets/entity/vet.entity';
 import { PickType } from '@nestjs/swagger';
 import { PetDto } from '../dto/pet.dto';
 
@@ -28,41 +27,41 @@ export class Pet {
   @Column()
   category: PetCategories;
 
-  @Column()
+  @Column({ nullable: true })
   breed: string;
 
-  @Column()
+  @Column({ nullable: true })
   weightKg: number;
 
-  @Column()
+  @Column({ nullable: true })
   age: number;
 
-  @Column('date')
+  @Column('date', { nullable: true })
   birth: Date;
 
-  @Column()
+  @Column({ nullable: true })
   gender: PetGender;
 
-  @Column()
+  @Column({ nullable: true })
   neutered: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   allergy: string;
 
-  @Column()
+  @Column({ nullable: true })
   vaccinate: PetVaccinatedInfo;
 
-  @Column()
+  @Column({ nullable: true })
   extraInfo: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(type => User, (user) => user)
+  @ManyToOne(() => User, (user) => user)
   @JoinColumn({name: 'userId'})
   userInfo?: User;
 
-  @OneToMany(type => Reservation, (reservation) => reservation.petInfo)
+  @OneToMany(() => Reservation, (reservation) => reservation.petInfo)
   reservations?: Reservation[];
 }
 

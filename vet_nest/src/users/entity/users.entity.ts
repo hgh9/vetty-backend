@@ -25,7 +25,7 @@ export class User {
   @Column()
   userName: string;
 
-  @Column()
+  @Column({ nullable: true })
   kakaoId?: string;
 
   @Column()
@@ -34,35 +34,31 @@ export class User {
   @Column()
   phoneNumber: string;
 
-  @Column({
-    type: 'int'
-  })
-  status: UserStatus
+  @Column({ type: 'int', nullable: true })
+  status: UserStatus;
   
-  @Column()
+  @Column({ nullable: true })
   level: UserLevel;
 
-  @Column({
-    nullable: true
-  })
+  @Column({ nullable: true })
   vetId: number | null;
 
   @ManyToOne((type) => Vet, (vet) => vet)
-  @JoinColumn({name: 'vetId'})
+  @JoinColumn({ name: 'vetId' })
   vetInfo: Vet;
 
   @OneToMany((type) => Pet, (pet) => pet.userInfo)
-  @JoinColumn({name: 'userId'})
+  @JoinColumn({ name: 'userId' })
   pets?: Pet[];
 
   @OneToMany(() => Reservation, (reservation: Reservation) => reservation.userInfo)
-  @JoinColumn({name: 'userId'})
+  @JoinColumn({ name: 'userId' })
   reservations?: Reservation[];
 }
 
 export enum UserStatus {
   USE = 1,
-  DELETE = 4
+  DELETE = 4,
 }
 
 export enum UserLevel {
