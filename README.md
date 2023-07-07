@@ -79,4 +79,5 @@
 
 ## CICD
   1. git action
+  2. docker hub
 
