@@ -97,7 +97,7 @@ export const databaseProviders = [
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
         synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-        logging: false,
+        logging: true,
         entities: [User, Pet, Vet, TimeSlot, Reservation, Payment],
       });
 
