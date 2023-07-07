@@ -36,8 +36,9 @@ jobs:
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: |
-            sudo docker-compose --project-directory ./app pull
-            sudo docker-compose --project-directory ./app --env-file ./app/.env --no-deps --build backend up -d 
+            sudo docker-compose --project-directory ./app pull &&
+            sudo docker-compose --project-directory ./app --env-file ./app/.env up -d --remove-orphans &&
+            sudo docker image prune
           host: ${{ secrets.SSH_HOST}}
           username: ${{ secrets.SSH_USERNAME}}   
           password: ${{ secrets.SSH_PASSWORD}}   
