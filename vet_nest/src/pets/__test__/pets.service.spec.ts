@@ -1,85 +1,237 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PetsService } from '../pets.service';
-import { Repository } from 'typeorm';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import {
-  AddPetDto,
-  Pet,
-  PetCategories,
-  PetGender,
-  PetVaccinatedInfo,
-} from '../entity/pet.entity';
+import { PetCategories, PetGender } from '../entity/pet.entity';
+import { PetsRepositoryMock } from '../repository/pets.repository.mock';
+import { PetsRepository } from '../repository/pets.repository';
 
-describe('add pet', () => {
+describe('LIST PET', () => {
   let service: PetsService;
-  let petRepositoryMock: jest.Mocked<Repository<Pet>>;
-
-  const addPetDto: AddPetDto = {
-    // id: 1,
-    age: 13,
-    category: PetCategories.DOG,
-    name: 'goyangyi',
-    birth: new Date('2022-01-01'),
-    weightKg: 4,
-    breed: 'Russian Blue',
-    gender: PetGender.FEMALE,
-    allergy: ['skin'],
-    neutered: true,
-    extraInfo: 'hello',
-    vaccinate: PetVaccinatedInfo.UNKNOWN_VACCINATED,
-  };
-  const addedPet: AddPetDto = {
-    // id: 2,
-    age: 14,
-    category: PetCategories.CAT,
-    name: 'goyangyi',
-    birth: new Date('2021-01-01'),
-    weightKg: 2,
-    breed: 'Russian Blue',
-    gender: PetGender.FEMALE,
-    allergy: ['skin'],
-    neutered: true,
-    extraInfo: 'hello',
-    vaccinate: PetVaccinatedInfo.UNKNOWN_VACCINATED,
-  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        PetsService,
         {
-          provide: getRepositoryToken(Pet),
-          useFactory: () => ({
-            create: jest.fn(),
-            save: jest.fn(),
-          }),
+          provide: PetsRepository,
+          useClass: PetsRepositoryMock,
         },
+        PetsService,
       ],
     }).compile();
 
     service = module.get<PetsService>(PetsService);
-    petRepositoryMock = module.get(getRepositoryToken(Pet));
-    petRepositoryMock.create.mockReturnValue(addedPet);
-    petRepositoryMock.save.mockResolvedValue(addedPet);
   });
 
-  test('required data is needed', async () => {
-    // PASS
-    const newPet = service.addPet(addPetDto);
-    expect(newPet).toEqual(addedPet);
+  test('listPet fails when userId is missing', async () => {
+    const userId = null;
 
-    // FAIL
-    const missingData = (key) => {
-      const copied = Object.assign({}, addPetDto);
-      copied[key] = '';
-      return copied;
-    };
-
-    const no_species = missingData('species');
     try {
-      await service.addPet(no_species);
-    } catch (error) {
+      await service.listPet(userId);
+    }
+    catch(error) {
       expect(error).toBeInstanceOf(Error);
     }
+
+    expect.assertions(1);
+  });
+
+  test('listPet passes with a valid userId', async () => {
+    const userId = 1;
+    const petList = [
+      {
+        petId: '1',
+        userId: 1,
+        name: 'goyangyi',
+        category: PetCategories.CAT,
+        breed: 'Russian Blue',
+        weightKg: 4,
+        age: 1,
+        birth: null,
+        gender: PetGender.MALE,
+        neutered: true,
+        allergy: null,
+        vaccinate: null,
+        extraInfo: null,
+        createdAt: null,
+      },
+    ];
+
+    const result = await service.listPet(userId);
+
+    expect(result).toEqual(petList);
+  });
+});
+
+describe('ADD PET', () => {
+  let service: PetsService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {
+          provide: PetsRepository,
+          useClass: PetsRepositoryMock,
+        },
+        PetsService,
+      ],
+    }).compile();
+
+    service = module.get<PetsService>(PetsService);
+  });
+
+  test('addPet fails when pet data are not valid', async () => {
+    const noNameCat = {
+      userId: 1,
+      name: null,
+      category: PetCategories.CAT,
+      breed: 'Russian Blue',
+      weightKg: 4,
+      age: 1,
+      birth: null,
+      gender: PetGender.MALE,
+      neutered: true,
+      allergy: null,
+      vaccinate: null,
+      extraInfo: null,
+    };
+
+    try {
+      await service.addPet(noNameCat);
+    }
+    catch(error) {
+      expect(error).toBeInstanceOf(Error);
+    }
+
+    expect.assertions(1);
+  });
+
+  test('addPet passes with valid pet data', async () => {
+    const addPetDto = {
+      userId: 1,
+      name: 'goyangyi',
+      category: PetCategories.CAT,
+      breed: 'Russian Blue',
+      weightKg: 4,
+      age: 1,
+      birth: null,
+      gender: PetGender.MALE,
+      neutered: true,
+      allergy: null,
+      vaccinate: null,
+      extraInfo: null,
+    };
+    const addedPet = Object.assign({}, addPetDto, { petId: 1 });
+
+    const result = await service.addPet(addPetDto);
+
+    expect(result).toEqual(addedPet);
+  });
+});
+
+describe('UPDATE PET', () => {
+  let service: PetsService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {
+          provide: PetsRepository,
+          useClass: PetsRepositoryMock,
+        },
+        PetsService,
+      ],
+    }).compile();
+
+    service = module.get<PetsService>(PetsService);
+  });
+
+  test('updatePet fails when pet data are not valid', async () => {
+    const noNameCat = {
+      petId: 1,
+      userId: 1,
+      name: null,
+      category: PetCategories.CAT,
+      breed: 'Russian Blue',
+      weightKg: 4,
+      age: 1,
+      birth: null,
+      gender: PetGender.MALE,
+      neutered: true,
+      allergy: null,
+      vaccinate: null,
+      extraInfo: null,
+    };
+
+    try {
+      await service.updatePet(noNameCat);
+    }
+    catch(error) {
+      expect(error).toBeInstanceOf(Error);
+    }
+
+    expect.assertions(1);
+  });
+
+  test('updatePet passes with valid pet data', async () => {
+    const updatePetDto = {
+      petId: 1,
+      userId: 1,
+      name: 'goyangyi',
+      category: PetCategories.CAT,
+      breed: 'Russian Blue',
+      weightKg: 4,
+      age: 1,
+      birth: null,
+      gender: PetGender.MALE,
+      neutered: true,
+      allergy: null,
+      vaccinate: null,
+      extraInfo: null,
+    };
+
+    const result = await service.updatePet(updatePetDto);
+
+    expect(result).toEqual(updatePetDto);
+  });
+});
+
+describe('DELETE PET', () => {
+  let service: PetsService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {
+          provide: PetsRepository,
+          useClass: PetsRepositoryMock,
+        },
+        PetsService,
+      ],
+    }).compile();
+
+    service = module.get<PetsService>(PetsService);
+  });
+
+  test('deletePet fails when petId and userId dont match ', async () => {
+    const userId = 99;
+    const petId = 1;
+
+    try {
+      await service.deletePet(petId, userId);
+    }
+    catch (error) {
+      expect(error).toBeInstanceOf(Error);
+    }
+
+    expect.assertions(1);
+  });
+
+  test('deletePet passes with valid pet and user data', async () => {
+    const userId = 1;
+    const petId = 1;
+    const deletedRows = 1;
+
+    const result = await service.deletePet(petId, userId);
+
+    expect(result).toEqual(deletedRows);
   });
 });

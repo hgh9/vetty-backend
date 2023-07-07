@@ -79,14 +79,7 @@ export class ReservationUserDto extends PickType(UserDto, [
   'userName',
 ]) {}
 
-export class LoginUserDto extends PickType(UserDto, [
-  'id',
-  'password',
-  'phoneNumber',
-  'email',
-  'userName',
-  'level',
-]) {}
+export class LoginUserDto extends PickType(UserDto, ['password', 'email']) {}
 
 export class LoginSimpleDto extends PickType(UserDto, ['password', 'email']) {}
 
