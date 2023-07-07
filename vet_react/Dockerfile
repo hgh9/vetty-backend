@@ -7,7 +7,8 @@ COPY . /app/
 COPY package*.json /app/
 
 RUN yarn \
-    && yarn run build 
+    && npx update-browserslist-db@latest  \
+    && yarn run build  
 
 COPY ./ ./
 
