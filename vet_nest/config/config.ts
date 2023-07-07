@@ -64,7 +64,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
   timezone: '+09:00',
   synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
   autoLoadEntities: true,
-  logging: true,
+  logging: false,
   // entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
   // entities: [Photo, Reservation,],
 };
@@ -80,7 +80,7 @@ export const testDbConfig: TypeOrmModuleOptions = {
   timezone: '+09:00',
   synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
   autoLoadEntities: true,
-  logging: true,
+  logging: false,
 };
 
 export const databaseProviders = [
@@ -98,7 +98,7 @@ export const databaseProviders = [
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
         synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-        logging: true,
+        logging: false,
         entities: [User, Pet, Vet, TimeSlot, Reservation, Payment],
       });
 

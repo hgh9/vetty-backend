@@ -40,9 +40,11 @@ export class ReservationsController {
 
   @Get()
   @HttpCode(200)
-  async getReservations(@Query() param: ReservationSearchDto): Promise<Reservation[]> {
+  async getReservations(
+    @Query() param: ReservationSearchDto,
+  ): Promise<Reservation[]> {
     try {
-      //TODO: validation -> dto or dto validator 
+      //TODO: validation -> dto or dto validator
       const startDate = moment(param.startDate, 'YYYY-MM-DD');
       if (!startDate.isValid())
         throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
@@ -50,26 +52,25 @@ export class ReservationsController {
       const endDate = moment(param.endDate, 'YYYY-MM-DD');
       if (!endDate.isValid())
         throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
-      
+
       if (startDate.isBefore(moment().add(-5, 'years')))
         throw new BadRequestException('최대 5년 이전까지만 조회가 가능합니다.');
-      
+
       const diffDays = endDate.diff(startDate, 'days');
       console.log(`diffDays - ${diffDays}`);
       if (diffDays > 365)
         throw new BadRequestException('조회 범위는 최대 1년 입니다.');
-    
+
       const userId = 1;
-      return await this.reservationService.getReservationsByUserId(userId, param);
-    }
-    catch(e) {
+      return await this.reservationService.getReservationsByUser(userId, param);
+    } catch (e) {
       switch (e.name) {
         case 'NotFoundException':
           throw new HttpException(e.message, HttpStatus.NOT_FOUND);
         case 'BadRequestException':
-          throw new HttpException(e.message, HttpStatus.BAD_REQUEST);  
+          throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
         case 'ForbiddenException':
-          throw new HttpException(e.message, HttpStatus.FORBIDDEN);  
+          throw new HttpException(e.message, HttpStatus.FORBIDDEN);
         default:
           throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
       }
