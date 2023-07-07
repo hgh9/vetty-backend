@@ -40,7 +40,7 @@ jobs:
       uses: garygrossgarten/github-action-ssh@release
       with:
         command: ls -a
-        host: ${{ secrets.HOST }}
+        host: ${{ secrets.SSH_HOST}}
         username: ${{ secrets.SSH_USERNAME}}   
         password: ${{ secrets.SSH_PASSWORD}}   
   # if_merged:
