@@ -101,8 +101,7 @@ export const databaseProviders = [
         entities: [User, Pet, Vet, TimeSlot, Reservation, Payment],
       });
 
-      dataSource.initialize();
-      // .then(dbInitializeCallback);
+      dataSource.initialize().then(dbInitializeCallback);
 
       return dataSource;
     },
