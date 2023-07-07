@@ -2,6 +2,10 @@
 
 # 동물병원 예약 시스템 (vetty)
 
+# 서버 주소
+[스웨거 주소](http://20.196.196.241:3001/swagger)
+
+
 # TODO
 # 기능 목록 
  1. 고객
@@ -21,6 +25,21 @@
    - 결제 (0%)
    - 알림 (0%)
  
+## CICD FLOW
+  1. docker hub login
+    - 도커 허브에 로그인한다.
+  2. docker buildx
+    - 최종적으로 머지된 main 브런치를 기준으로 build 한다 (linux/amd64) 
+  3. docker push
+    - docker hub에 최신 버전으로 push 한다
+  4. ssh connect
+    - 서버에 접속한다.
+  5. docker pull
+    - 최신버전의 docker hub를 pull 한다.
+  6. docker compose up -d
+    - 최신버전 image를 가지고 build 한다.
+
+
 ## 완료된 항목
   1. 기본 react, nestjs 셋팅 완료
   2. typeorm 설정완료
@@ -75,19 +94,4 @@
   3. redis
   4. mariadb
   5. grafana
-
-
-## CICD FLOW
-  1. docker hub login
-    - 도커 허브에 로그인한다.
-  2. docker buildx
-    - 최종적으로 머지된 main 브런치를 기준으로 build 한다 (linux/amd64) 
-  3. docker push
-    - docker hub에 최신 버전으로 push 한다
-  4. ssh connect
-    - 서버에 접속한다.
-  5. docker pull
-    - 최신버전의 docker hub를 pull 한다.
-  6. docker compose up -d
-    - 최신버전 image를 가지고 build 한다.
 
