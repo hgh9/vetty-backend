@@ -1,19 +1,14 @@
 #NAME
-name: Push images to Dockerhub and deploy on ELastic Beanstalk
+name: Push images to Dockerhub and pull to the ubuntu server
 #EVENT
 on:
   push:
     branches:
       - "main"
-  # pull_request:
-  #   branches:
-  #     - "dev_docker"
-  #   types:
-  #     - closed
 
 #JOBS
 jobs:
-  build:
+  buildAndDeploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -43,74 +38,3 @@ jobs:
           host: ${{ secrets.SSH_HOST}}
           username: ${{ secrets.SSH_USERNAME}}   
           password: ${{ secrets.SSH_PASSWORD}}   
-          
-  # if_merged:
-  #   if: ${{ github.event.pull_request.merged }}
-  #   name: build docker images
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   # - name: message to slack
-  #   #   uses: wethinkcode/git hub_action_slackbot@v0.1
-  #   #   with:
-  #   #     slack-bot-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_TOKEN }}
-  #   #     slack-channel: C04CUJDMVDW
-  #   #     slack-bot-function: message-send
-  #   #     slack-message-body: "starting deploy at ymyd-backend-dev / ${{ github.event.head_commit.message }}"
-
-  #   - name: checkout
-  #     uses: actions/checkout@v2
-
-  #   - name: Docker Login
-  #     uses: docker/login-action@v1.8.0
-  #     with:
-  #       username: ${{secrets.DOCKERHUB_USERNAME}}
-  #       password: ${{secrets.DOCKERHUB_TOKEN}}
-  #       logout: true
-
-  #   - name: Build Server image
-  #     run: docker build -t ymyd00/ymyd_backend_dev -f
-  #             ./Dockerfile ./
-
-  #   - name: Tag our Image
-  #     run: docker tag ymyd00/ymyd_backend_dev
-  #             ymyd00/ymyd_backend_dev:latest
-
-  #   - name: Push to dockerhub
-  #     run: docker push ymyd00/ymyd_backend_dev
-
-  #   - name: Get Timestamp
-  #     uses: gerred/actions/current-time@master
-  #     id: current-time
-
-  #   - name: Run String Replace
-  #     uses: frabert/replace-string-action@master
-  #     id: format-time
-  #     with:
-  #       pattern: '[:\.]+'
-  #       string: "${{ steps.current-time.outputs.time }}"
-  #       replace-with: '-'
-  #       flags: 'g'
-
-  #   - name: Generate Deployment Package
-  #     run: zip -r deploy.zip . -x "**node_modules**"
-
-  #   - name: Deploy to EB
-  #     uses: einaregilsson/beanstalk-deploy@v21
-  #     with:
-  #       aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-  #       aws_secret_key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
-  #       application_name: ymyd-legacy-backend
-  #       environment_name: ymydb-ackend-dev
-  #       version_label: "docker-app-dev-${{ steps.format-time.outputs.replaced }}"
-  #       region: ap-northeast-2
-  #       deployment_package: deploy.zip
-  #       wait_for_environment_recovery : 3000
-  #       version_description: ${{ github.event.head_commit.message }}
-
-  #   # - name: message to slack
-  #   #   uses: wethinkcode/git hub_action_slackbot@v0.1
-  #   #   with:
-  #   #     slack-bot-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_TOKEN }}
-  #   #     slack-channel: C04CUJDMVDW
-  #   #     slack-bot-function: message-send
-  #   #     slack-message-body: "deploy complete :  ymyd-backend-dev / ${{ github.event.head_commit.message }}"
