@@ -13,7 +13,7 @@ describe('ReservationCancelationService', () => {
 
   let dataSource: DataSource
   let service: ReservationCancelationService;
-  
+
   beforeAll(async (): Promise<DataSource> => await initializeDataSource());
   afterAll(async (): Promise<void> => dataSource?.destroy());
   beforeEach(async () => {

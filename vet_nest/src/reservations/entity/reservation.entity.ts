@@ -9,7 +9,7 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
-import { Payment } from './payment.entity';
+import { Payment } from '../../payments/entity/payments.entity';
 import { Pet } from '../../pets/entity/pet.entity';
 import { User } from '../../users/entity/users.entity';
 import { Vet } from '../../vets/entity/vet.entity';
@@ -68,7 +68,7 @@ export class Reservation {
 
   @ManyToOne(() => Pet, (pet) => pet)
   @JoinColumn({name: 'petId'})
-  petInfo?: Pet
+  petInfo?: Pet;
 
   @ManyToOne(() => Vet, (vet) => vet)
   @JoinColumn({ name : 'vetId'})

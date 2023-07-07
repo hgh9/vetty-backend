@@ -19,6 +19,7 @@ import { VetsModule } from './vets/vets.module';
 import { PaymentsController } from './payments/payments.controller';
 import { PaymentsService } from './payments/payments.service';
 import { PaymentsModule } from './payments/payments.module';
+import { PaymentsRepository } from './payments/repository/payments.repository';
 import { UsersModule } from './users/users.module';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
@@ -69,6 +70,7 @@ import { JwtService } from '@nestjs/jwt';
     PetsRepository,
     VetsService,
     PaymentsService,
+    PaymentsRepository,
     UsersService,
     UsersRepository,
     JwtService,

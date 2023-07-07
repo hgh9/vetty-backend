@@ -5,7 +5,7 @@ import {
   Reservation,
   TreatmentStatus
 } from './../src/reservations/entity/reservation.entity';
-import { Payment } from './../src/reservations/entity/payment.entity';
+import { Payment } from '../src/payments/entity/payments.entity';
 import { Pet, PetCategories, PetGender, PetVaccinatedInfo } from '../src/pets/entity/pet.entity';
 import { Vet, VetStatus } from '../src/vets/entity/vet.entity';
 import { TimeSlot } from '../src/vets/entity/timeslot.entity';

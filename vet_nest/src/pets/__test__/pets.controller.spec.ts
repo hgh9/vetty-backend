@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PetsController } from '../pets.controller';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
