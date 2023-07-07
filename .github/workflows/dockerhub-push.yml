@@ -2,16 +2,18 @@
 name: Push images to Dockerhub and deploy on ELastic Beanstalk
 #EVENT
 on:
-  pull_request:
+  push:
     branches:
-      - "dev_docker"
-    types:
-      - closed
+      - "main"
+  # pull_request:
+  #   branches:
+  #     - "dev_docker"
+  #   types:
+  #     - closed
 
 #JOBS
 jobs:
-  if_pushed:
-    if: push
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
