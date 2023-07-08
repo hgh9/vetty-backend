@@ -10,7 +10,7 @@ import {
 import { Pet } from '../../pets/entity/pet.entity';
 import { User } from '../../users/entity/users.entity';
 import { Reservation } from '../../reservations/entity/reservation.entity';
-import { TimeSlot } from '../../reservations/entity/timeslot.entity';
+import { TimeSlot } from './timeslot.entity';
 
 @Entity()
 export class Vet {

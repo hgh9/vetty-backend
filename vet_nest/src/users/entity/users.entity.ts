@@ -25,7 +25,7 @@ export class User {
   @Column()
   userName: string;
 
-  @Column()
+  @Column({ nullable: true })
   kakaoId?: string;
 
   @Column()
@@ -34,17 +34,13 @@ export class User {
   @Column()
   phoneNumber: string;
 
-  @Column({
-    type: 'int',
-  })
+  @Column({ type: 'int', nullable: true })
   status: UserStatus;
 
-  @Column()
+  @Column({ nullable: true })
   level: UserLevel;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   vetId: number | null;
 
   @ManyToOne((type) => Vet, (vet) => vet)

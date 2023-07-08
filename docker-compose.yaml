@@ -12,7 +12,7 @@ services:
     ports:
       - $DB_PORT:$DB_PORT
     volumes:
-      - ./init:/docker-entrypoint-initdb.d
+      - ./vet_nest/sql:/docker-entrypoint-initdb.d/
     environment:
       - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
       - MYSQL_DATABASE=$DB_DATABASE
@@ -23,19 +23,19 @@ services:
     networks:
       - backend
 
-  front:
-    depends_on:
-      - backend
-    build: ./vet_react
-    # dockerfile: Dockerfile
-    restart: unless-stopped
-    env_file: ./.env
-    ports:
-      - $REACT_APP_LOCAL_PORT:$REACT_APP_DOCKER_PORT
-    volumes:
-      - ./vet_react:/app
-    networks:
-      - backend
+  # front:
+  #   depends_on:
+  #     - backend
+  #   build: ./vet_react
+  #   # dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   env_file: ./.env
+  #   ports:
+  #     - $REACT_APP_LOCAL_PORT:$REACT_APP_DOCKER_PORT
+  #   volumes:
+  #     - ./vet_react:/app
+  #   networks:
+  #     - backend
 
   backend:
     depends_on:

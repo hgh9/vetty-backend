@@ -25,6 +25,9 @@ import { UsersService } from './users/users.service';
 import { DiagnosisModule } from './diagnosis/diagnosis.module';
 import { DisgnosisController } from './diagnosis/diagnosis.controller';
 import { DiagnosisService } from './diagnosis/diagnosis.service';
+import { PetsRepository } from './pets/repository/pets.repository';
+import { UsersRepository } from './users/repository/users.repository';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -66,10 +69,13 @@ import { DiagnosisService } from './diagnosis/diagnosis.service';
   providers: [
     AppService,
     PetsService,
+    PetsRepository,
     VetsService,
     PaymentsService,
     UsersService,
     DiagnosisService,
+    UsersRepository,
+    JwtService,
   ],
 })
 export class AppModule {}

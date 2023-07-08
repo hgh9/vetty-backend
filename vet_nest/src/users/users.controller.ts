@@ -1,18 +1,25 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { GetUserDto, UserDto, UserIdDto } from './dto/user.dto';
+import { Controller, Post, HttpException } from '@nestjs/common';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  @Get()
-  async getUser(@Query() userInfo: GetUserDto) {
-    try {
-      return {
-        result: true,
-        // data: result,
-        message: '예약이 완료되었습니다.',
-      };
-    } catch (err) {
-      throw new Error(err);
-    }
+  constructor(private UsersService: UsersService) {}
+
+  @Post('signup')
+  async signup(createUserDto) {
+    const result = await this.UsersService.signup(createUserDto).catch((error) => {
+      throw new HttpException({ result: false, message: error.message }, 400);
+    });
+
+    return { result: result, code: 200, message: '/signup' };
+  }
+
+  @Post('login')
+  async login(loginUserDto) {
+    const result = await this.UsersService.login(loginUserDto).catch((error) => {
+      throw new HttpException({ result: false, message: error.message }, 400);
+    });
+
+    return { result: result, code: 200, message: '/login' };
   }
 }

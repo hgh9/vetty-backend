@@ -12,6 +12,7 @@ import {
   PetGender,
   PetVaccinatedInfo,
 } from '../../pets/entity/pet.entity';
+import * as moment from 'moment';
 
 describe('ReservationsController', () => {
   let controller: ReservationsController;
@@ -52,9 +53,52 @@ describe('ReservationsController', () => {
     });
   });
 
-  it('예약 조회', () => {
-    // expect(controller).toBeDefined();
-  });
+  describe('GET /reservations - 예약정보 조회', () => {
+    
+    it('예약정보 정보 조회할 경우 200을 반환한다.', async () => {
+      //Arrange
+      const customerId = '1';
+      const startDate = moment().add(-1, 'months').format('YYYY-MM-DD');
+      const endDate = moment().format('YYYY-MM-DD');
+      const param = `startDate=${startDate}&endDate=${endDate}`;
+      // Act
+      const res = 
+        await request('http://localhost:3001')
+              .get(`/reservations?${param}`);
+      // Assert  
+      expect(res.status).toBe(HttpStatus.OK);
+    });
 
-  // 예약건들의 조회
+    it('조회 최소 기한이 5년 이전인 경우 400을 반환한다.', async () => {
+      //Arrange
+      const today = new Date();
+      const startDate = moment().add(-5, 'years').add(-1, 'days').format('YYYY-MM-DD');
+      const endDate = moment().add(-5, 'years').format('YYYY-MM-DD');
+      const param = `startDate=${startDate}&endDate=${endDate}`;
+
+      //Act
+      const res = 
+        await request('http://localhost:3001')
+              .get(`/reservations?${param}`);
+
+      //Assert
+      expect(res.status).toBe(HttpStatus.BAD_REQUEST);
+    });
+
+    it('조회 기간이 1년을 초과하면 400을 반환한다.', async () => {
+      
+      //Arrange
+      const startDate = moment().add(-366, 'days').format('YYYY-MM-DD');
+      const endDate   = moment().format('YYYY-MM-DD');
+      const param = `startDate=${startDate}&endDate=${endDate}`;
+      
+      //Act
+      const res = 
+        await request('http://localhost:3001')
+              .get(`/reservations?${param}`);
+
+      //Assert
+      expect(res.status).toBe(HttpStatus.BAD_REQUEST);
+    });
+  });
 });

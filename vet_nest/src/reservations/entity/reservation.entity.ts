@@ -13,7 +13,7 @@ import { Payment } from './payment.entity';
 import { Pet } from '../../pets/entity/pet.entity';
 import { User } from '../../users/entity/users.entity';
 import { Vet } from '../../vets/entity/vet.entity';
-import { TimeSlot } from './timeslot.entity';
+import { TimeSlot } from '../../vets/entity/timeslot.entity';
 
 @Entity()
 export class Reservation {
@@ -55,59 +55,40 @@ export class Reservation {
   })
   amount: number;
 
-  // @ManyToOne(() => TimeSlot, (slot) => slot)
-  // @JoinColumn({ name: 'slotId' })
-  // slotInfo: TimeSlot;
-
-  @ManyToOne(() => Pet, (pet) => pet)
-  @JoinColumn({ name: 'petId' })
-  petInfo: Pet;
-
-  @ManyToOne(() => Vet, (vet) => vet)
-  @JoinColumn({ name: 'vetId' })
-  vetInfo?: Vet;
-
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt?: Date;
 
-  // @
+  @ManyToOne(() => TimeSlot, (slot) => slot)
+  @JoinColumn({ name: 'slotId' })
+  slotInfo?: TimeSlot;
+
+  @ManyToOne(() => Pet, (pet) => pet)
+  @JoinColumn({ name: 'petId' })
+  petInfo?: Pet;
+
+  @ManyToOne(() => Vet, (vet) => vet)
+  @JoinColumn({ name: 'vetId' })
+  vetInfo?: Vet;
 
   @ManyToOne(() => User, (user) => user)
   @JoinColumn({ name: 'userId' })
-  userInfo: User;
+  userInfo?: User;
 
   @OneToMany(() => Payment, (payment) => payment.reservation, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  payments: Payment[];
+  payments?: Payment[];
 
-  // @ManyToOne(() => Pet, (pet) => pet.reservation, {
-  //   nullable: false,
-  //   onDelete: 'CASCADE',
-  // })
-  // pet?: Pet;
+  constructor() {}
 
-  // @ManyToOne(() => User, (user) => user.reservation, {
-  //   nullable: false,
-  //   onDelete: 'CASCADE',
-  // })
-  // user?: User;
-
-  // @OneToOne(() => Vet, (vet) => vet.reservation)
-  // vet?: Vet;
-
-  // @OneToMany(() => TimeSlot, (timeSlot) => timeSlot.reservation)
-  // timeSlot: TimeSlot;
-
-  // @OneToOne(
-  //   () => ReservationTime,
-  //   (reservationTime) => reservationTime.reservation,
-  // )
-  // reservationTime: ReservationTime;
+  public cancel(): void {
+    this.status = TreatmentStatus.RESERVATION_CANCELED;
+    this.updatedAt = new Date();
+  }
 }
 
 export enum TreatmentStatus {
