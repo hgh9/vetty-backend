@@ -4,6 +4,8 @@ import { DataSource } from 'typeorm';
 import { initializeDataSource } from '../../database/typeorm-maria-testing.module';
 import { ReservationSearchDto } from '../dto/reservation-search.dto';
 import * as moment from 'moment';
+import { ReservationReposiotory } from '../repository/reservation-repository';
+import { MockReservationRepository } from '../repository/reservation-repository.mock';
 
 describe('ReservationsService', () => {
   let dataSource: DataSource;
@@ -14,11 +16,11 @@ describe('ReservationsService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        ReservationService,
         {
-          provide: 'DATA_SOURCE', 
-          useFactory: (() => initializeDataSource())
-        }, 
-        ReservationService
+          provide: ReservationReposiotory, 
+          useClass: MockReservationRepository
+        }
       ]
     }).compile();
 
@@ -38,7 +40,7 @@ describe('ReservationsService', () => {
       searchQuery.startDate = moment().add(-7, 'days').format('YYYY-MM-DD'); 
       searchQuery.endDate   = moment().format('YYYY-MM-DD'); 
       //Act
-      const reservations = await service.getReservationsByUserId(userId, searchQuery); 
+      const reservations = await service.getReservationsByUser(userId, searchQuery); 
       //Assert
       expect(reservations.length).toBeGreaterThan(0);
     });
