@@ -3,10 +3,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
-  Inject,
-  NotFoundException,
-  Param,
-  Query,
+  Param
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { Reservation } from './entity/reservation.entity';

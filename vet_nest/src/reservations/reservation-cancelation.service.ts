@@ -11,27 +11,17 @@ import { DataSource, Repository } from 'typeorm';
 import { PaymentFactoryService } from './fake-modules/payment-factory.service';
 // import { IPaymentService } from './fake-modules/payment-service.interface';
 import ReservationCancelationValidator from './validator/reservation-cancelation.validator';
+import { ReservationReposiotory } from './repository/reservation-repository';
 
 @Injectable()
 // -> ReservationCancelationRepositoryService
 export class ReservationCancelationService implements IReservationsCancelation {
-  //TODO: Repository<Reservation> ->customReservationRepository 
-  private reservationRepository: Repository<Reservation>;
-  //TODO: paymentService -> paymentApiCaller
-  // private paymentRepository: Repository<Payment>;
-  // private paymentService: IPaymentService;
   constructor(
-    @Inject('DATA_SOURCE')
-    private readonly dataSource: DataSource,
-    private readonly paymentFactory: PaymentFactoryService,
-  ) {
-    this.reservationRepository = this.dataSource.getRepository(Reservation);
-    // this.paymentRepository = this.dataSource.getRepository(Payment);
-    // this.paymentService = this.paymentFactory.getService('test');
-  }
+    private readonly reservationRepository: ReservationReposiotory,
+  ) {}
 
   async cancelReservation(reservationId: number): Promise<Reservation> {
-    const reservation = await this.reservationRepository.findOneBy({ id: reservationId });
+    const reservation = await this.reservationRepository.getReservationById(reservationId);
     try {
       const isValid = await ReservationCancelationValidator.validate(reservation);
       if (isValid) {

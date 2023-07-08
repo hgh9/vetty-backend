@@ -1,13 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ReservationCancelationController } from '../reservation-cancelation.controller';
 import {
-  ForbiddenException,
   HttpStatus,
   INestApplication,
 } from '@nestjs/common';
 import * as request from 'supertest';
-import { ReservastionsDto } from '../dto/reservations.dto';
-import { TreatmentStatus } from '../entity/reservation.entity';
 
 describe('ReservationCancelationController', () => {
   let app: INestApplication;

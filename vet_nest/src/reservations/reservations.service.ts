@@ -4,15 +4,15 @@ import { Between, DataSource, MoreThanOrEqual, Raw, Repository } from 'typeorm';
 import { ReservastionsDto } from './dto/reservations.dto';
 import { ReservationSearchDto } from './dto/reservation-search.dto';
 import moment from 'moment';
+import { ReservationReposiotory } from './repository/reservation-repository';
 
 @Injectable()
 export class ReservationService {
-  private reservationRepository: Repository<Reservation>;
+  // private reservationRepository: Repository<Reservation>;
   constructor(
-    @Inject('DATA_SOURCE')
-    private readonly dataSource: DataSource
+    private readonly reservationRepository: ReservationReposiotory
   ) {
-    this.reservationRepository = this.dataSource.getRepository(Reservation);
+    // this.reservationRepository = this.dataSource.getRepository(Reservation);
   }
 
   async create(data: ReservastionsDto): Promise<any> {
