@@ -46,7 +46,7 @@ describe('ReservationCancelationController', () => {
       //Arrange
       const reservationId = 2;
       //Act
-      const res = await request('http://localhost:3001')
+      const res = await request('http://localhost:3001/')
         .get(`/reservation-cancelation/${reservationId}`);
       //Assert
       expect(res.status).toBe(HttpStatus.FORBIDDEN);

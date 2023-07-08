@@ -21,9 +21,7 @@ export class ReservationCancelationController {
   @Get(':id')
   async cancelReservation(@Param('id') id: number) {
     try {
-      const result = await this.reservationCancelationService.cancelReservation(
-        id,
-      );
+      const result = await this.reservationCancelationService.cancelReservation(id);
       return {
         result: result,
         message: '예약이 취소되었습니다.',
