@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { Pet } from '../../pets/entity/pet.entity';
 import { Reservation } from '../../reservations/entity/reservation.entity';
-import { Vet } from '@/vets/entity/vet.entity';
+import { Vet } from '../../vets/entity/vet.entity';
 
 @Entity()
 export class User {
@@ -35,34 +35,37 @@ export class User {
   phoneNumber: string;
 
   @Column({
-    type: 'int'
+    type: 'int',
   })
-  status: UserStatus
-  
+  status: UserStatus;
+
   @Column()
   level: UserLevel;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   vetId: number | null;
 
   @ManyToOne((type) => Vet, (vet) => vet)
-  @JoinColumn({name: 'vetId'})
+  @JoinColumn({ name: 'vetId' })
   vetInfo: Vet;
 
   @OneToMany((type) => Pet, (pet) => pet.userInfo)
-  @JoinColumn({name: 'userId'})
+  @JoinColumn({ name: 'userId' })
   pets?: Pet[];
 
-  @OneToMany(() => Reservation, (reservation: Reservation) => reservation.userInfo)
-  @JoinColumn({name: 'userId'})
+  @OneToMany(
+    () => Reservation,
+    (reservation: Reservation) => reservation.userInfo,
+  )
+  @JoinColumn({ name: 'userId' })
   reservations?: Reservation[];
 }
 
 export enum UserStatus {
   USE = 1,
-  DELETE = 4
+  DELETE = 4,
 }
 
 export enum UserLevel {

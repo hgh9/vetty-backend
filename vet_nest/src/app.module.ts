@@ -22,7 +22,9 @@ import { PaymentsModule } from './payments/payments.module';
 import { UsersModule } from './users/users.module';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
-import { CheckModule } from './check/check.module';
+import { DiagnosisModule } from './diagnosis/diagnosis.module';
+import { DisgnosisController } from './diagnosis/diagnosis.controller';
+import { DiagnosisService } from './diagnosis/diagnosis.service';
 
 @Module({
   imports: [
@@ -47,7 +49,7 @@ import { CheckModule } from './check/check.module';
     }),
     DatabaseModule,
     ReservationsModule,
-    CheckModule,
+    DiagnosisModule,
     PetsModule,
     VetsModule,
     PaymentsModule,
@@ -59,6 +61,7 @@ import { CheckModule } from './check/check.module';
     VetsController,
     PaymentsController,
     UsersController,
+    DisgnosisController,
   ],
   providers: [
     AppService,
@@ -66,6 +69,7 @@ import { CheckModule } from './check/check.module';
     VetsService,
     PaymentsService,
     UsersService,
+    DiagnosisService,
   ],
 })
 export class AppModule {}

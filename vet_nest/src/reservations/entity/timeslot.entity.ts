@@ -22,22 +22,22 @@ export class TimeSlot {
   time: number;
 
   @Column({
-    type: 'timestamp'
+    type: 'timestamp',
   })
-  startTime: Date
+  startTime: Date;
 
   @Column({
-    type: 'timestamp'
+    type: 'timestamp',
   })
-  endTime: Date
+  endTime: Date;
 
   @Column()
   vetId: number;
 
   @ManyToOne(() => Vet, (vet) => vet)
-  @JoinColumn({name: 'vetId'})
-  vet: Vet;;
+  @JoinColumn({ name: 'vetId' })
+  vet: Vet;
 
-  @ManyToOne(() => Reservation, (reservation) => reservation.slotInfo)
-  reservation: Reservation;
+  // @ManyToOne(() => Reservation, (reservation) => reservation.slotInfo)
+  // reservation: Reservation;
 }

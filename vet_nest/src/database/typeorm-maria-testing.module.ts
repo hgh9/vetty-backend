@@ -1,9 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Payment } from './../reservations/entity/payment.entity';
-import {
-  Reservation,
-  ReservationStatus,
-} from './../reservations/entity/reservation.entity';
+import { Reservation } from './../reservations/entity/reservation.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User, UserLevel, UserStatus } from '../users/entity/users.entity';
 
