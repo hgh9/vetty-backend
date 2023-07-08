@@ -39,7 +39,3 @@ export class ReservationService {
       searchQuery.endDate);
   }
 }
-
-interface FindOptionsWhere<Reservation>{
-
-}
