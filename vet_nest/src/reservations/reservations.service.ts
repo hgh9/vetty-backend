@@ -31,15 +31,12 @@ export class ReservationService {
     return this.reservationRepository.find();
   }
 
-  async getReservationsByUserId(userId: number, searchQuery: ReservationSearchDto): Promise<Reservation[]> {
+  async getReservationsByUser(userId: number, searchQuery: ReservationSearchDto): Promise<Reservation[]> {
     //TODO: QueryExtension 사용 불가능한지 확인 -> TypeScript, TypeOrm
-    let query = {}; 
-    query['userId'] = userId;
-    if (searchQuery.startDate && searchQuery.endDate) {
-      query['reservedAt'] = Raw((alias) => `DATE(${alias}) >= ${searchQuery.startDate} && DATE(${alias}) <= :endDate`, searchQuery);
-    }
-    console.log(`query: ${JSON.stringify(query)}`);
-    return this.reservationRepository.findBy(query);
+    return this.reservationRepository.getReservationsByUser(
+      userId, 
+      searchQuery.startDate, 
+      searchQuery.endDate);
   }
 }
 
