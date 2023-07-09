@@ -28,7 +28,7 @@ export async function swaggerSetting(app) {
     swaggerOptions: {
       persistAuthorization: true,
     },
-    customSiteTitle: '개인 플젝트',
+    customSiteTitle: '항해플러스 1기 9조 동물병원',
   };
   SwaggerModule.setup('/swagger', app, document, customOptions);
 }
