@@ -9,10 +9,9 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ConfigService } from '@nestjs/config';
-import { ApiBody, ApiProperty } from '@nestjs/swagger';
+import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { IsOptional, IsString, isString } from 'class-validator';
-import { ExceptionService } from './exception/exception.service';
-import { CustomInterceptor } from '../util/interceptor.util';
+import { ExceptionsService } from '../exceptions/exceptions.service';
 
 export class Command {
   @ApiProperty({
@@ -35,11 +34,12 @@ export class Command {
   name: string;
 }
 @Controller()
+@ApiTags('App')
 export class AppController {
   private readonly logger = new Logger(AppController.name);
   constructor(
     private readonly appService: AppService,
-    private readonly exceptionService: ExceptionService,
+    private readonly exceptionService: ExceptionsService,
     private readonly config: ConfigService,
   ) {}
 
@@ -48,8 +48,13 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Get('helthCheck')
+  healthCheck(): string {
+    return 'good Health';
+  }
+
   // 예외처리 예제 입니다.
-  @Post('test')
+  @Post('exceptionTest')
   @ApiBody({ type: Command })
   // @UseInterceptors(CustomInterceptor)
   exceptionTest(@Body() infoDto: Command): string {

@@ -1,14 +1,14 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ExceptionService } from './exception/exception.service';
 import { Command } from './app.controller';
-import { NotEnoughParameterError } from '../util/exception.util';
+import { ExceptionsService } from '../exceptions/exceptions.service';
+import { NotEnoughParameterError } from '../../util/exception.util';
 
 @Injectable()
 export class AppService {
   constructor(
     private readonly config: ConfigService,
-    private readonly exceptionService: ExceptionService,
+    private readonly exceptionService: ExceptionsService,
   ) {}
   getHello(): string {
     return 'api test for react from nestjs server!!!!!!!!!';
