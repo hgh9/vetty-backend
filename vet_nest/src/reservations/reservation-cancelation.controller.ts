@@ -8,8 +8,10 @@ import {
 import { DataSource } from 'typeorm';
 import { Reservation } from './entity/reservation.entity';
 import { ReservationCancelationService } from './reservation-cancelation.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('reservation-cancelation')
+@ApiTags('Reservation-cancelation')
 export class ReservationCancelationController {
   constructor(
     private reservationCancelationService: ReservationCancelationService,

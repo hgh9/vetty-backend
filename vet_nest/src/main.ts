@@ -1,7 +1,6 @@
 declare const module: any;
 import { NestFactory } from '@nestjs/core';
 import { RedisIoAdapter } from '../adapters/redis.adapter';
-import { AppModule } from './app.module';
 import * as express from 'express';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { winstonSetting } from '../config/winston.config';
@@ -11,6 +10,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { swaggerSetting } from '../config/swagger.config';
 import config from '@configs';
 import { LoggerInterceptor } from '../util/interceptor.util';
+import { AppModule } from './app/app.module';
 
 async function nestFactoryCreate() {
   const server = express();

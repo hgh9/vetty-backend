@@ -1,7 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ExceptionService {
+export class ExceptionsService {
   //Service 부분 또는 repository 부분에서 발생되는 비지니스 에러부분입니다.
   //try catch로 묶어서
   NotEnoughParameter(data = null, statusCode = 300) {
