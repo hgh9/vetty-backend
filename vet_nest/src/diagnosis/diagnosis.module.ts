@@ -8,6 +8,6 @@ import { DiagnosisService } from './diagnosis.service';
 @Module({
   imports: [DatabaseModule],
   controllers: [DisgnosisController],
-  providers: [AppService, DiagnosisService],
+  providers: [DiagnosisService],
 })
 export class DiagnosisModule {}

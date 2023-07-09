@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module, LoggerService } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -28,6 +28,10 @@ import { DiagnosisService } from './diagnosis/diagnosis.service';
 import { PetsRepository } from './pets/repository/pets.repository';
 import { UsersRepository } from './users/repository/users.repository';
 import { JwtService } from '@nestjs/jwt';
+import { ExceptionService } from './exception/exception.service';
+import { ExceptionModule } from './exception/exception.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggerInterceptor } from '../util/interceptor.util';
 
 @Module({
   imports: [
@@ -57,6 +61,7 @@ import { JwtService } from '@nestjs/jwt';
     VetsModule,
     PaymentsModule,
     UsersModule,
+    ExceptionModule,
   ],
   controllers: [
     AppController,
@@ -76,6 +81,7 @@ import { JwtService } from '@nestjs/jwt';
     DiagnosisService,
     UsersRepository,
     JwtService,
+    ExceptionService,
   ],
 })
 export class AppModule {}
