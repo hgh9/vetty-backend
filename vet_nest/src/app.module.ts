@@ -30,6 +30,8 @@ import { UsersRepository } from './users/repository/users.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ExceptionService } from './exception/exception.service';
 import { ExceptionModule } from './exception/exception.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggerInterceptor } from '../util/interceptor.util';
 
 @Module({
   imports: [

@@ -5,12 +5,14 @@ import {
   Logger,
   LoggerService,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ConfigService } from '@nestjs/config';
 import { ApiBody, ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, isString } from 'class-validator';
 import { ExceptionService } from './exception/exception.service';
+import { CustomInterceptor } from '../util/interceptor.util';
 
 export class Command {
   @ApiProperty({
@@ -49,11 +51,12 @@ export class AppController {
   // 예외처리 예제 입니다.
   @Post('test')
   @ApiBody({ type: Command })
+  // @UseInterceptors(CustomInterceptor)
   exceptionTest(@Body() infoDto: Command): string {
-    this.logger.verbose('exception');
     try {
       return this.appService.exception(infoDto);
     } catch (error) {
+      console.log('hello');
       if (error.constructor.name == 'NotEnoughParameterError') return error;
       this.exceptionService.FailedPostException();
     }
