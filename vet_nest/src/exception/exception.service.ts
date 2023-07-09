@@ -7,10 +7,38 @@ export class ExceptionService {
   NotEnoughParameter(data = null, statusCode = 300) {
     throw new HttpException(
       {
-        ok: false,
-        message: '파라미터가 잘못되었거나 부족합니다.', //한글로된 메세지
-        error: 'Internal Server Error', //영어로된 메세지
-        data: data,
+        result: {
+          message: '파라미터가 잘못되었거나 부족합니다.', //한글로된 메세지
+          error: 'Internal Server Error', //영어로된 메세지
+          data: data,
+        },
+      },
+      statusCode,
+    );
+  }
+
+  UnknownException(data = null, statusCode = 400) {
+    throw new HttpException(
+      {
+        result: {
+          ok: false,
+          message: '알수없는 예외가 발생했습니다.', //한글로된 메세지
+          error: 'Unknown Error', //영어로된 메세지
+          data: data,
+        },
+      },
+      statusCode,
+    );
+  }
+
+  FailedPostException(data = null, statusCode = 300) {
+    throw new HttpException(
+      {
+        result: {
+          message: '디비 삽입에 실패했습니다.', //한글로된 메세지
+          error: 'Failed Insert DB', //영어로된 메세지
+          data: data,
+        },
       },
       statusCode,
     );

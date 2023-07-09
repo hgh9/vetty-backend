@@ -10,7 +10,7 @@ const dateNow = DateTime.now().setZone('Asia/Seoul');
 
 export async function swaggerSetting(app) {
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('CHAT API')
+    .setTitle('VETTY API')
     .setDescription(
       `
         마지막 업데이트 : ${dateNow.toFormat('yyyy-MM-dd HH:mm:ss')}
