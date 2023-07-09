@@ -15,16 +15,15 @@ import { User } from '../../users/entity/users.entity';
 import { Vet } from '../../vets/entity/vet.entity';
 import { TimeSlot } from '../../vets/entity/timeslot.entity';
 
-
 @Entity()
 export class Reservation {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
-    type: 'varchar'
+    type: 'varchar',
   })
-  receptionMethod: ReceptionMethod
+  receptionMethod: ReceptionMethod;
 
   @Column({
     type: 'int',
@@ -37,9 +36,9 @@ export class Reservation {
   @Column()
   vetId: number;
 
-  @Column()
-  // @RelationId((slot: TimeSlot) => slot.id)
-  slotId: number;
+  // @Column()
+  // // @RelationId((slot: TimeSlot) => slot.id)
+  // slotId: number;
 
   // @RelationId((pet: Pet) => pet.petId)
   @Column()
@@ -52,7 +51,7 @@ export class Reservation {
   treatmentStatus: TreatmentStatus;
 
   @Column({
-    type: 'decimal'
+    type: 'decimal',
   })
   amount: number;
 
@@ -63,19 +62,19 @@ export class Reservation {
   updatedAt?: Date;
 
   @ManyToOne(() => TimeSlot, (slot) => slot)
-  @JoinColumn({name: 'slotId'})
+  @JoinColumn({ name: 'slotId' })
   slotInfo?: TimeSlot;
 
   @ManyToOne(() => Pet, (pet) => pet)
-  @JoinColumn({name: 'petId'})
-  petInfo?: Pet
+  @JoinColumn({ name: 'petId' })
+  petInfo?: Pet;
 
   @ManyToOne(() => Vet, (vet) => vet)
-  @JoinColumn({ name : 'vetId'})
+  @JoinColumn({ name: 'vetId' })
   vetInfo?: Vet;
 
   @ManyToOne(() => User, (user) => user)
-  @JoinColumn({name: 'userId'})
+  @JoinColumn({ name: 'userId' })
   userInfo?: User;
 
   @OneToMany(() => Payment, (payment) => payment.reservation, {
@@ -84,17 +83,12 @@ export class Reservation {
   })
   payments?: Payment[];
 
+  constructor() {}
 
-  constructor() {
-    
-  }
-
-  public cancel(): void 
-  {
+  public cancel(): void {
     this.status = TreatmentStatus.RESERVATION_CANCELED;
     this.updatedAt = new Date();
   }
-
 }
 
 export enum TreatmentStatus {
@@ -102,12 +96,12 @@ export enum TreatmentStatus {
   IN_TREATMENT = 2,
   TREATMENT_COMPLETED = 3,
   RESERVATION_CANCELED = -1,
-  TREATMENT_CANCELED = -2
+  TREATMENT_CANCELED = -2,
 }
 
 export enum ReceptionMethod {
-  RESERVATION = 'R', 
-  ON_SITE = 'O'
+  RESERVATION = 'R',
+  ON_SITE = 'O',
 }
 export enum DignosisCategory {
   NORMAL = 1,

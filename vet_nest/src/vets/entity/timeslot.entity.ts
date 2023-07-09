@@ -16,7 +16,7 @@ export class TimeSlot {
   id: number;
 
   @Column({
-    type: 'date'
+    type: 'date',
   })
   startDate: Date;
 
@@ -24,20 +24,20 @@ export class TimeSlot {
   time: number;
 
   @Column({
-    type: 'time'
+    type: 'time',
   })
-  startTime: string
+  startTime: string;
 
   @Column({
-    type: 'time'
+    type: 'time',
   })
-  endTime: string
+  endTime: string;
 
   @Column()
   vetId: number;
 
   @ManyToOne(() => Vet, (vet) => vet)
-  @JoinColumn({name: 'vetId'})
+  @JoinColumn({ name: 'vetId' })
   vet?: Vet;
 
   @OneToMany(() => Reservation, (reservation) => reservation.slotInfo)

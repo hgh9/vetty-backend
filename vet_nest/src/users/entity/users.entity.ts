@@ -36,7 +36,7 @@ export class User {
 
   @Column({ type: 'int', nullable: true })
   status: UserStatus;
-  
+
   @Column({ nullable: true })
   level: UserLevel;
 
@@ -51,7 +51,10 @@ export class User {
   @JoinColumn({ name: 'userId' })
   pets?: Pet[];
 
-  @OneToMany(() => Reservation, (reservation: Reservation) => reservation.userInfo)
+  @OneToMany(
+    () => Reservation,
+    (reservation: Reservation) => reservation.userInfo,
+  )
   @JoinColumn({ name: 'userId' })
   reservations?: Reservation[];
 }

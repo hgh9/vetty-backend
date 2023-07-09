@@ -13,6 +13,10 @@ export class ReservastionsDto {
   @IsOptional()
   id?: number;
 
+  // @ApiProperty({
+  //   name: 'status',
+  //   type: ReservationStatus,
+  // })
   @ApiProperty({
     default: '',
     required: false,

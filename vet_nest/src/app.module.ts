@@ -22,7 +22,9 @@ import { PaymentsModule } from './payments/payments.module';
 import { UsersModule } from './users/users.module';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
-import { CheckModule } from './check/check.module';
+import { DiagnosisModule } from './diagnosis/diagnosis.module';
+import { DisgnosisController } from './diagnosis/diagnosis.controller';
+import { DiagnosisService } from './diagnosis/diagnosis.service';
 import { PetsRepository } from './pets/repository/pets.repository';
 import { UsersRepository } from './users/repository/users.repository';
 import { JwtService } from '@nestjs/jwt';
@@ -50,7 +52,7 @@ import { JwtService } from '@nestjs/jwt';
     }),
     DatabaseModule,
     ReservationsModule,
-    CheckModule,
+    DiagnosisModule,
     PetsModule,
     VetsModule,
     PaymentsModule,
@@ -62,6 +64,7 @@ import { JwtService } from '@nestjs/jwt';
     VetsController,
     PaymentsController,
     UsersController,
+    DisgnosisController,
   ],
   providers: [
     AppService,
@@ -70,6 +73,7 @@ import { JwtService } from '@nestjs/jwt';
     VetsService,
     PaymentsService,
     UsersService,
+    DiagnosisService,
     UsersRepository,
     JwtService,
   ],

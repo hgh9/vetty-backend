@@ -21,16 +21,16 @@ export class Vet {
   name: string;
 
   @Column({
-    type: 'int'
+    type: 'int',
   })
   status: VetStatus;
 
   @OneToMany(() => Vet, 'vetId')
-  @JoinColumn({name: 'vetId'})
+  @JoinColumn({ name: 'vetId' })
   employees?: User[];
 
   @OneToMany(() => Reservation, (reservation) => reservation.vetInfo)
-  @JoinColumn({name: 'vetId'})
+  @JoinColumn({ name: 'vetId' })
   reservations?: Reservation[];
 
   @OneToMany(() => TimeSlot, (timeSlot) => timeSlot.vet)
@@ -39,5 +39,5 @@ export class Vet {
 
 export enum VetStatus {
   USE = 1,
-  DELETE = 4
+  DELETE = 4,
 }
