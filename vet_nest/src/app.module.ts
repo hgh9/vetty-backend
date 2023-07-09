@@ -8,7 +8,7 @@ import {
   utilities as nestWinstonModuleUtilities,
 } from 'nest-winston';
 import { ReservationsModule } from './reservations/reservations.module';
-import config from '../config/config';
+import config, { currentModeProviders } from '../config/config';
 import { DatabaseModule } from './database/database.module';
 import { PetsController } from './pets/pets.controller';
 import { PetsService } from './pets/pets.service';
@@ -82,6 +82,7 @@ import { LoggerInterceptor } from '../util/interceptor.util';
     UsersRepository,
     JwtService,
     ExceptionService,
+    currentModeProviders,
   ],
 })
 export class AppModule {}

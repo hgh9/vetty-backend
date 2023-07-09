@@ -15,10 +15,12 @@ import {
 import { Vet, VetStatus } from '../src/vets/entity/vet.entity';
 import { TimeSlot } from '../src/vets/entity/timeslot.entity';
 import { User, UserLevel, UserStatus } from '../src/users/entity/users.entity';
-import { Logger } from 'winston';
+import config from '@configs';
 import * as moment from 'moment';
+import { Logger } from '@nestjs/common';
 
 export default () => ({
+  MODE: process.env.REACT_APP_ENV,
   DB: {
     type: process.env.DB_TYPE === 'mariadb' ? 'mariadb' : 'mysql',
     host:
@@ -28,6 +30,7 @@ export default () => ({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     entities: ['dist/**/*.entity.js'],
+    // logging: Boolean(JSON.parse(process.env.DB_LOGGING)),
     synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
   },
   NEST: {
@@ -64,7 +67,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
   timezone: '+09:00',
   synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
   autoLoadEntities: true,
-  logging: false,
+  // logging: Boolean(JSON.parse(process.env.DB_LOGGING)),
   // entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
   // entities: [Photo, Reservation,],
 };
@@ -80,7 +83,7 @@ export const testDbConfig: TypeOrmModuleOptions = {
   timezone: '+09:00',
   synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
   autoLoadEntities: true,
-  logging: false,
+  // logging: Boolean(JSON.parse(process.env.DB_LOGGING)),
 };
 
 export const databaseProviders = [
@@ -98,7 +101,7 @@ export const databaseProviders = [
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
         synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-        logging: false,
+        logging: Boolean(JSON.parse(process.env.DB_LOGGING)),
         entities: [User, Pet, Vet, TimeSlot, Reservation, Payment],
       });
 
@@ -108,6 +111,21 @@ export const databaseProviders = [
     },
   },
 ];
+
+export const currentModeProviders = {
+  provide: 'CurrentMode',
+  useFactory: async () => {
+    const logger = new Logger();
+
+    logger.verbose(`
+  *********************************************************************
+  *                                                                   
+  *                  Currently '${config().MODE}' MODE                 
+  *                                                                   
+  *********************************************************************
+  `);
+  },
+};
 
 export async function dbInitializeCallback(db: DataSource) {
   console.log(`db initialized`);
