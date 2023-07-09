@@ -7,7 +7,7 @@ import {
   WinstonModule,
   utilities as nestWinstonModuleUtilities,
 } from 'nest-winston';
-import config, { currentModeProviders } from '../../config/config';
+import config from '../../config/config';
 import { DatabaseModule } from '../database/database.module';
 import { ReservationsModule } from '../reservations/reservations.module';
 import { DiagnosisModule } from '../diagnosis/diagnosis.module';
@@ -30,6 +30,7 @@ import { DiagnosisService } from '../diagnosis/diagnosis.service';
 import { UsersRepository } from '../users/repository/users.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ExceptionsService } from '../exceptions/exceptions.service';
+import { currentModeProviders } from './providers/currentMode.provider';
 
 @Module({
   imports: [
