@@ -36,9 +36,9 @@ export class Reservation {
   @Column()
   vetId: number;
 
-  // @Column()
-  // // @RelationId((slot: TimeSlot) => slot.id)
-  // slotId: number;
+  @Column()
+  // @RelationId((slot: TimeSlot) => slot.id)
+  slotId: number;
 
   // @RelationId((pet: Pet) => pet.petId)
   @Column()
