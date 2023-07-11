@@ -13,20 +13,24 @@ export class MockReservationRepository {
   }
   async getReservationById(reservationId: number): Promise<Reservation> {
     const reservation = this.mockReservations.find((model) => {
-        return model.id == reservationId;
-      });
+      return model.id == reservationId;
+    });
     return reservation;
   }
 
-  getReservationsByUser(userId: number, startDate?: string, endDate?: string): Promise<Reservation[]> {
-    let reservations = this.mockReservations.filter((model) => {
-        return model.userId == userId;
+  getReservationsByUser(
+    userId: number,
+    startDate?: string,
+    endDate?: string,
+  ): Promise<Reservation[]> {
+    const reservations = this.mockReservations.filter((model) => {
+      return model.userId == userId;
     });
 
     if (startDate && endDate) {
       reservations.filter((model) => {
         model.reservedAt >= new Date(startDate) &&
-        model.reservedAt <= new Date(endDate);
+          model.reservedAt <= new Date(endDate);
       });
     }
 
@@ -50,7 +54,7 @@ export class MockReservationRepository {
         ? TreatmentStatus.RESERVATION_CANCELED
         : TreatmentStatus.RESERVATION_COMPLETED;
 
-    let reservation = new Reservation();
+    const reservation = new Reservation();
     reservation.id = reservationId;
     reservation.receptionMethod = ReceptionMethod.RESERVATION;
     reservation.status = RESERVATION_STATUS;

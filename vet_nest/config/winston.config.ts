@@ -2,7 +2,9 @@ import { WinstonModule } from 'nest-winston';
 import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 import * as winston from 'winston';
 import { DateTime } from 'luxon';
-// require('winston-daily-rotate-file');
+const {
+  AzureApplicationInsightsLogger,
+} = require('winston-azure-application-insights');
 
 const dateNow = DateTime.now().setZone('Asia/Seoul');
 
@@ -44,19 +46,9 @@ export const winstonSetting = {
         maxSize: '20m',
         maxFiles: '14d',
       }),
-      // new winston.transports.File({
-      //   filename: "./log/error.log",
-      //   level: "error",
-      // }),
-      // new winston.transports.File({
-      //   filename: "./log/wired.log",
-      //   level: "verbose",
-      // }),
-      // new winston.transports.File({
-      //   filename: "./log/info.log",
-      //   level: "info",
-      // }),
-      // new winston.transports.File({ filename: "./log/combined.log" }),
+      new AzureApplicationInsightsLogger({
+        key: 'key값을 넣어주세요',
+      }),
     ],
   }),
 };
