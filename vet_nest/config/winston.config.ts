@@ -24,7 +24,7 @@ export const winstonSetting = {
           winston.format.json(),
           winston.format.colorize({ all: true }),
           winston.format.align(),
-          nestWinstonModuleUtilities.format.nestLike('CHAT', {
+          nestWinstonModuleUtilities.format.nestLike('VETTY', {
             prettyPrint: true,
           }),
         ),

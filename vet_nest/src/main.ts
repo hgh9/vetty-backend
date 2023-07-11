@@ -1,7 +1,6 @@
 declare const module: any;
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { RedisIoAdapter } from '../adapters/redis.adapter';
-import { AppModule } from './app.module';
 import * as express from 'express';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { winstonSetting } from '../config/winston.config';
@@ -10,7 +9,8 @@ import * as bodyParser from 'body-parser';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { swaggerSetting } from '../config/swagger.config';
 import config from '@configs';
-import { CustomAppExceptionFilter } from './filters/custom-app-exception.filter';
+import { LoggerInterceptor } from '../util/interceptor.util';
+import { AppModule } from './app/app.module';
 
 async function nestFactoryCreate() {
   const server = express();
@@ -35,6 +35,7 @@ async function nestFactoryCreate() {
     optionsSuccessStatus: 204,
     credentials: true,
   });
+  app.useGlobalInterceptors(new LoggerInterceptor());
 
   app.useGlobalPipes(
     new ValidationPipe({

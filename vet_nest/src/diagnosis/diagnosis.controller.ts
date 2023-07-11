@@ -11,10 +11,12 @@ import {
 import { Reservation } from '@/reservations/entity/reservation.entity';
 import { DiagnosisService } from './diagnosis.service';
 import { HttpExceptionFilter } from './exceptions/http-exception.filter';
+import { ApiTags } from '@nestjs/swagger';
 
 // http요청 처리 및 checkservice를 호출해서 예약정보 반환 -> 의존성주입
 @Controller('diagnosis')
 @UseFilters(HttpExceptionFilter)
+@ApiTags('Dignosis')
 export class DisgnosisController {
   constructor(private readonly DiagnosisService: DiagnosisService) {}
   //기본적인 로직을 완성해두고, 에러가 날 수 있는 가능한 모든 경우들을 생각해 test code를 작성하고 동작하는 코드에서 예외처리를 하는 방식으로 코드를 작성해 나갈 수 있습니다.

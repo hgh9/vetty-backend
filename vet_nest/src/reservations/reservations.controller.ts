@@ -16,8 +16,10 @@ import { ReservationService } from './reservations.service';
 import { Reservation } from './entity/reservation.entity';
 import { ReservationSearchDto } from './dto/reservation-search.dto';
 import * as moment from 'moment';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('reservations')
+@ApiTags('Reservations')
 export class ReservationsController {
   constructor(private reservationService: ReservationService) {}
   @Post()
