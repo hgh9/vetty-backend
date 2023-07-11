@@ -1,4 +1,4 @@
-import { DataSource } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { User, UserLevel, UserStatus } from '../../users/entity/users.entity';
 import {
   Pet,
@@ -15,25 +15,20 @@ import {
 } from '../../reservations/entity/reservation.entity';
 import { Payment } from '../../reservations/entity/payment.entity';
 import * as moment from 'moment';
+import { ConfigService } from '@nestjs/config';
+
+interface DatabaseConfig {
+  DB: DataSourceOptions;
+}
 
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
-    useFactory: async () => {
-      const dataSource = new DataSource({
-        type: process.env.DB_TYPE === 'mariadb' ? 'mariadb' : 'mysql',
-        host:
-          process.env.REACT_APP_ENV === 'local'
-            ? 'localhost'
-            : process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT),
-        username: process.env.DB_USERNAME,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_DATABASE,
-        synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-        logging: Boolean(JSON.parse(process.env.DB_LOGGING)) || false,
-        entities: [User, Pet, Vet, TimeSlot, Reservation, Payment],
-      });
+    inject: [ConfigService],
+    useFactory: async (configService: ConfigService) => {
+      const dataSource = new DataSource(
+        configService.get<DataSourceOptions>('DB'),
+      );
 
       dataSource.initialize().then(dbInitializeCallback);
 
