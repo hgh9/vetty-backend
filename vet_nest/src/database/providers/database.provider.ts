@@ -31,7 +31,7 @@ export const databaseProviders = [
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
         synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-        logging: Boolean(JSON.parse(process.env.DB_LOGGING)) || false,
+        logging: false,
         entities: [User, Pet, Vet, TimeSlot, Reservation, Payment],
       });
 

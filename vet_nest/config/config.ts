@@ -9,7 +9,7 @@ export default () => ({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     entities: ['dist/**/*.entity.js'],
-    logging: Boolean(JSON.parse(process.env.DB_LOGGING)),
+    logging: false,
     synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
   },
   NEST: {
