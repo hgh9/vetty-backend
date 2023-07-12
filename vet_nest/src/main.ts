@@ -11,6 +11,8 @@ import { swaggerSetting } from '../config/swagger.config';
 import config from '@configs';
 import { LoggerInterceptor } from '../util/interceptor.util';
 import { AppModule } from './app/app.module';
+import dotenv = require('dotenv');
+dotenv.config();
 
 async function nestFactoryCreate() {
   const server = express();
