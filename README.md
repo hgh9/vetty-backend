@@ -34,6 +34,18 @@
 - 결제 (80%)
 - 알림 (0%)
 
+## Monitoring Service
+
+1. AZURE Application Insights
+
+   - 라이브러리 설치 및 연결
+   - INSTRUMENT_KEY 입력 후 call stack 확인
+
+2. winston 라이브러리와 함께 사용
+
+3. Metric 모니터링 서비스는 준비중 
+
+
 ## Exception handling
 
 1. Exception.util.ts
@@ -46,8 +58,7 @@
 2. ExceptionService
 
    - controller에서 마지막 throw new httpexception을 토해내는 서비스입니다.
-   - 대부분의 마지막 에러처리는 get, post, delete, update의 실패로 처리합니다. 
-   
+   - 대부분의 마지막 에러처리는 get, post, delete, update의 실패로 처리합니다.
 
 3. 두가지 예제를 보려면 [app.controller.ts](https://github.com/hgh9/vetty-backend/blob/main/vet_nest/src/app.controller.ts) 또는 [app.service.ts](https://github.com/hgh9/vetty-backend/blob/main/vet_nest/src/app.service.ts)를 참고하시면 됩니다.
 
