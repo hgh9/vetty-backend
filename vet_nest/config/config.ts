@@ -7,6 +7,7 @@ import { Payment } from '../src/reservations/entity/payment.entity';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: '../.env' });
 
+
 export default () => ({
   MODE: process.env.REACT_APP_ENV,
   DB: {
@@ -44,3 +45,4 @@ export default () => ({
     AZURE_INSTRUMENT_KEY: process.env.AZURE_INSTRUMENT_KEY,
   },
 });
+
