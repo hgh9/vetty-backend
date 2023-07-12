@@ -8,7 +8,7 @@ import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { swaggerSetting } from '../config/swagger.config';
-import config, { AZURE_CONFIG } from '@configs';
+import config from '@configs';
 import { LoggerInterceptor } from '../util/interceptor.util';
 import { AppModule } from './app/app.module';
 import dotenv = require('dotenv');
