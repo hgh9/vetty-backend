@@ -1,4 +1,3 @@
-import { DataSourceOptions } from 'typeorm';
 import { User } from '../src/users/entity/users.entity';
 import { Pet } from '../src/pets/entity/pet.entity';
 import { Vet } from '../src/vets/entity/vet.entity';
@@ -6,7 +5,7 @@ import { TimeSlot } from '../src/vets/entity/timeslot.entity';
 import { Reservation } from '../src/reservations/entity/reservation.entity';
 import { Payment } from '../src/reservations/entity/payment.entity';
 import * as dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 export default () => ({
   MODE: process.env.REACT_APP_ENV,

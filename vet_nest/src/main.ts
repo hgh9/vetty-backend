@@ -8,9 +8,11 @@ import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { swaggerSetting } from '../config/swagger.config';
-import config from '@configs';
+import config, { AZURE_CONFIG } from '@configs';
 import { LoggerInterceptor } from '../util/interceptor.util';
 import { AppModule } from './app/app.module';
+import dotenv = require('dotenv');
+dotenv.config();
 
 async function nestFactoryCreate() {
   const server = express();
@@ -56,6 +58,8 @@ async function bootstrap() {
   if (1) {
     swaggerSetting(app);
   }
+
+  console.log()
 
   const port = config().NEST.PORT;
   await app.listen(port || 3002);
