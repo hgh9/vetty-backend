@@ -59,8 +59,6 @@ async function bootstrap() {
     swaggerSetting(app);
   }
 
-  console.log()
-
   const port = config().NEST.PORT;
   await app.listen(port || 3002);
   logger.log(`Application running on port:: ${port}`);
