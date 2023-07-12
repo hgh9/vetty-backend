@@ -3,6 +3,7 @@ import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 import * as winston from 'winston';
 import { DateTime } from 'luxon';
 import config from './config';
+
 const {
   AzureApplicationInsightsLogger,
 } = require('winston-azure-application-insights');
