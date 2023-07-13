@@ -51,3 +51,4 @@ export class FailedPost extends BaseError {}
 export class FailedDelete extends BaseError {}
 export class FailedVerifyCode extends BaseError {}
 export class FailedChangePassword extends BaseError {}
+export class BisunessException extends BaseError {}

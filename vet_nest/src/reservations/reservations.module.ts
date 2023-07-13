@@ -6,6 +6,8 @@ import { ReservationReposiotory } from '@/reservations/repository/reservation-re
 import { ReservationService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
 import { ReservationFacade } from './reservation-facade';
+import { ReservationMapperProfile } from './dto/reservation-profile.mapper';
+import { PaymentsService } from '@/payments/payments.service';
 
 @Module({
   imports: [DatabaseModule],
@@ -17,7 +19,9 @@ import { ReservationFacade } from './reservation-facade';
     ReservationCancelationService,
     ReservationReposiotory,
     ReservationService,
-    ReservationFacade
+    ReservationFacade,
+    PaymentsService,
+    // ReservationMapperProfile
   ],
 })
 export class ReservationsModule {}

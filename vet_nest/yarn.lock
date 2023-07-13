@@ -68,6 +68,16 @@
     ora "5.4.1"
     rxjs "6.6.7"
 
+"@automapper/core@^8.7.7":
+  version "8.7.7"
+  resolved "https://registry.yarnpkg.com/@automapper/core/-/core-8.7.7.tgz#b48dd0260d188e6036fafd7ac03727d9295175ab"
+  integrity sha512-YfpDJ/xqwUuC0S+BLNk81ZJfeL7CmjirUX/Gk9eQyx146DKvneBZgeZ9v5rDB51Ti14jTxVHis+5JuT7W/q0TA==
+
+"@automapper/nestjs@^8.7.7":
+  version "8.7.7"
+  resolved "https://registry.yarnpkg.com/@automapper/nestjs/-/nestjs-8.7.7.tgz#797bca292f86e7b44530939f359aa8374b47629d"
+  integrity sha512-9/uYY2cmN7SJjr2QxnfyXsteHrn/RHD+Dg0VMBflzK/e8Bh/KWyOve7+kaFixlUoyHe44aXs2LVaCslqt8wnhQ==
+
 "@azure/abort-controller@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@azure/abort-controller/-/abort-controller-1.1.0.tgz#788ee78457a55af8a1ad342acb182383d2119249"
