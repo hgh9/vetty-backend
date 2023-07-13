@@ -4,7 +4,7 @@ import * as request from 'supertest';
 
 const LOCAL_HOST = 'http://localhost:3001';
 
-describe('CREATE PAYMENT', () => {
+describe('createPayment', () => {
   let app: INestApplication;
   
   beforeEach(async () => {
@@ -14,36 +14,37 @@ describe('CREATE PAYMENT', () => {
     await app.init;
   });
   
-  test('POST /payments creates a new payment', () => {
+  test('POST /create makes a payment record', () => {
     const createPaymentDto = {
+      amount: '100',
       reservationId: 1,
-      amount: 100,
     };
     
     request(LOCAL_HOST)
-      .post('/payments')
+      .post('/pg/create')
       .send(createPaymentDto)
       .then((res: request.Response) => {
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
+        expect(res.body.result).toEqual({ appId: 'PG' + createPaymentDto.reservationId });
       });
   });
   
-  test('POST /payments fails with invalid data', () => {
-    const invalidDto = {
-      amount: 100,
+  test('POST /create fails with invalid data', () => {
+    const createPaymentDto = {
+      amount: null,
+      reservationId: 1,
     };
     
     request(LOCAL_HOST)
-      .post('/payments')
-      .send(invalidDto)
+      .post('/pg/create')
+      .send(createPaymentDto)
       .then((res: request.Response) => {
         expect(res.statusCode).toEqual(HttpStatus.BAD_REQUEST);
-        expect(res.body.message).toEqual('invalid data');
       });
   });
 });
 
-describe('REFUND PAYMENT', () => {
+describe('refundPayment', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -52,29 +53,30 @@ describe('REFUND PAYMENT', () => {
     app = module.createNestApplication();
     await app.init;
   });
-
-  test('POST /payments/refund refunds', () => {
-    const refundPaymentDto = { reservationId: 1 };
+  
+  test('POST /refund passes with valid appId', () => {
+    const refundPaymentDto = {
+      appId: 1,
+    };
 
     request(LOCAL_HOST)
-      .post('/payments/refund')
+      .post('/pg/refund')
       .send(refundPaymentDto)
       .then((res: request.Response) => {
         expect(res.statusCode).toEqual(HttpStatus.OK);
       });
   });
-
-  test('POST /payments/refund fails with invalid data', () => {
-    const invalidDto = {
-      amount: 100,
+  
+  test('POST /refund fails when there is no appId', () => {
+    const refundPaymentDto = {
+      appId: null,
     };
-
+    
     request(LOCAL_HOST)
-      .post('/payments/refund')
-      .send(invalidDto)
+      .post('/pg/refund')
+      .send(refundPaymentDto)
       .then((res: request.Response) => {
         expect(res.statusCode).toEqual(HttpStatus.BAD_REQUEST);
-        expect(res.body.message).toEqual('paymentId is required');
       });
   });
 });

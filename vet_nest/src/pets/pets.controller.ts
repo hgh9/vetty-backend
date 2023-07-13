@@ -40,9 +40,7 @@ export class PetsController {
   @Put()
   async updatePet(@Body() updatePetDto) {
     const result = await this.PetsService.updatePet(updatePetDto).catch((error) => {
-      if (error.message === 'valid pet data are required') {
-        throw new HttpException({ result: false, message: error.message }, 400);
-      }
+      throw new HttpException({ result: false, message: error.message }, 400);
     });
 
     return { result: result, code: 200, message: '/pets' };

@@ -1,4 +1,4 @@
-import { Controller, Post, HttpException } from '@nestjs/common';
+import { Controller, Post, HttpException, Body } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -6,7 +6,7 @@ export class UsersController {
   constructor(private UsersService: UsersService) {}
 
   @Post('signup')
-  async signup(createUserDto) {
+  async signup(@Body() createUserDto) {
     const result = await this.UsersService.signup(createUserDto).catch((error) => {
       throw new HttpException({ result: false, message: error.message }, 400);
     });
@@ -15,7 +15,7 @@ export class UsersController {
   }
 
   @Post('login')
-  async login(loginUserDto) {
+  async login(@Body() loginUserDto) {
     const result = await this.UsersService.login(loginUserDto).catch((error) => {
       throw new HttpException({ result: false, message: error.message }, 400);
     });

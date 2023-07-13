@@ -1,6 +1,6 @@
 import { Repository, DataSource, EntityRepository } from 'typeorm';
 import { Payment } from '../entity/payments.entity';
-import { Inject } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 
 @EntityRepository(Payment)
 export class PaymentsRepository extends Repository<Payment>
@@ -12,29 +12,30 @@ export class PaymentsRepository extends Repository<Payment>
     super(Payment, dataSource.createEntityManager());
   }
   
-  async findByPaymentId(paymentId) {
-    return await this.findOneBy({ paymentId });
+  async findByReservationId(reservationId) {
+    try {
+      return await this.findOne({ where: { reservationId } });
+    }
+    catch (error) {
+      const aa = new Logger();
+      aa.log(error);
+    }
   }
-  
-  async createPayment(reservationId, amount) {
+
+  async findByPaymentId(paymentId) {
+    return await this.findOneById(paymentId);
+  }
+
+  async createPayment(reservationId, amount, appId) {
     const newPayment = this.create({
       reservationId,
       amount,
-      status: 'progress',
+      appId,
+      status: 'done',
+      method: 'CARD',
     });
     await this.save(newPayment);
     return newPayment;
-  }
-  
-  async done(paymentId) {
-    return await this.update(paymentId, { status: 'done' });
-  }
-  
-  async cancel(paymentId) {
-    return await this.update(paymentId, {
-      status: 'canceled',
-      canceledAt: new Date(),
-    });
   }
   
   async refund(paymentId) {

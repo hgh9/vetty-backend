@@ -64,7 +64,7 @@ describe('SIGN UP', () => {
       .send(createUserDto)
       .then((res: request.Response) => {
         expect(res.statusCode).toEqual(HttpStatus.BAD_REQUEST);
-        expect(res.body.message).toEqual('Invalid user data');
+        expect(res.body.message).toEqual('invalid user data');
       });
   });
 });

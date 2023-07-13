@@ -2,22 +2,34 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PaymentsService } from '../payments.service';
 import { PaymentsRepositoryMock } from '../repository/payments.repository.mock';
 import { PaymentsRepository } from '../repository/payments.repository';
+import { HttpService, HttpModule } from '@nestjs/axios';
+import { of } from 'rxjs';
+import { AxiosResponse } from 'axios';
 
+// 여기만 하면 된다..
 describe('CREATE PAYMENT', () => {
   let service: PaymentsService;
+  let httpService: HttpService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         {
           provide: PaymentsRepository,
           useClass: PaymentsRepositoryMock,
         },
         PaymentsService,
+        {
+          provide: HttpService,
+          useFactory: () => ({
+            post: jest.fn(),
+          }),
+        },
       ],
     }).compile();
-
     service = module.get<PaymentsService>(PaymentsService);
+    httpService = module.get<HttpService>(HttpService);
   });
   
   test('invalid data fails', async () => {
@@ -60,9 +72,25 @@ describe('CREATE PAYMENT', () => {
     const createdPayment = {
       reservationId: 1,
       paymentId: 1,
+      appId: 'PG1',
       amount: 200,
-      status: 'progress',
+      status: 'done',
     };
+
+    jest.spyOn(httpService, 'post').mockImplementation(() => {
+      const test = of({
+        data: {
+          result: { code: 200, appId: 'PG1' },
+        },
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {},
+      } as AxiosResponse<any>);
+
+      console.log(typeof test);
+      console.log(test);
+    });
     
     const result = await service.create(createPaymentDto);
     
@@ -70,64 +98,7 @@ describe('CREATE PAYMENT', () => {
   });
 });
 
-describe('CANCEL PAYMENT', () => {
-  let service: PaymentsService;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        {
-          provide: PaymentsRepository,
-          useClass: PaymentsRepositoryMock,
-        },
-        PaymentsService,
-      ],
-    }).compile();
-
-    service = module.get<PaymentsService>(PaymentsService);
-  });
-  
-  test('cancel fails when paymentId is missing', async () => {
-    const cancelPaymentDto = { paymentId: null };
-    
-    try {
-      await service.cancel(cancelPaymentDto);
-    }
-    catch(error) {
-      expect(error).toBeInstanceOf(Error);
-    }
-    
-    expect.assertions(1);
-  });
-  
-  test('cancel fails when paymentId is not in progress', async () => {
-    const cancelPaymentDto = { paymentId: 3 };
-
-    try {
-      await service.cancel(cancelPaymentDto);
-    }
-    catch(error) {
-      expect(error).toBeInstanceOf(Error);
-    }
-
-    expect.assertions(1);
-  });
-  
-  test('cancel passes with valid data', async () => {
-    const cancelPaymentDto = { paymentId: 2 };
-    const canceled = {
-      paymentId: 2,
-      amount: 200,
-      status: 'canceled',
-    };
-
-    const result = await service.cancel(cancelPaymentDto);
-    
-    expect(result).toEqual(canceled);
-  });
-});
-
-describe('CANCEL PAYMENT', () => {
+describe('REFUND PAYMENT', () => {
   let service: PaymentsService;
 
   beforeEach(async () => {

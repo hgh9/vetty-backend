@@ -27,6 +27,10 @@ import { CheckModule } from './check/check.module';
 import { PetsRepository } from './pets/repository/pets.repository';
 import { UsersRepository } from './users/repository/users.repository';
 import { JwtService } from '@nestjs/jwt';
+import { PgController } from './pg/pg.controller';
+import { PgService } from './pg/pg.service';
+import { PgModule } from './pg/pg.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -56,6 +60,8 @@ import { JwtService } from '@nestjs/jwt';
     VetsModule,
     PaymentsModule,
     UsersModule,
+    PgModule,
+    HttpModule,
   ],
   controllers: [
     AppController,
@@ -63,6 +69,7 @@ import { JwtService } from '@nestjs/jwt';
     VetsController,
     PaymentsController,
     UsersController,
+    PgController,
   ],
   providers: [
     AppService,
@@ -74,6 +81,7 @@ import { JwtService } from '@nestjs/jwt';
     UsersService,
     UsersRepository,
     JwtService,
+    PgService,
   ],
 })
 export class AppModule {}

@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PaymentsRepository } from './repository/payments.repository';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class PaymentsService {
-  constructor(private readonly paymentsRepository: PaymentsRepository) {}
+  constructor(
+    private readonly paymentsRepository: PaymentsRepository,
+    private readonly httpService: HttpService,
+  ) {}
 
   async create(createPaymentDto) {
     if (!(createPaymentDto.reservationId && createPaymentDto.amount)) {
@@ -11,26 +16,23 @@ export class PaymentsService {
     }
 
     const targetPayment =
-      await this.paymentsRepository.findByPaymentId(createPaymentDto.reservationId);
-    if (targetPayment && (targetPayment.status === 'progress' || targetPayment.status === 'done')) {
+      await this.paymentsRepository.findByReservationId(createPaymentDto.reservationId);
+    if (targetPayment && targetPayment.status === 'done') {
       throw new Error('payment has already made');
     }
 
-    return this.paymentsRepository.createPayment(createPaymentDto.reservationId, createPaymentDto.amount);
-  }
+    const pgCreateUrl = 'http://localhost:3001/pg/create';
+    const pgCreateBody = {
+      reservationId: createPaymentDto.reservationId,
+      amount: createPaymentDto.amount,
+    };
 
-  async cancel(cancelPaymentDto) {
-    if (!cancelPaymentDto.paymentId) {
-      throw new Error('paymentId is required');
+    const pgResponse = (await firstValueFrom(this.httpService.post(pgCreateUrl, pgCreateBody))).data;
+    if (pgResponse.code !== 201) {
+      throw new Error('pg error');
     }
 
-    const targetPayment =
-      await this.paymentsRepository.findByPaymentId(cancelPaymentDto.paymentId);
-    if (!targetPayment || targetPayment.status !== 'progress') {
-      throw new Error('payment is not in progress');
-    }
-
-    return this.paymentsRepository.cancel(cancelPaymentDto.paymentId);
+    return this.paymentsRepository.createPayment(createPaymentDto.reservationId, createPaymentDto.amount, pgResponse.result.appId);
   }
 
   async refund(refundPaymentDto) {
@@ -40,25 +42,17 @@ export class PaymentsService {
 
     const targetPayment =
       await this.paymentsRepository.findByPaymentId(refundPaymentDto.paymentId);
-    if (!targetPayment || targetPayment.status !== 'done') {
-      throw new Error('payment is not done');
+    if (!targetPayment || targetPayment.status === 'refund') {
+      throw new Error('payment is not refundable');
+    }
+
+    const pgRefundUrl = 'http://localhost:3001/pg/refund';
+    const pgRefundBody = { appId: targetPayment.appId };
+    const result = (await firstValueFrom(this.httpService.post(pgRefundUrl, pgRefundBody))).data;
+    if (result.code !== 200) {
+      throw new Error('pg error');
     }
 
     return this.paymentsRepository.refund(refundPaymentDto.paymentId);
-  }
-
-  // API (X), PG 대체 내부 용도 (O)
-  async done(donePaymentDto) {
-    if (!donePaymentDto.paymentId) {
-      throw new Error('paymentId is required');
-    }
-
-    const targetPayment =
-      await this.paymentsRepository.findByPaymentId(donePaymentDto.paymentId);
-    if (!targetPayment || targetPayment.status !== 'progress') {
-      throw new Error('payment is not in progress');
-    }
-
-    return this.paymentsRepository.done(donePaymentDto.paymentId);
   }
 }

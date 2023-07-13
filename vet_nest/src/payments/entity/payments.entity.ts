@@ -9,7 +9,7 @@ export class Payment {
   @Column({ nullable: true })
   appId: string;
 
-  @Column({ nullable: true })
+  @Column()
   method: string;
 
   @Column()
