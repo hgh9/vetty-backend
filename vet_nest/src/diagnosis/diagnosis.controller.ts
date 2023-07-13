@@ -30,7 +30,25 @@ export class DisgnosisController {
     };
   }
 
-  @Put('/:id')
+  @Get('/:vetId') //병원의 진료목록조회
+  async getAllDiagnosis(
+    @Param() param: { id: number },
+    @Body() body: { treatmentStatus: number },
+  ) {
+    // 예약정보를 조회한다.
+    //파마리터로 값 가져와야해
+    const result = await this.DiagnosisService.getDiagnosisList(
+      param.id,
+      body.treatmentStatus,
+    );
+    return {
+      result: result,
+      message: '예약조회가 완료되었습니다.',
+    };
+    //파라미터값 에러
+  }
+
+  @Put('/:reservationId')
   async updateReservaionStatus(@Param() param: { id: number }) {
     // 예약상태변경
     const result = await this.DiagnosisService.updateReservaionStatus(param.id);
@@ -38,6 +56,7 @@ export class DisgnosisController {
       result: result,
       message: '상태변경이 완료 되었습니다.',
     };
+    //파라미터값 에러
   }
 
   @Post('/:id')

@@ -48,7 +48,7 @@ export class Reservation {
   userId: number;
 
   @Column()
-  treatmentStatus: TreatmentStatus;
+  treatmentStatus: DignosisCategory;
 
   @Column({
     type: 'decimal',

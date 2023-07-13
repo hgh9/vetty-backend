@@ -3,49 +3,47 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { TreatmentResult } from './entity/TreatmentResult.entity';
 import { Reservation } from '../reservations/entity/reservation.entity';
-import exp from 'constants';
+import { ReservationReposiotory } from '@/reservations/repository/reservation-repository';
+import { DiagnosisRepository } from './repository/diagnosis-repository';
 
 @Injectable()
 export class DiagnosisService {
-  private reservationRepository: Repository<Reservation>;
   private treatmentRepository: Repository<TreatmentResult>;
   constructor(
     @Inject('DATA_SOURCE')
-    private readonly dataSource: DataSource,
-  ) {
-    this.reservationRepository = this.dataSource.getRepository(Reservation);
-  }
+    private readonly reservationRepository: ReservationReposiotory,
+    private readonly diagnosisRepository: DiagnosisRepository,
+  ) {}
 
+  //
   public async getAllReservations() {
-    const getAllReservation = await this.reservationRepository.find({
-      where: {
-        status: 1,
-      },
-    });
+    const getAllReservation =
+      await this.reservationRepository.getAllReservationByStatus();
 
     if (!getAllReservation) {
-      throw new BadRequestException('예약정보가 없습니다.');
+      throw new BadRequestException('예약정보를 불러오는데 실패했습니다');
     }
     // 값을 불러오지 못했을 경우의 에러처리 필요
     return getAllReservation;
   }
 
-  public async getAllDiagnosis() {
-    const getAllDiagnosis = await this.treatmentRepository.find();
+  // public async getAllDiagnosis() {
+  //   const getAllDiagnosis = await this.treatmentRepository.find();
 
-    if (!getAllDiagnosis) {
-      throw new BadRequestException('진료목록이 없습니다.');
-    }
-    // 값을 불러오지 못했을 경우의 에러처리 필요
-    return getAllDiagnosis;
-  }
+  //   if (!getAllDiagnosis) {
+  //     throw new BadRequestException('진료목록이 없습니다.');
+  //   }
+  //   // 값을 불러오지 못했을 경우의 에러처리 필요
+  //   return getAllDiagnosis;
+  // }
 
-  public async updateReservaionStatus(id: number) {
+  public async updateReservaionStatus(reservationId: number) {
     // 진료중으로 변경
     // 아에 Dto 넘기면 값을 다 안써도 값을 불러올 수 있다
-    const reservationInfo = await this.reservationRepository.findOneBy({
-      id,
-    });
+    const reservationInfo =
+      await this.reservationRepository.updateReservaionStatusById(
+        reservationId,
+      );
 
     //validation
     const validationReservationStatus = this.checkReservationStatus_cancle(
@@ -93,20 +91,20 @@ export class DiagnosisService {
     }
   }
 
-  // 고객의 진료 목록을 조회한다.
-  public async getDiagnosis(id: number) {
-    const reservationId = await this.reservationRepository.findOneBy({
-      id,
-    });
-    const treatmentResult = await this.treatmentRepository.findOneBy({
-      id,
-    });
-    if (reservationId.id !== treatmentResult.id) {
-      throw new BadRequestException('예약id가 일치하지 않습니다.');
+  // 병원의 진료 목록을 조회한다. all아니면 카테고리값으로 넘어와서 카테고리별 조회
+  public async getDiagnosisList(vetId: number, treatmentStatus: number) {
+    const getAllDiagnosis =
+      await this.diagnosisRepository.getDiagnosisListByVetId(
+        vetId,
+        treatmentStatus,
+      );
+    if (!getAllDiagnosis) {
+      throw new BadRequestException('진료목록을 불러오는데 실패하였습니다.');
     }
-    return;
+    return getAllDiagnosis;
   }
 
+  // 결제완료
   public async completePayment(id: number, amount: number) {
     const reservationInfo = await this.reservationRepository.findOneBy({
       id,

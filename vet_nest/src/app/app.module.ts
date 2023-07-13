@@ -68,7 +68,6 @@ import { currentModeProviders } from './providers/currentMode.provider';
     VetsController,
     PaymentsController,
     UsersController,
-    DisgnosisController,
   ],
   providers: [
     AppService,
@@ -77,7 +76,6 @@ import { currentModeProviders } from './providers/currentMode.provider';
     VetsService,
     PaymentsService,
     UsersService,
-    DiagnosisService,
     UsersRepository,
     JwtService,
     ExceptionsService,
