@@ -1,3 +1,13 @@
+import { User } from '../src/users/entity/users.entity';
+import { Pet } from '../src/pets/entity/pet.entity';
+import { Vet } from '../src/vets/entity/vet.entity';
+import { TimeSlot } from '../src/vets/entity/timeslot.entity';
+import { Reservation } from '../src/reservations/entity/reservation.entity';
+import { Payment } from '../src/reservations/entity/payment.entity';
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '../.env' });
+
+
 export default () => ({
   MODE: process.env.REACT_APP_ENV,
   DB: {
@@ -8,10 +18,12 @@ export default () => ({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    entities: ['dist/**/*.entity.js'],
-    logging: false,
+    // entities: ['dist/**/*.entity.js'],
+    logging: Boolean(JSON.parse(process.env.DB_LOGGING)),
     synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
+    entities: [User, Pet, Vet, TimeSlot, Reservation, Payment],
   },
+
   NEST: {
     PORT: process.env.REACT_APP_NEST_LOCAL_PORT,
     HOST:
@@ -29,4 +41,8 @@ export default () => ({
         ? 'localhost'
         : process.env.REACT_APP_REDIS_HOSTNAME,
   },
+  AZURE: {
+    AZURE_INSTRUMENT_KEY: process.env.AZURE_INSTRUMENT_KEY,
+  },
 });
+

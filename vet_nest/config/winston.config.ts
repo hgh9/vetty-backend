@@ -2,6 +2,8 @@ import { WinstonModule } from 'nest-winston';
 import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 import * as winston from 'winston';
 import { DateTime } from 'luxon';
+import config from './config';
+
 const {
   AzureApplicationInsightsLogger,
 } = require('winston-azure-application-insights');
@@ -47,7 +49,7 @@ export const winstonSetting = {
         maxFiles: '14d',
       }),
       new AzureApplicationInsightsLogger({
-        key: 'key값을 넣어주세요',
+        key: config().AZURE.AZURE_INSTRUMENT_KEY,
       }),
     ],
   }),
