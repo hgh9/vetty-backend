@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "winston-application-insights-transport": "^0.0.1",
+    "winston-azure-application-insights": "^4.0.0"
+  }
+}
