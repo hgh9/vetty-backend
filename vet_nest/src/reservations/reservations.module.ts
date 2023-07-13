@@ -5,6 +5,7 @@ import { ReservationCancelationService } from '@/reservations/reservation-cancel
 import { ReservationReposiotory } from '@/reservations/repository/reservation-repository';
 import { ReservationService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
+import { ReservationFacade } from './reservation-facade';
 
 @Module({
   imports: [DatabaseModule],
@@ -15,9 +16,8 @@ import { ReservationsController } from './reservations.controller';
   providers: [
     ReservationCancelationService,
     ReservationReposiotory,
-    ReservationService
-    // PaymentFactoryService,
-    // FakePaymentService,
+    ReservationService,
+    ReservationFacade
   ],
 })
 export class ReservationsModule {}

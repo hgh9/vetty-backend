@@ -1,6 +1,6 @@
 declare const module: any;
 import { NestFactory } from '@nestjs/core';
-import { RedisIoAdapter } from '../adapters/redis.adapter';
+// import { RedisIoAdapter } from '../adapters/redis.adapter';
 import * as express from 'express';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { winstonSetting } from '../config/winston.config';
@@ -23,10 +23,10 @@ async function nestFactoryCreate() {
     winstonSetting,
   );
 
-  const redisIoAdapter = new RedisIoAdapter(app);
-  await redisIoAdapter.connectToRedis();
+  // const redisIoAdapter = new RedisIoAdapter(app);
+  // await redisIoAdapter.connectToRedis();
 
-  app.useWebSocketAdapter(redisIoAdapter);
+  // app.useWebSocketAdapter(redisIoAdapter);
 
   app.use(cookieParser());
   app.use(bodyParser.json({ limit: '50mb' }));
