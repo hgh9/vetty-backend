@@ -13,6 +13,7 @@ import {
   PetVaccinatedInfo,
 } from '../../pets/entity/pet.entity';
 import * as moment from 'moment';
+import { SetTimeSlotCommand } from '../dto/timeslot.dto';
 
 describe('ReservationsController', () => {
   let controller: ReservationsController;
@@ -23,10 +24,10 @@ describe('ReservationsController', () => {
     status: TreatmentStatus.RESERVATION_COMPLETED,
     updatedAt: new Date(Date.now()),
     reservedAt: new Date(Date.now()),
-    paymentId: 1,
+    // paymentId: 1,
     petId: 1,
     userId: 1,
-    vetId: 3,
+    vetId: 1,
   };
 
   beforeEach(async () => {
@@ -36,19 +37,49 @@ describe('ReservationsController', () => {
     await app.init();
   });
 
+  describe('슬롯 체킹(예약가능한 날짜 확인)', () => {
+    it('checking date ', async () => {
+      await request('http://localhost:3001')
+        .get('/reservations/available/time')
+        .query({ startDate: '2023-01-01' })
+        .then((res: request.Response) => {
+          expect(res.statusCode).toEqual(HttpStatus.OK);
+        });
+    });
+  });
+
+  describe('슬롯 저장', () => {
+    const saveSlotTIme = {
+      // startDate: new Date(moment('2023-01-01').format('YYYY-MM-DD')),
+      startDate: '2023-01-01',
+      startTime: '13:00:00',
+      endTime: '14:00:00',
+      time: 13,
+      vetId: 1,
+    };
+    it('set timeslot date ', async () => {
+      await request('http://localhost:3001')
+        .post('/reservations/set/time')
+        .send(saveSlotTIme)
+        .then((res: request.Response) => {
+          expect(res.statusCode).toEqual(HttpStatus.OK);
+        });
+    });
+  });
+
   describe('예약 저장', () => {
     it('/reservations, 예약저장 ', async () => {
-      //pet id ,reservation date, hospital id,  user id , reservation info
-      // request('http://localhost:3001')
-      //   .post(`/reservations`)
-      //   .send(mockData)
-      //   .then((res: request.Response) => {
-      //     //Assert
-      //     expect(res.statusCode).toEqual(HttpStatus.OK);
-      //     expect(res.body.result).toBeTruthy();
-      //     expect(res.body.result).toBeCalled();
-      //     expect(res.body.message).toEqual('예약이 완료되었습니다.');
-      //   });
+      // pet id ,reservation date, hospital id,  user id , reservation info
+      const res = await request('http://localhost:3001')
+        .post(`/reservations`)
+        .send(mockData)
+        .then((res: request.Response) => {
+          //Assert
+          expect(res.statusCode).toEqual(HttpStatus.OK);
+          expect(res.body.result).toBeTruthy();
+          expect(res.body.result).toBeCalled();
+          expect(res.body.message).toEqual('예약이 완료되었습니다.');
+        });
     });
   });
 
@@ -85,8 +116,8 @@ describe('ReservationsController', () => {
       expect(res.status).toBeGreaterThan(HttpStatus.BAD_REQUEST);
       expect(res.body.error.length).toBeGreaterThan(0);
       expect(res.body.error).toContainEqual({
-        key: "startDate",
-        error: "최대 5년 이전까지만 조회가 가능합니다."
+        key: 'startDate',
+        error: '최대 5년 이전까지만 조회가 가능합니다.',
       });
     });
 
@@ -105,8 +136,8 @@ describe('ReservationsController', () => {
       expect(res.status).toBeGreaterThan(HttpStatus.BAD_REQUEST);
       expect(res.body.error.length).toBeGreaterThan(0);
       expect(res.body.error).toContainEqual({
-        key: "startDate",
-        error: "조회 범위는 최대 1년 입니다."
+        key: 'startDate',
+        error: '조회 범위는 최대 1년 입니다.',
       });
     });
   });

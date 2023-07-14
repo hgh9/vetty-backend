@@ -33,6 +33,7 @@ import { ExceptionsService } from '../exceptions/exceptions.service';
 import { currentModeProviders } from './providers/currentMode.provider';
 import { PaymentsRepository } from '../payments/repository/payments.repository';
 import { HttpModule } from '@nestjs/axios';
+import { TimeSlotReposiotory } from '../reservations/repository/timeslot-repository';
 
 @Module({
   imports: [
@@ -86,6 +87,7 @@ import { HttpModule } from '@nestjs/axios';
     JwtService,
     ExceptionsService,
     currentModeProviders,
+    TimeSlotReposiotory,
   ],
 })
 export class AppModule {}

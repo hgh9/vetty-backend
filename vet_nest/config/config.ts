@@ -21,6 +21,7 @@ export default () => ({
     database: process.env.DB_DATABASE,
     // entities: ['dist/**/*.entity.js'],
     logging: Boolean(JSON.parse(process.env.DB_LOGGING)),
+    // logging: true,
     synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
     entities: [User, Pet, Vet, TimeSlot, Reservation, Payment],
   },

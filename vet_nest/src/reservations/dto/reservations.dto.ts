@@ -7,6 +7,7 @@ import {
 import { PetDto } from '../../pets/dto/pet.dto';
 import { VetDto } from '../../vets/dto/vet.dto';
 import { ReservationUserDto, UserDto } from '../../users/dto/user.dto';
+import { TimeSlot } from '../../vets/entity/timeslot.entity';
 
 export class ReservastionsDto {
   @IsOptional()
@@ -66,25 +67,35 @@ export class ReservastionsDto {
   @IsOptional()
   reservedAt?: Date | null;
 
+  // @ApiProperty({
+  //   default: '',
+  //   required: true,
+  //   type: 'array',
+  //   name: 'payments',
+  //   description: '결제정보',
+  // })
+  // @IsOptional()
+  // paymentId: number;
+
   @ApiProperty({
-    default: '',
+    default: '2023-01-02',
     required: true,
-    type: 'array',
-    name: 'payments',
-    description: '결제정보',
+    type: 'object',
+    name: 'timeSlot',
+    description: '예약 시간',
   })
   @IsOptional()
-  paymentId: number;
+  timeSlot?: TimeSlot;
 
   @ApiProperty({
     default: '',
     required: true,
-    type: 'object',
+    type: 'string',
     name: 'pet',
     description: 'Pet정보',
   })
   @IsOptional()
-  petId: number;
+  petId: string;
 
   @ApiProperty({
     default: '',
