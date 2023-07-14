@@ -31,39 +31,37 @@ describe('CREATE PAYMENT', () => {
     service = module.get<PaymentsService>(PaymentsService);
     httpService = module.get<HttpService>(HttpService);
   });
-  
+
   test('invalid data fails', async () => {
     const createPaymentDto = {
       reservationId: null,
       amount: 100,
     };
-    
+
     try {
       await service.create(createPaymentDto);
-    }
-    catch(error) {
+    } catch (error) {
       expect(error).toBeInstanceOf(Error);
     }
-    
+
     expect.assertions(1);
   });
-  
+
   test('duplicate payment fails', async () => {
     const createPaymentDto = {
       reservationId: 2,
       amount: 50,
     };
-    
+
     try {
       await service.create(createPaymentDto);
-    }
-    catch(error) {
+    } catch (error) {
       expect(error).toBeInstanceOf(Error);
     }
-    
+
     expect.assertions(1);
   });
-  
+
   test('create passes with valid payment data', async () => {
     const createPaymentDto = {
       reservationId: 1,
@@ -91,9 +89,9 @@ describe('CREATE PAYMENT', () => {
       console.log(typeof test);
       console.log(test);
     });
-    
+
     const result = await service.create(createPaymentDto);
-    
+
     expect(result).toEqual(createdPayment);
   });
 });
@@ -114,27 +112,25 @@ describe('REFUND PAYMENT', () => {
 
     service = module.get<PaymentsService>(PaymentsService);
   });
-  
+
   test('refund fails when paymentId is missing', async () => {
     const cancelPaymentDto = { paymentId: null };
 
     try {
       await service.refund(cancelPaymentDto);
-    }
-    catch(error) {
+    } catch (error) {
       expect(error).toBeInstanceOf(Error);
     }
 
     expect.assertions(1);
   });
-  
+
   test('refund fails when payment is not done', async () => {
     const cancelPaymentDto = { paymentId: 2 };
 
     try {
       await service.refund(cancelPaymentDto);
-    }
-    catch(error) {
+    } catch (error) {
       expect(error).toBeInstanceOf(Error);
     }
 

@@ -5,7 +5,7 @@ import { Reservation } from '../../reservations/entity/reservation.entity';
 export class Payment {
   @PrimaryGeneratedColumn()
   paymentId: number;
-  
+
   @Column({ nullable: true })
   appId: string;
 

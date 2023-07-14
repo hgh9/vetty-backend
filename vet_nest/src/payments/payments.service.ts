@@ -15,8 +15,9 @@ export class PaymentsService {
       throw new Error('invalid data');
     }
 
-    const targetPayment =
-      await this.paymentsRepository.findByReservationId(createPaymentDto.reservationId);
+    const targetPayment = await this.paymentsRepository.findByReservationId(
+      createPaymentDto.reservationId,
+    );
     if (targetPayment && targetPayment.status === 'done') {
       throw new Error('payment has already made');
     }
@@ -27,12 +28,18 @@ export class PaymentsService {
       amount: createPaymentDto.amount,
     };
 
-    const pgResponse = (await firstValueFrom(this.httpService.post(pgCreateUrl, pgCreateBody))).data;
+    const pgResponse = (
+      await firstValueFrom(this.httpService.post(pgCreateUrl, pgCreateBody))
+    ).data;
     if (pgResponse.code !== 201) {
       throw new Error('pg error');
     }
 
-    return this.paymentsRepository.createPayment(createPaymentDto.reservationId, createPaymentDto.amount, pgResponse.result.appId);
+    return this.paymentsRepository.createPayment(
+      createPaymentDto.reservationId,
+      createPaymentDto.amount,
+      pgResponse.result.appId,
+    );
   }
 
   async refund(refundPaymentDto) {
@@ -40,15 +47,18 @@ export class PaymentsService {
       throw new Error('paymentId is required');
     }
 
-    const targetPayment =
-      await this.paymentsRepository.findByPaymentId(refundPaymentDto.paymentId);
+    const targetPayment = await this.paymentsRepository.findByPaymentId(
+      refundPaymentDto.paymentId,
+    );
     if (!targetPayment || targetPayment.status === 'refund') {
       throw new Error('payment is not refundable');
     }
 
     const pgRefundUrl = 'http://localhost:3001/pg/refund';
     const pgRefundBody = { appId: targetPayment.appId };
-    const result = (await firstValueFrom(this.httpService.post(pgRefundUrl, pgRefundBody))).data;
+    const result = (
+      await firstValueFrom(this.httpService.post(pgRefundUrl, pgRefundBody))
+    ).data;
     if (result.code !== 200) {
       throw new Error('pg error');
     }
