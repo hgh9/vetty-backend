@@ -10,6 +10,8 @@ import {
   Param,
   Post,
   Query,
+  UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ReservastionsDto } from './dto/reservations.dto';
 import { ReservationService } from './reservations.service';
@@ -44,14 +46,16 @@ export class ReservationsController {
 
   @Get()
   @HttpCode(200)
+  // @UseInterceptors(CustomInterceptor)
   async getReservations(
     @Query() param: ReservationSearchDto,
   ): Promise<Reservation[]> {
     try {
       
       const validationResult = param.validate();
-      if (validationResult.length > 0) 
+      if (validationResult.length > 0) {
         throw new BisunessException(validationResult, '', '404');
+      }
 
       // TODO : Auth -> Claims.UserId
       const userId = 1; 
@@ -74,13 +78,4 @@ export class ReservationsController {
       // }
     }
   }
-
-  // @Get()
-  // async getByEmail(@Query() email: findByEmailDto) {
-  //   try {
-  //     return await this.reservationService.findByEmail(email);
-  //   } catch (err) {
-  //     throw new Error(err);
-  //   }
-  // }
 }

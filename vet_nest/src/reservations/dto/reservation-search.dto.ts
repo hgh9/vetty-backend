@@ -38,14 +38,15 @@ export class ReservationSearchDto {
         errors.push({key: 'endDate', error: '날짜 형식이 올바르지 않습니다.'});
       }
         
-      if (startDate.isBefore(moment().add(-5, 'years')))
+      if (startDate.isBefore(moment().add(-5, 'years'))){
         errors.push({key: 'startDate', error: '최대 5년 이전까지만 조회가 가능합니다.'});
-
+      }
+        
       const diffDays = endDate.diff(startDate, 'days');
-      console.log(`diffDays - ${diffDays}`);
-      if (diffDays > 365)
+      if (diffDays > 365){
         errors.push({key: 'startDate', error: '조회 범위는 최대 1년 입니다.'});
-
+      }
+        
     return errors;
   }
 }

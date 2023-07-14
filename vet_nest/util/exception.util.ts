@@ -4,7 +4,7 @@ export const ErrorCode = {
   ERROR_NOT_ENOUGH_PARAMETERS: 20,
 };
 
-class BaseError extends Error {
+export class BaseError extends Error {
   data: any;
 
   constructor(data?: object, message?: string, status?: string) {

@@ -1,5 +1,5 @@
 declare const module: any;
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 // import { RedisIoAdapter } from '../adapters/redis.adapter';
 import * as express from 'express';
 import { ExpressAdapter } from '@nestjs/platform-express';
@@ -13,6 +13,8 @@ import { LoggerInterceptor } from '../util/interceptor.util';
 import { AppModule } from './app/app.module';
 import dotenv = require('dotenv');
 dotenv.config();
+import { AllExceptionsFilter } from './diagnosis/exceptions/all-http-exception.filter';
+
 
 async function nestFactoryCreate() {
   const server = express();
@@ -46,6 +48,9 @@ async function nestFactoryCreate() {
       transform: true,
     }),
   );
+  
+  const adapterHost = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   return app;
 }
