@@ -3,16 +3,15 @@ import {
   Get,
   HttpException,
   HttpStatus,
-  Inject,
-  NotFoundException,
-  Param,
-  Query,
+  Param
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { Reservation } from './entity/reservation.entity';
 import { ReservationCancelationService } from './reservation-cancelation.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('reservation-cancelation')
+@ApiTags('Reservation-cancelation')
 export class ReservationCancelationController {
   constructor(
     private reservationCancelationService: ReservationCancelationService,
@@ -21,9 +20,7 @@ export class ReservationCancelationController {
   @Get(':id')
   async cancelReservation(@Param('id') id: number) {
     try {
-      const result = await this.reservationCancelationService.cancelReservation(
-        id,
-      );
+      const result = await this.reservationCancelationService.cancelReservation(id);
       return {
         result: result,
         message: '예약이 취소되었습니다.',

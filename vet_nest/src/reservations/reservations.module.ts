@@ -1,20 +1,27 @@
 import { Module } from '@nestjs/common';
-import { ReservationCancelationController } from './reservation-cancelation.controller';
-import { DatabaseModule } from '../database/database.module';
-import { ReservationCancelationService } from './reservation-cancelation.service';
-import { FakePaymentService } from './fake-modules/fake-payment.service';
-import { PaymentFactoryService } from './fake-modules/payment-factory.service';
-import { ReservationsController } from './reservations.controller';
+import { DatabaseModule } from '@/database/database.module';
+import { ReservationCancelationController } from '@/reservations/reservation-cancelation.controller';
+import { ReservationCancelationService } from '@/reservations/reservation-cancelation.service';
+import { ReservationReposiotory } from '@/reservations/repository/reservation-repository';
 import { ReservationService } from './reservations.service';
+import { ReservationsController } from './reservations.controller';
+import { ReservationFacade } from './reservation-facade';
+import { ReservationMapperProfile } from './dto/reservation-profile.mapper';
+import { PaymentsService } from '@/payments/payments.service';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [ReservationCancelationController, ReservationsController],
+  controllers: [
+    ReservationCancelationController,
+    ReservationsController,
+  ],
   providers: [
     ReservationCancelationService,
+    ReservationReposiotory,
     ReservationService,
-    PaymentFactoryService,
-    FakePaymentService,
+    ReservationFacade,
+    PaymentsService,
+    // ReservationMapperProfile
   ],
 })
 export class ReservationsModule {}

@@ -7,9 +7,11 @@ export class PaymentsController {
 
   @Post()
   async create(@Body() createPaymentDto) {
-    const result = await this.PaymentsService.create(createPaymentDto).catch((error) => {
-      throw new HttpException({ result: false, message: error.message }, 400);
-    });
+    const result = await this.PaymentsService.create(createPaymentDto).catch(
+      (error) => {
+        throw new HttpException({ result: false, message: error.message }, 400);
+      },
+    );
 
     return { result: result, code: 200, message: '/payments' };
   }

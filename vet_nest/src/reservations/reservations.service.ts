@@ -1,19 +1,18 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Inject, Injectable } from '@nestjs/common';
 import { Reservation } from './entity/reservation.entity';
-import { DataSource, Repository } from 'typeorm';
+import { Between, DataSource, MoreThanOrEqual, Raw, Repository } from 'typeorm';
 import { ReservastionsDto } from './dto/reservations.dto';
-import { Payment } from './entity/payment.entity';
+import { ReservationSearchDto } from './dto/reservation-search.dto';
+import moment from 'moment';
+import { ReservationReposiotory } from './repository/reservation-repository';
 
 @Injectable()
 export class ReservationService {
-  private reservationRepository: Repository<Reservation>;
-  private paymentRepository: Repository<Payment>;
+  // private reservationRepository: Repository<Reservation>;
   constructor(
-    @Inject('DATA_SOURCE')
-    private readonly dataSource: DataSource, // @InjectRepository(Reservation) // private readonly reservationReposiotory: Repository<Reservation>, // @InjectRepository(Payment) // private readonly paymentReposiotory: Repository<Payment>,
+    private readonly reservationRepository: ReservationReposiotory
   ) {
-    this.reservationRepository = this.dataSource.getRepository(Reservation);
+    // this.reservationRepository = this.dataSource.getRepository(Reservation);
   }
 
   async create(data: ReservastionsDto): Promise<any> {
@@ -30,5 +29,13 @@ export class ReservationService {
 
   async findAll(): Promise<Reservation[]> {
     return this.reservationRepository.find();
+  }
+
+  async getReservationsByUser(userId: number, searchQuery: ReservationSearchDto): Promise<Reservation[]> {
+    //TODO: QueryExtension 사용 불가능한지 확인 -> TypeScript, TypeOrm
+    return this.reservationRepository.getReservationsByUser(
+      userId, 
+      searchQuery.startDate, 
+      searchQuery.endDate);
   }
 }

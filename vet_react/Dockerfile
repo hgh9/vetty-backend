@@ -6,9 +6,11 @@ COPY . /app/
 
 COPY package*.json /app/
 
-COPY ./ ./
 RUN yarn \
-    && yarn run build 
+    && npx update-browserslist-db@latest  \
+    && yarn run build  
+
+COPY ./ ./
 
 EXPOSE 3000 
 

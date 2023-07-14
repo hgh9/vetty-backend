@@ -1,13 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ReservationCancelationController } from '../reservation-cancelation.controller';
 import {
-  ForbiddenException,
   HttpStatus,
   INestApplication,
 } from '@nestjs/common';
 import * as request from 'supertest';
-import { ReservastionsDto } from '../dto/reservations.dto';
-import { TreatmentStatus } from '../entity/reservation.entity';
 
 describe('ReservationCancelationController', () => {
   let app: INestApplication;
@@ -46,7 +42,7 @@ describe('ReservationCancelationController', () => {
       //Arrange
       const reservationId = 2;
       //Act
-      const res = await request('http://localhost:3001')
+      const res = await request('http://localhost:3001/')
         .get(`/reservation-cancelation/${reservationId}`);
       //Assert
       expect(res.status).toBe(HttpStatus.FORBIDDEN);

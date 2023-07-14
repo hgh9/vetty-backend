@@ -10,14 +10,20 @@ import {
   Param,
   Post,
   Query,
+  UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ReservastionsDto } from './dto/reservations.dto';
 import { ReservationService } from './reservations.service';
 import { Reservation } from './entity/reservation.entity';
 import { ReservationSearchDto } from './dto/reservation-search.dto';
 import * as moment from 'moment';
+import { ApiTags } from '@nestjs/swagger';
+import { MapPipe } from '@automapper/nestjs';
+import { BisunessException, NotEnoughParameterError } from 'util/exception.util';
 
 @Controller('reservations')
+@ApiTags('Reservations')
 export class ReservationsController {
   constructor(private reservationService: ReservationService) {}
   @Post()
@@ -40,48 +46,36 @@ export class ReservationsController {
 
   @Get()
   @HttpCode(200)
-  async getReservations(@Query() param: ReservationSearchDto): Promise<Reservation[]> {
+  // @UseInterceptors(CustomInterceptor)
+  async getReservations(
+    @Query() param: ReservationSearchDto,
+  ): Promise<Reservation[]> {
     try {
-      //TODO: validation -> dto or dto validator 
-      console.log(`param: ${JSON.stringify(param)}`);
-      const startDate = moment(param.startDate, 'YYYY-MM-DD');
-      if (!startDate.isValid())
-        throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
-
-      const endDate = moment(param.endDate, 'YYYY-MM-DD');
-      if (!endDate.isValid())
-        throw new BadRequestException('날짜 형식이 올바르지 않습니다.');
       
-      if (startDate.isBefore(moment().add(-5, 'years')))
-        throw new BadRequestException('최대 5년 이전까지만 조회가 가능합니다.');
-      
-      const diffDays = endDate.diff(startDate, 'days');
-      console.log(`diffDays - ${diffDays}`);
-      if (diffDays > 365)
-        throw new BadRequestException('조회 범위는 최대 1년 입니다.');
-      
-      return await Promise.resolve([]);
-    }
-    catch(e) {
-      switch (e.name) {
-        case 'NotFoundException':
-          throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-        case 'BadRequestException':
-          throw new HttpException(e.message, HttpStatus.BAD_REQUEST);  
-        case 'ForbiddenException':
-          throw new HttpException(e.message, HttpStatus.FORBIDDEN);  
-        default:
-          throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      const validationResult = param.validate();
+      if (validationResult.length > 0) {
+        throw new BisunessException(validationResult, '', '404');
       }
+
+      // TODO : Auth -> Claims.UserId
+      const userId = 1; 
+      
+      //TODO: Mapper 적용 
+      const reservations = await this.reservationService.getReservationsByUser(userId, param);
+      return reservations;
+    } 
+    catch (e) {
+      throw e;
+      // switch (e.name) {
+      //   case 'NotFoundException':
+      //     throw new HttpException(e.message, HttpStatus.NOT_FOUND);
+      //   case 'BadRequestException':
+      //     throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+      //   case 'ForbiddenException':
+      //     throw new HttpException(e.message, HttpStatus.FORBIDDEN);
+      //   default:
+      //     throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      // }
     }
   }
-
-  // @Get()
-  // async getByEmail(@Query() email: findByEmailDto) {
-  //   try {
-  //     return await this.reservationService.findByEmail(email);
-  //   } catch (err) {
-  //     throw new Error(err);
-  //   }
-  // }
 }
