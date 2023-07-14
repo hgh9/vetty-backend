@@ -25,9 +25,7 @@ export const databaseProviders = [
       const dataSource = new DataSource(
         configService.get<DataSourceOptions>('DB'),
       );
-
       dataSource.initialize().then(dbInitializeCallback);
-
       return dataSource;
     },
   },

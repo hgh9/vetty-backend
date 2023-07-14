@@ -67,9 +67,8 @@ describe('ReservationsController', () => {
       expect(res.status).toBe(HttpStatus.OK);
     });
 
-    it('조회 최소 기한이 5년 이전인 경우 400을 반환한다.', async () => {
+    it('조회 최소 기한이 5년 이전인 경우 최대 5년까지만 조회가 가능합니다 오류 메시지를 반환한다.', async () => {
       //Arrange
-      const today = new Date();
       const startDate = moment()
         .add(-5, 'years')
         .add(-1, 'days')
@@ -83,7 +82,12 @@ describe('ReservationsController', () => {
       );
 
       //Assert
-      expect(res.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(res.status).toBeGreaterThan(HttpStatus.BAD_REQUEST);
+      expect(res.body.error.length).toBeGreaterThan(0);
+      expect(res.body.error).toContainEqual({
+        key: "startDate",
+        error: "최대 5년 이전까지만 조회가 가능합니다."
+      });
     });
 
     it('조회 기간이 1년을 초과하면 400을 반환한다.', async () => {
@@ -98,7 +102,12 @@ describe('ReservationsController', () => {
       );
 
       //Assert
-      expect(res.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(res.status).toBeGreaterThan(HttpStatus.BAD_REQUEST);
+      expect(res.body.error.length).toBeGreaterThan(0);
+      expect(res.body.error).toContainEqual({
+        key: "startDate",
+        error: "조회 범위는 최대 1년 입니다."
+      });
     });
   });
 });
