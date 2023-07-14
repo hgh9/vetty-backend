@@ -5,6 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   RelationId,
   UpdateDateColumn,
@@ -14,6 +15,7 @@ import { Pet } from '../../pets/entity/pet.entity';
 import { User } from '../../users/entity/users.entity';
 import { Vet } from '../../vets/entity/vet.entity';
 import { TimeSlot } from '../../vets/entity/timeslot.entity';
+import { TreatmentResult } from '@/diagnosis/entity/TreatmentResult.entity';
 
 @Entity()
 export class Reservation {

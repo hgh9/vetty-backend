@@ -3,119 +3,127 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { TreatmentResult } from './entity/TreatmentResult.entity';
 import { Reservation } from '../reservations/entity/reservation.entity';
-import { ReservationReposiotory } from '@/reservations/repository/reservation-repository';
+import { ReservationReposiotory } from '../reservations/repository/reservation-repository';
 import { DiagnosisRepository } from './repository/diagnosis-repository';
-
+import ReservationValidator from './validator/diagnosis.validator';
+import { TreatmentDto } from './dto/TreatmentResult.dto';
 @Injectable()
 export class DiagnosisService {
   private treatmentRepository: Repository<TreatmentResult>;
   constructor(
     @Inject('DATA_SOURCE')
+    private readonly dataSource: DataSource,
     private readonly reservationRepository: ReservationReposiotory,
     private readonly diagnosisRepository: DiagnosisRepository,
-  ) {}
-
-  //
-  public async getAllReservations() {
-    const getAllReservation =
-      await this.reservationRepository.getAllReservationByStatus();
-
-    if (!getAllReservation) {
-      throw new BadRequestException('예약정보를 불러오는데 실패했습니다');
-    }
-    // 값을 불러오지 못했을 경우의 에러처리 필요
-    return getAllReservation;
+  ) {
+    this.treatmentRepository = this.dataSource.getRepository(TreatmentResult);
   }
 
-  // public async getAllDiagnosis() {
-  //   const getAllDiagnosis = await this.treatmentRepository.find();
+  public async getAllReservation(vetId: number, receptionMethod: string) {
+    const reservationList =
+      await this.reservationRepository.getAllReservationByVetId(
+        vetId,
+        receptionMethod,
+      );
+    const isValid = await ReservationValidator.ReservationListValidate(
+      reservationList,
+      receptionMethod,
+    );
+    try {
+      if (isValid) {
+        return reservationList;
+      }
+    } catch (e) {
+      //모지?
+      throw e;
+    }
+  }
 
-  //   if (!getAllDiagnosis) {
-  //     throw new BadRequestException('진료목록이 없습니다.');
-  //   }
-  //   // 값을 불러오지 못했을 경우의 에러처리 필요
-  //   return getAllDiagnosis;
-  // }
-
+  // 예약 상태를 진료중으로 변경한다.
   public async updateReservaionStatus(reservationId: number) {
     // 진료중으로 변경
-    // 아에 Dto 넘기면 값을 다 안써도 값을 불러올 수 있다
-    const reservationInfo =
+    const reservationStatus =
       await this.reservationRepository.updateReservaionStatusById(
         reservationId,
       );
 
-    //validation
-    const validationReservationStatus = this.checkReservationStatus_cancle(
-      reservationInfo.status,
+    const isValid = await ReservationValidator.ReservationStatusvalidate(
+      reservationStatus,
     );
-    if (!validationReservationStatus) {
-      return validationReservationStatus;
+    try {
+      if (isValid) {
+        reservationStatus.status = 2;
+        reservationStatus.updatedAt = new Date();
+        await this.reservationRepository.save(reservationStatus);
+        return reservationStatus;
+      }
+    } catch (e) {
+      throw e;
     }
-
-    reservationInfo.status = 2;
-    reservationInfo.updatedAt = new Date();
-    await this.reservationRepository.save(reservationInfo);
-  }
-
-  // switch 문으로 변경할 수 있겠다.
-  checkReservationStatus_cancle(reservationStatus: number) {
-    if (reservationStatus === 2) {
-      throw new BadRequestException('진료 중인 상태입니다.');
-    }
-    if (reservationStatus === 3) {
-      throw new BadRequestException('진료 완료 상태입니다.');
-    }
-    if (reservationStatus === -1) {
-      throw new BadRequestException('예약이 취소된 상태입니다.');
-    }
-    if (reservationStatus === -2) {
-      throw new BadRequestException('진료가 취소된 상태입니다.');
-    }
-    return true;
   }
 
   // 진료를 완료 한다.
-  public async completeDignosis(id: number) {
-    const reservationInfo = await this.reservationRepository.findOneBy({
-      id,
-    });
-    if (reservationInfo.status === 2) {
-      reservationInfo.status = 3;
-      reservationInfo.updatedAt = new Date();
-      await this.reservationRepository.save(reservationInfo);
-      const newTreatment = this.treatmentRepository.create(); //treatmentdto
-      await this.treatmentRepository.save(newTreatment);
-    } else {
-      throw new BadRequestException('예약 상태를 확인해주세요.');
+  public async completeDignosis(
+    reservationId: number,
+    treatmentResult: string,
+  ) {
+    const diagnosisStatus =
+      await this.diagnosisRepository.updateDignosisStatusById(reservationId);
+
+    const isValid = await ReservationValidator.DignosisStatusvalidate(
+      treatmentResult,
+      diagnosisStatus,
+    );
+    try {
+      if (isValid) {
+        diagnosisStatus.status = 3;
+        diagnosisStatus.updatedAt = new Date();
+        await this.reservationRepository.save(diagnosisStatus);
+        await this.treatmentRepository.save({
+          id: reservationId,
+          treatmentResult: treatmentResult,
+        });
+        return diagnosisStatus;
+      }
+    } catch (e) {
+      throw e;
     }
   }
 
-  // 병원의 진료 목록을 조회한다. all아니면 카테고리값으로 넘어와서 카테고리별 조회
+  //카테고리값으로 넘어와서 카테고리별 조회
   public async getDiagnosisList(vetId: number, treatmentStatus: number) {
-    const getAllDiagnosis =
+    const getDiagnosisList =
       await this.diagnosisRepository.getDiagnosisListByVetId(
         vetId,
         treatmentStatus,
       );
-    if (!getAllDiagnosis) {
-      throw new BadRequestException('진료목록을 불러오는데 실패하였습니다.');
+    console.log(getDiagnosisList);
+    const isValid = await ReservationValidator.TreatmentStatusvalidate(
+      vetId,
+      treatmentStatus,
+      getDiagnosisList,
+    );
+
+    try {
+      if (isValid) {
+        return getDiagnosisList;
+      }
+    } catch (e) {
+      e;
     }
-    return getAllDiagnosis;
   }
 
   // 결제완료
-  public async completePayment(id: number, amount: number) {
+  public async completePayment(id: number) {
     const reservationInfo = await this.reservationRepository.findOneBy({
       id,
     });
 
-    const validationAmount = this.validateAmount(amount);
+    const validationAmount = this.validateAmount(reservationInfo.amount);
     if (!validationAmount) {
       return validationAmount;
     }
 
-    reservationInfo.amount = amount;
     await this.reservationRepository.save(reservationInfo);
   }
 
@@ -134,5 +142,45 @@ export class DiagnosisService {
     if (userId === 2) {
       return true;
     }
+  }
+
+  public async getDiagnosisByUser(userId: number) {
+    const diagnosisByUser =
+      await this.diagnosisRepository.getDiagnosisListByUser(userId);
+    const isValid = await ReservationValidator.DiagnosisByUser(diagnosisByUser);
+
+    try {
+      if (isValid) {
+        return diagnosisByUser;
+      }
+    } catch (e) {
+      e;
+    }
+  }
+
+  public async getDiagnosisDetail(
+    userId: number,
+    reservationId: number,
+    treatmentStatus: number,
+  ) {
+    const diagnosisDetail =
+      await this.diagnosisRepository.getDiagnosisDetailByUser(
+        userId,
+        treatmentStatus,
+      );
+
+    const isValid = await ReservationValidator.DiagnosisDetailByUser(
+      diagnosisDetail,
+    );
+
+    try {
+      if (isValid) {
+        return diagnosisDetail;
+      }
+    } catch (e) {
+      e;
+    }
+
+    return diagnosisDetail;
   }
 }

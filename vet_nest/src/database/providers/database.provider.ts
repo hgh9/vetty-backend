@@ -12,6 +12,7 @@ import {
   ReceptionMethod,
   Reservation,
   TreatmentStatus,
+  DignosisCategory,
 } from '../../reservations/entity/reservation.entity';
 import { Payment } from '../../reservations/entity/payment.entity';
 import * as moment from 'moment';
@@ -122,19 +123,19 @@ export async function dbInitializeCallback(db: DataSource) {
       slotId: 1,
       petId: '263df66a-c1e0-4ad3-94e7-bf8236ec3f09',
       userId: 1,
-      treatmentStatus: TreatmentStatus.RESERVATION_COMPLETED,
-      amount: 10000,
+      treatmentStatus: DignosisCategory.NORMAL,
+      amount: 20000,
     },
     {
       id: 2,
-      receptionMethod: ReceptionMethod.RESERVATION,
+      receptionMethod: ReceptionMethod.ON_SITE,
       status: TreatmentStatus.RESERVATION_COMPLETED,
       reservedAt: moment().add(0.5, 'hours').add(9, 'hours').toDate(),
       vetId: 1,
       slotId: 1,
       petId: '263df66a-c1e0-4ad3-94e7-bf8236ec3f09',
       userId: 1,
-      treatmentStatus: TreatmentStatus.RESERVATION_COMPLETED,
+      treatmentStatus: DignosisCategory.VACCINATING,
       amount: 10000,
     },
     {
@@ -146,8 +147,20 @@ export async function dbInitializeCallback(db: DataSource) {
       slotId: 1,
       petId: '263df66a-c1e0-4ad3-94e7-bf8236ec3f09',
       userId: 1,
-      treatmentStatus: TreatmentStatus.RESERVATION_CANCELED,
+      treatmentStatus: DignosisCategory.NORMAL,
       amount: 10000,
+    },
+    {
+      id: 4,
+      receptionMethod: ReceptionMethod.RESERVATION,
+      status: TreatmentStatus.RESERVATION_COMPLETED,
+      reservedAt: moment(new Date()).add(1.5, 'hours').add(9, 'hours').toDate(),
+      vetId: 1,
+      slotId: 1,
+      petId: '263df66a-c1e0-4ad3-94e7-bf8236ec3f09',
+      userId: 1,
+      treatmentStatus: DignosisCategory.NORMAL,
+      amount: 20000,
     },
   ]);
 }

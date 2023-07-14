@@ -32,18 +32,20 @@ export class ReservationReposiotory extends Repository<Reservation> {
     return this.findBy(query);
   }
 
-  async getAllReservationByStatus() {
-    // 배열로 반환 타입 추가 필요
-    return await this.find({
-      where: {
-        status: 1,
-      },
-    });
+  async getAllReservationByVetId(
+    vetId: number,
+    receptionMethod: string,
+  ): Promise<Reservation[]> {
+    return await this.createQueryBuilder('reservation')
+      .where('reservation.vetId = :vetId', { vetId: vetId })
+      .andWhere('reservation.receptionMethod = :receptionMethod', {
+        receptionMethod,
+      })
+      .getMany();
   }
 
   async updateReservaionStatusById(reservationId: number) {
     return this.findOneBy({
-      //위에랑 똑같은데 따로 만들어서 사용해야되나?
       id: reservationId,
     });
   }

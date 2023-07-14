@@ -5,8 +5,8 @@ import { TimeSlot } from '../src/vets/entity/timeslot.entity';
 import { Reservation } from '../src/reservations/entity/reservation.entity';
 import { Payment } from '../src/reservations/entity/payment.entity';
 import * as dotenv from 'dotenv';
+import { TreatmentResult } from '@/diagnosis/entity/TreatmentResult.entity';
 dotenv.config({ path: '../.env' });
-
 
 export default () => ({
   MODE: process.env.REACT_APP_ENV,
@@ -21,7 +21,7 @@ export default () => ({
     // entities: ['dist/**/*.entity.js'],
     logging: Boolean(JSON.parse(process.env.DB_LOGGING)),
     synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-    entities: [User, Pet, Vet, TimeSlot, Reservation, Payment],
+    entities: [User, Pet, Vet, TimeSlot, Reservation, Payment, TreatmentResult],
   },
 
   NEST: {
@@ -45,4 +45,3 @@ export default () => ({
     AZURE_INSTRUMENT_KEY: process.env.AZURE_INSTRUMENT_KEY,
   },
 });
-
