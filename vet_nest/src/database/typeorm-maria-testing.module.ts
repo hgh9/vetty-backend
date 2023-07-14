@@ -6,6 +6,7 @@ import { User, UserLevel, UserStatus } from '../users/entity/users.entity';
 import { Vet } from '../vets/entity/vet.entity';
 import { TimeSlot } from '../vets/entity/timeslot.entity';
 import { Pet } from '../pets/entity/pet.entity';
+import { TreatmentResult } from '@/diagnosis/entity/TreatmentResult.entity';
 
 export const testDbDataSource: DataSourceOptions = {
   type: 'mariadb',
@@ -16,8 +17,8 @@ export const testDbDataSource: DataSourceOptions = {
   database: 'test',
   synchronize: true,
   logging: true,
-  timezone: '+00:00',
-  entities: [Reservation, Payment, Vet, TimeSlot, Pet, User],
+  timezone: '+09:00',
+  entities: [Reservation, Payment, Vet, TimeSlot, Pet, User, TreatmentResult],
 };
 
 export const TypeORMMariaSqlTestingModule = (entities: any[]) =>

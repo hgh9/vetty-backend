@@ -71,7 +71,6 @@ import { HttpModule } from '@nestjs/axios';
     VetsController,
     PaymentsController,
     UsersController,
-    DisgnosisController,
   ],
   providers: [
     AppService,
@@ -81,7 +80,6 @@ import { HttpModule } from '@nestjs/axios';
     PaymentsService,
     PaymentsRepository,
     UsersService,
-    DiagnosisService,
     UsersRepository,
     JwtService,
     ExceptionsService,
