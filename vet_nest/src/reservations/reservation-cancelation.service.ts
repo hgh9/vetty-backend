@@ -4,12 +4,11 @@ import {
 import {
   Reservation
 } from '../reservations/entity/reservation.entity';
-import { IReservationsCancelation } from './reservation-cancelation.interface';
 import ReservationCancelationValidator from './validator/reservation-cancelation.validator';
 import { ReservationReposiotory } from './repository/reservation-repository';
 
 @Injectable()
-export class ReservationCancelationService implements IReservationsCancelation {
+export class ReservationCancelationService {
   constructor(
     private readonly reservationRepository: ReservationReposiotory,
   ) {}
