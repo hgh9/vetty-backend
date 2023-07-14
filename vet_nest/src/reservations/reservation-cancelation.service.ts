@@ -25,7 +25,6 @@ export class ReservationCancelationService implements IReservationsCancelation {
       return Promise.resolve(reservation);
     }
     catch(e) {
-      //TODO: CommonResponse class 생성 후 감싸서 보낼 것
       throw e;
     }
   }

@@ -20,7 +20,7 @@ import { ReservationSearchDto } from './dto/reservation-search.dto';
 import * as moment from 'moment';
 import { ApiTags } from '@nestjs/swagger';
 import { MapPipe } from '@automapper/nestjs';
-import { BisunessException, NotEnoughParameterError } from 'util/exception.util';
+import { BusinessException, NotEnoughParameterError } from 'util/exception.util';
 
 @Controller('reservations')
 @ApiTags('Reservations')
@@ -46,7 +46,6 @@ export class ReservationsController {
 
   @Get()
   @HttpCode(200)
-  // @UseInterceptors(CustomInterceptor)
   async getReservations(
     @Query() param: ReservationSearchDto,
   ): Promise<Reservation[]> {
@@ -54,7 +53,7 @@ export class ReservationsController {
       
       const validationResult = param.validate();
       if (validationResult.length > 0) {
-        throw new BisunessException(validationResult, '', '404');
+        throw new BusinessException(validationResult, '', '404');
       }
 
       // TODO : Auth -> Claims.UserId
@@ -66,16 +65,6 @@ export class ReservationsController {
     } 
     catch (e) {
       throw e;
-      // switch (e.name) {
-      //   case 'NotFoundException':
-      //     throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-      //   case 'BadRequestException':
-      //     throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-      //   case 'ForbiddenException':
-      //     throw new HttpException(e.message, HttpStatus.FORBIDDEN);
-      //   default:
-      //     throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
-      // }
     }
   }
 }
