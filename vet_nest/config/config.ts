@@ -1,10 +1,10 @@
-import { User } from '../src/users/entity/users.entity';
+import { Reservation } from './../src/reservations/entity/reservation.entity';
 import { Pet } from '../src/pets/entity/pet.entity';
 import { Vet } from '../src/vets/entity/vet.entity';
+import { User } from '../src/users/entity/users.entity';
 import { TimeSlot } from '../src/vets/entity/timeslot.entity';
-import { Reservation } from '../src/reservations/entity/reservation.entity';
-import { Payment } from '../src/reservations/entity/payment.entity';
 import * as dotenv from 'dotenv';
+import { Payment } from '../src/payments/entity/payments.entity';
 dotenv.config({ path: './../.env' });
 
 export default () => ({

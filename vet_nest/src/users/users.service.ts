@@ -27,7 +27,7 @@ export class UsersService {
       await this.usersRepository.findOneByEmailAndPassword(loginUserDto);
 
     if (!loginUser) {
-      throw new Error('Wrong user data');
+      throw new Error('Invalid user data');
     }
 
     return {
