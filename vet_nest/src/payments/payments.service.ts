@@ -2,9 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PaymentsRepository } from './repository/payments.repository';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { Payment } from './entity/payments.entity';
 
 @Injectable()
 export class PaymentsService {
+  
   constructor(
     private readonly paymentsRepository: PaymentsRepository,
     private readonly httpService: HttpService,
@@ -64,5 +66,9 @@ export class PaymentsService {
     }
 
     return this.paymentsRepository.refund(refundPaymentDto.paymentId);
+  }
+
+  async cancelPayment(payment: Payment): Promise<Payment> {
+    throw new Error("Method not implemented.");
   }
 }

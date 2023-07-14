@@ -32,4 +32,13 @@ export class Payment {
     onDelete: 'CASCADE',
   })
   reservation: Reservation;
+
+  isCanceled(): boolean {
+    return this.status == PaymentStatus.COMPLETE
+  }
+}
+
+export enum PaymentStatus {
+  COMPLETE = 'Complete', 
+  CANCELD = 'Cancel'
 }

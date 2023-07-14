@@ -1,7 +1,12 @@
-import { Payment } from "@/reservations/entity/payment.entity";
-
+import { Payment } from "./entity/payments.entity";
 export interface IPaymentService {
-  pay(): Promise<Payment>;
-  cancelPayment(): Promise<Payment>;
-  cancelPayments(): Promise<Payment[]>;
+  getPaymentsByReservationId(reservationId: string): Promise<Payment[]>;
+  pay(createPaymentDto: object): Promise<Payment>;
+  cancelPayment(paymentId: number): Promise<Payment>;
+  cancelPayments(paymentId: number[]): Promise<Payment[]>;
+}
+
+export interface IFakePgApi {
+  pay(createPgApiDto: object);
+  cancel(): any;
 }

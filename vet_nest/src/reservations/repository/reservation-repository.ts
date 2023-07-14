@@ -1,6 +1,7 @@
 import { DataSource, EntityRepository, Raw, Repository } from 'typeorm';
 import { Reservation } from '../entity/reservation.entity';
 import { Inject, Injectable } from '@nestjs/common';
+import { Payment } from '@/payments/entity/payments.entity';
 
 @EntityRepository(Reservation)
 export class ReservationReposiotory extends Repository<Reservation> {
@@ -48,5 +49,13 @@ export class ReservationReposiotory extends Repository<Reservation> {
     return this.findOneBy({
       id: reservationId,
     });
+  }
+
+  async getPaymentsByReservationId(reservationId: number): Promise<Payment[]> {
+    const reservation = await this.findOne({
+      where: {id: reservationId}, 
+      relations: ['Payment']
+    });
+    return Promise.resolve(reservation.payments);
   }
 }

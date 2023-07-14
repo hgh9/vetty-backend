@@ -5,15 +5,13 @@ import { ReservastionsDto } from './dto/reservations.dto';
 import { ReservationSearchDto } from './dto/reservation-search.dto';
 import moment from 'moment';
 import { ReservationReposiotory } from './repository/reservation-repository';
+import { Payment } from '@/payments/entity/payments.entity';
 
 @Injectable()
 export class ReservationService {
-  // private reservationRepository: Repository<Reservation>;
   constructor(
     private readonly reservationRepository: ReservationReposiotory
-  ) {
-    // this.reservationRepository = this.dataSource.getRepository(Reservation);
-  }
+  ) { }
 
   async create(data: ReservastionsDto): Promise<any> {
     // new Logger().verbose('create Reservations in repo', JSON.stringify(data));
@@ -37,5 +35,9 @@ export class ReservationService {
       userId, 
       searchQuery.startDate, 
       searchQuery.endDate);
+  }
+
+  async getPaymentsByReservationId(reservationId: number): Promise<Payment[]> {
+    return await this.reservationRepository.getPaymentsByReservationId(reservationId);
   }
 }

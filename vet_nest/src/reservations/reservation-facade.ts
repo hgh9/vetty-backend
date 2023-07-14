@@ -12,10 +12,22 @@ export class ReservationFacade {
         private readonly paymentService: PaymentsService
     ) {}
 
-    cancelReservation(reservationId: number): void {
-        const canceledReservation = this.reservationCancelationService.cancelReservation(reservationId);
-        //TODO: Payments를 가져온다. 
+    async cancelReservation(reservationId: number): Promise<void> {
+        const canceledReservation = await this.reservationCancelationService.cancelReservation(reservationId);
+        const payments = await this.reservationService.getPaymentsByReservationId(canceledReservation.id);
         
+        // 1:N - 예약금, 진료비 ( 예약 상태일 경우에는 무조건 1개 이지 않을까? )
+        const cancelPaymentResults = await payments.map( async (payment) => 
+            await this.paymentService.cancelPayment(payment)
+        );
+
+        // const allPaymentCanceled = await cancelPaymentResults.every((payment) => {
+        //     return (await payment).isCanceled();
+        // });
+
+        // if (!allPaymentCanceled) {  
+
+        // }
         
     }
 }
