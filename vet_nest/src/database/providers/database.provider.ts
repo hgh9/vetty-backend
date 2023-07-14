@@ -13,7 +13,6 @@ import {
   Reservation,
   TreatmentStatus,
 } from '../../reservations/entity/reservation.entity';
-import { Payment } from '../../reservations/entity/payment.entity';
 import * as moment from 'moment';
 import { ConfigService } from '@nestjs/config';
 
