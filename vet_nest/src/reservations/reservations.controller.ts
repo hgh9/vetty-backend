@@ -20,7 +20,7 @@ import { ReservationSearchDto } from './dto/reservation-search.dto';
 import * as moment from 'moment';
 import { ApiTags } from '@nestjs/swagger';
 import { MapPipe } from '@automapper/nestjs';
-import { BisunessException, NotEnoughParameterError } from 'util/exception.util';
+import { BusinessException, NotEnoughParameterError } from 'util/exception.util';
 
 @Controller('reservations')
 @ApiTags('Reservations')
@@ -54,7 +54,7 @@ export class ReservationsController {
       
       const validationResult = param.validate();
       if (validationResult.length > 0) {
-        throw new BisunessException(validationResult, '', '404');
+        throw new BusinessException(validationResult, '', '404');
       }
 
       // TODO : Auth -> Claims.UserId

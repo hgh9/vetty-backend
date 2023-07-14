@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Inject,
   Injectable
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { PaymentFactoryService } from './fake-modules/payment-factory.service';
 // import { IPaymentService } from './fake-modules/payment-service.interface';
 import ReservationCancelationValidator from './validator/reservation-cancelation.validator';
 import { ReservationReposiotory } from './repository/reservation-repository';
+import { BusinessException } from 'util/exception.util';
 
 @Injectable()
 // -> ReservationCancelationRepositoryService
@@ -25,13 +27,12 @@ export class ReservationCancelationService implements IReservationsCancelation {
     try {
       const isValid = await ReservationCancelationValidator.validate(reservation);
       if (isValid) {
-        reservation.cancel();  
+        reservation.cancel();
         this.reservationRepository.save(reservation);
       }
       return Promise.resolve(reservation);
     }
     catch(e) {
-      //TODO: CommonResponse class 생성 후 감싸서 보낼 것
       throw e;
     }
   }
