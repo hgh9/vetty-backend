@@ -7,11 +7,6 @@ import {
   TreatmentStatus,
 } from '../entity/reservation.entity';
 import { ReservastionsDto } from '../dto/reservations.dto';
-import {
-  PetCategories,
-  PetGender,
-  PetVaccinatedInfo,
-} from '../../pets/entity/pet.entity';
 import * as moment from 'moment';
 
 describe('ReservationsController', () => {
