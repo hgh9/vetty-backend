@@ -1,6 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
-import { Payment } from '../entity/payment.entity';
 import {
   DignosisCategory,
   TreatmentStatus,

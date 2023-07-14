@@ -31,6 +31,8 @@ import { UsersRepository } from '../users/repository/users.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ExceptionsService } from '../exceptions/exceptions.service';
 import { currentModeProviders } from './providers/currentMode.provider';
+import { PaymentsRepository } from '../payments/repository/payments.repository';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -61,6 +63,7 @@ import { currentModeProviders } from './providers/currentMode.provider';
     PaymentsModule,
     UsersModule,
     ExceptionsModule,
+    HttpModule,
   ],
   controllers: [
     AppController,
@@ -75,6 +78,7 @@ import { currentModeProviders } from './providers/currentMode.provider';
     PetsRepository,
     VetsService,
     PaymentsService,
+    PaymentsRepository,
     UsersService,
     UsersRepository,
     JwtService,

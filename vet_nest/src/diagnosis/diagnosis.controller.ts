@@ -9,13 +9,12 @@ import {
 } from '@nestjs/common';
 
 import { DiagnosisService } from './diagnosis.service';
-import { HttpExceptionFilter } from './exceptions/http-exception.filter';
 import { ApiTags } from '@nestjs/swagger';
 import { get } from 'http';
 
 // http요청 처리 및 checkservice를 호출해서 예약정보 반환 -> 의존성주입
 @Controller('diagnosis')
-@UseFilters(HttpExceptionFilter)
+// @UseFilters(HttpExceptionFilter)
 @ApiTags('Dignosis')
 export class DisgnosisController {
   constructor(private DiagnosisService: DiagnosisService) {}

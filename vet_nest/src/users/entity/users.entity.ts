@@ -4,11 +4,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
-  RelationId,
-  RelationOptions,
-  TableForeignKey,
 } from 'typeorm';
 import { Pet } from '../../pets/entity/pet.entity';
 import { Reservation } from '../../reservations/entity/reservation.entity';

@@ -14,7 +14,6 @@ import {
   TreatmentStatus,
   DignosisCategory,
 } from '../../reservations/entity/reservation.entity';
-import { Payment } from '../../reservations/entity/payment.entity';
 import * as moment from 'moment';
 import { ConfigService } from '@nestjs/config';
 
@@ -26,9 +25,7 @@ export const databaseProviders = [
       const dataSource = new DataSource(
         configService.get<DataSourceOptions>('DB'),
       );
-
       dataSource.initialize().then(dbInitializeCallback);
-
       return dataSource;
     },
   },
