@@ -32,6 +32,9 @@ export class PetsService {
   }
 
   async deletePet(petId, userId) {
+    if (!petId || !userId) {
+      throw new Error('valid data are required');
+    }
     const isPetUsers = await this.petsRepository.isPetUsers(petId, userId);
     if (!isPetUsers) {
       throw new Error('the pet is not users');

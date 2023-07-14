@@ -1,8 +1,8 @@
-import { User } from '../src/users/entity/users.entity';
+import { Reservation } from './../src/reservations/entity/reservation.entity';
 import { Pet } from '../src/pets/entity/pet.entity';
 import { Vet } from '../src/vets/entity/vet.entity';
+import { User } from '../src/users/entity/users.entity';
 import { TimeSlot } from '../src/vets/entity/timeslot.entity';
-import { Reservation } from '../src/reservations/entity/reservation.entity';
 import { Payment } from '../src/reservations/entity/payment.entity';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: './../.env' });
@@ -11,9 +11,10 @@ export default () => ({
   MODE: process.env.REACT_APP_ENV,
   DB: {
     type: process.env.DB_TYPE === 'mariadb' ? 'mariadb' : 'mysql',
-    host: process.env.REACT_APP_ENV === 'local' 
-      ? process.env.DB_HOST
-      : process.env.DB_HOST,
+    host:
+      process.env.REACT_APP_ENV === 'local'
+        ? process.env.DB_HOST
+        : process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT),
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
@@ -45,4 +46,3 @@ export default () => ({
     AZURE_INSTRUMENT_KEY: process.env.AZURE_INSTRUMENT_KEY,
   },
 });
-

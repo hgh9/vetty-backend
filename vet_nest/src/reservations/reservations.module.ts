@@ -6,21 +6,21 @@ import { ReservationReposiotory } from '@/reservations/repository/reservation-re
 import { ReservationService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
 import { ReservationFacade } from './reservation-facade';
-import { ReservationMapperProfile } from './dto/reservation-profile.mapper';
 import { PaymentsService } from '@/payments/payments.service';
+import { PaymentsRepository } from '../payments/repository/payments.repository';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [DatabaseModule],
-  controllers: [
-    ReservationCancelationController,
-    ReservationsController,
-  ],
+  imports: [DatabaseModule, HttpModule],
+  controllers: [ReservationCancelationController, ReservationsController],
   providers: [
     ReservationCancelationService,
     ReservationReposiotory,
     ReservationService,
     ReservationFacade,
     PaymentsService,
+    PaymentsRepository,
+
     // ReservationMapperProfile
   ],
 })

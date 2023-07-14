@@ -16,7 +16,7 @@ CMD ["yarn", "test"]
 
 
 FROM base as prod 
-CMD [ "npm", "run", "start:prod" ]
+CMD [ "npm", "run", "start:dev" ]
 
 # 개발 환경에서는 start:dev로 주석을 해제
 # 배포 환경에서는 start:pod을 주석 해제
