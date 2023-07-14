@@ -14,8 +14,6 @@ import { AppModule } from './app/app.module';
 import dotenv = require('dotenv');
 import { AllExceptionsFilter } from './diagnosis/exceptions/all-http-exception.filter';
 dotenv.config();
-import { AllExceptionsFilter } from './diagnosis/exceptions/all-http-exception.filter';
-
 
 async function nestFactoryCreate() {
   const server = express();

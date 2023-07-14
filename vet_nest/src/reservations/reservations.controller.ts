@@ -56,7 +56,7 @@ export class ReservationsController {
       if (validationResult.length > 0) {
         throw new BusinessException(validationResult, '', '404');
       }
-
+      
       // TODO : Auth -> Claims.UserId
       const userId = 1; 
       
@@ -66,16 +66,6 @@ export class ReservationsController {
     } 
     catch (e) {
       throw e;
-      // switch (e.name) {
-      //   case 'NotFoundException':
-      //     throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-      //   case 'BadRequestException':
-      //     throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-      //   case 'ForbiddenException':
-      //     throw new HttpException(e.message, HttpStatus.FORBIDDEN);
-      //   default:
-      //     throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
-      // }
     }
   }
 }
