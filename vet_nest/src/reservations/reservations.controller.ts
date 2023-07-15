@@ -13,7 +13,10 @@ import {
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
-import { ReservastionsDto } from './dto/reservations.dto';
+import {
+  ReservastionsDto,
+  ReservationProcessDto as ReservationProcessCommand,
+} from './dto/reservations.dto';
 import { ReservationService } from './reservations.service';
 import { Reservation } from './entity/reservation.entity';
 import { ReservationSearchDto } from './dto/reservation-search.dto';
@@ -37,29 +40,26 @@ export class ReservationsController {
   ) {}
   @Post()
   @HttpCode(200)
-  @UseInterceptors()
-  async createReservation(@Body() reservationInfo: ReservastionsDto) {
+  async createReservation(@Body() reservationInfo: ReservationProcessCommand) {
     try {
-      new Logger().verbose('create Reservations');
-      const timeSlotManager = new TimeSlotMananger();
+      new Logger().verbose('---Post Reservations---');
 
       // 예약 정보들 저장
-      await this.reservationService.setReservation(reservationInfo);
+      const reservationResult = await this.reservationService.setReservation(
+        reservationInfo,
+      );
 
       // 페이먼트 저장
-      // payments()
-      await this.paymentsService
+      // await this.paymentsService.create(reservationInfo.payments);
 
       // 그 타임 슬롯 저장
-      timeSlotManager.setTimeSlot(reservationInfo.timeSlot.time);
+      await this.reservationService.setReserveTime(reservationInfo.timeSlot);
 
-      // const result = await this.reservationService.create(reservationInfo);
-      // return result;
-      return null;
-      // return {
-      //   result: true,
-      //   message: '예약이 완료되었습니다.',
-      // };
+      return {
+        result: true,
+        data: reservationResult,
+        message: '예약이 완료되었습니다.',
+      };
     } catch (err) {
       throw new Error(err);
     }

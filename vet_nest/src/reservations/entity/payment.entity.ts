@@ -10,13 +10,13 @@ export class Payment {
   appId: string;
 
   @Column()
-  method: string;
+  payMethod: number;
 
   @Column()
   amount: number;
 
   @Column()
-  status: string;
+  status: number;
 
   @Column()
   createdAt: Date;

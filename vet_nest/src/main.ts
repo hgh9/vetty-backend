@@ -12,6 +12,7 @@ import config from '@configs';
 import { LoggerInterceptor } from '../util/interceptor.util';
 import { AppModule } from './app/app.module';
 import dotenv = require('dotenv');
+import { AllExceptionsFilter } from './diagnosis/exceptions/all-http-exception.filter';
 dotenv.config();
 
 async function nestFactoryCreate() {

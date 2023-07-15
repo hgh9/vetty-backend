@@ -6,7 +6,10 @@ import {
   DignosisCategory,
   TreatmentStatus,
 } from '../entity/reservation.entity';
-import { ReservastionsDto } from '../dto/reservations.dto';
+import {
+  ReservastionsDto,
+  ReservationProcessDto,
+} from '../dto/reservations.dto';
 import {
   PetCategories,
   PetGender,
@@ -14,20 +17,35 @@ import {
 } from '../../pets/entity/pet.entity';
 import * as moment from 'moment';
 import { SetTimeSlotCommand } from '../dto/timeslot.dto';
+import { PayMethod, PaymentStatus } from '../../payments/dto/payment.dto';
 
 describe('ReservationsController', () => {
   let controller: ReservationsController;
   let app: INestApplication;
-  const mockData: ReservastionsDto = {
+  const mockData: ReservationProcessDto = {
     id: 1,
     firstVisit: DignosisCategory.NORMAL,
     status: TreatmentStatus.RESERVATION_COMPLETED,
-    updatedAt: new Date(Date.now()),
+    // updatedAt: new Date(Date.now()),
     reservedAt: new Date(Date.now()),
-    // paymentId: 1,
-    petId: 1,
+    petId: '263df66a-c1e0-4ad3-94e7-bf8236ec3f09',
     userId: 1,
     vetId: 1,
+    payments: {
+      appId: '263df66a-c1e0-4ad3-94e7-bf8236ec3f09',
+      amount: 30000,
+      status: PaymentStatus.PENDING,
+      payMethod: PayMethod.CARD,
+      createdAt: new Date(Date.now()),
+      reservationId: 1,
+    },
+    timeSlot: {
+      time: 13,
+      startDate: new Date(Date.now()),
+      startTime: '14:00:00',
+      endTime: '15:00:00',
+      vetId: 1,
+    },
   };
 
   beforeEach(async () => {

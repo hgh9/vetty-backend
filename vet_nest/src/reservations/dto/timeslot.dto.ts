@@ -1,7 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
 import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
-import moment from 'moment';
 
 export class TimeSlotDto {
   @IsOptional()
@@ -24,7 +22,6 @@ export class TimeSlotDto {
     name: 'startDate',
     description: '타임슬롯 ',
   })
-  @IsOptional()
   @IsDateString()
   startDate?: Date;
 
@@ -35,7 +32,6 @@ export class TimeSlotDto {
     name: 'startTime',
     description: '시작시간',
   })
-  @IsOptional()
   @IsString()
   // @Transform(({ value }) => value && new Date(value))
   startTime?: string;

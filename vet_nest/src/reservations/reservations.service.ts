@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpCode, Injectable, Logger } from '@nestjs/common';
 import { Reservation } from './entity/reservation.entity';
-import { ReservastionsDto } from './dto/reservations.dto';
+import { ReservastionsDto as ReservastionsCommand } from './dto/reservations.dto';
 import { ReservationSearchDto } from './dto/reservation-search.dto';
 import { ReservationReposiotory } from './repository/reservation-repository';
 import TimeSlotMananger, {
@@ -8,6 +8,8 @@ import TimeSlotMananger, {
 } from './slot-manager/slot-manger.service';
 import { CheckingDateCommand, SetTimeSlotCommand } from './dto/timeslot.dto';
 import { TimeSlotReposiotory } from './repository/timeslot-repository';
+import { FailedPost } from '../../util/exception.util';
+import { STATUS_CODES } from 'http';
 
 @Injectable()
 export class ReservationService {
@@ -33,15 +35,12 @@ export class ReservationService {
     return result;
   }
 
-  async setReservation(data: ReservastionsDto): Promise<any> {
-    this.logger.verbose('create Reservations in repo', JSON.stringify(data));
-    const result = await this.reservationRepository.save(data);
-    console.log(result);
-    return {
-      result: true,
-      data: result,
-      message: '예약이 완료되었습니다.',
-    };
+  async setReservation(reservationData: ReservastionsCommand): Promise<any> {
+    try {
+      return await this.reservationRepository.postReservation(reservationData);
+    } catch (err) {
+      throw new FailedPost(err, 'set reservation failed');
+    }
   }
 
   async findAll(): Promise<Reservation[]> {
