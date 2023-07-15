@@ -2,6 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpException,
+  HttpStatus,
   Logger,
   LoggerService,
   Post,
@@ -12,6 +15,8 @@ import { ConfigService } from '@nestjs/config';
 import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { IsOptional, IsString, isString } from 'class-validator';
 import { ExceptionsService } from '../exceptions/exceptions.service';
+import { NotExist } from '../../util/exception.util';
+import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 
 export class Command {
   @ApiProperty({
@@ -61,6 +66,7 @@ export class AppController {
     try {
       return this.appService.exception(infoDto);
     } catch (error) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
       console.log('hello');
       if (error.constructor.name == 'NotEnoughParameterError') return error;
       this.exceptionService.FailedPostException();

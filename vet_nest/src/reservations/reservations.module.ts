@@ -9,6 +9,7 @@ import { ReservationFacade } from './reservation-facade';
 import { PaymentsService } from '@/payments/payments.service';
 import { PaymentsRepository } from '../payments/repository/payments.repository';
 import { HttpModule } from '@nestjs/axios';
+import { TimeSlotReposiotory } from './repository/timeslot-repository';
 
 @Module({
   imports: [DatabaseModule, HttpModule],
@@ -22,6 +23,9 @@ import { HttpModule } from '@nestjs/axios';
     PaymentsRepository,
 
     // ReservationMapperProfile
+    TimeSlotReposiotory,
+    // PaymentFactoryService,
+    // FakePaymentService,
   ],
 })
 export class ReservationsModule {}

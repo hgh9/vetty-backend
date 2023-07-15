@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PaymentsRepository } from './repository/payments.repository';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { PaymentDto } from './dto/payment.dto';
 
 @Injectable()
 export class PaymentsService {
@@ -10,7 +11,7 @@ export class PaymentsService {
     private readonly httpService: HttpService,
   ) {}
 
-  async create(createPaymentDto) {
+  async create(createPaymentDto: PaymentDto) {
     if (!(createPaymentDto.reservationId && createPaymentDto.amount)) {
       throw new Error('invalid data');
     }

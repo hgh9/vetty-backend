@@ -1,6 +1,11 @@
 import { DataSource, EntityRepository, Raw, Repository } from 'typeorm';
 import { Reservation } from '../entity/reservation.entity';
 import { Inject, Injectable } from '@nestjs/common';
+import { CheckingDateCommand } from '../dto/timeslot.dto';
+import { TimeSlot } from '../../vets/entity/timeslot.entity';
+import { plainToInstance } from 'class-transformer';
+import { ReservastionsDto } from '../dto/reservations.dto';
+
 
 @EntityRepository(Reservation)
 export class ReservationReposiotory extends Repository<Reservation> {
@@ -9,6 +14,11 @@ export class ReservationReposiotory extends Repository<Reservation> {
     private readonly dataSource: DataSource,
   ) {
     super(Reservation, dataSource.createEntityManager());
+  }
+
+
+  async postReservation(reservationData: ReservastionsDto) {
+    return this.insert(reservationData);
   }
 
   async getReservationById(reservationId: number): Promise<Reservation | null> {
@@ -49,4 +59,5 @@ export class ReservationReposiotory extends Repository<Reservation> {
       id: reservationId,
     });
   }
+
 }
