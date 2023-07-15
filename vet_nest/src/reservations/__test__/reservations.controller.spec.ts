@@ -15,6 +15,8 @@ import {
   PetGender,
   PetVaccinatedInfo,
 } from '../../pets/entity/pet.entity';
+import { ReservastionsDto } from '../dto/reservations.dto';
+
 import * as moment from 'moment';
 import { SetTimeSlotCommand } from '../dto/timeslot.dto';
 import { PayMethod, PaymentStatus } from '../../payments/dto/payment.dto';

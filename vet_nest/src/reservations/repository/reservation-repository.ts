@@ -6,6 +6,7 @@ import { TimeSlot } from '../../vets/entity/timeslot.entity';
 import { plainToInstance } from 'class-transformer';
 import { ReservastionsDto } from '../dto/reservations.dto';
 
+
 @EntityRepository(Reservation)
 export class ReservationReposiotory extends Repository<Reservation> {
   constructor(
@@ -14,6 +15,7 @@ export class ReservationReposiotory extends Repository<Reservation> {
   ) {
     super(Reservation, dataSource.createEntityManager());
   }
+
 
   async postReservation(reservationData: ReservastionsDto) {
     return this.insert(reservationData);
@@ -39,4 +41,23 @@ export class ReservationReposiotory extends Repository<Reservation> {
     }
     return this.findBy(query);
   }
+
+  async getAllReservationByVetId(
+    vetId: number,
+    receptionMethod: string,
+  ): Promise<Reservation[]> {
+    return await this.createQueryBuilder('reservation')
+      .where('reservation.vetId = :vetId', { vetId: vetId })
+      .andWhere('reservation.receptionMethod = :receptionMethod', {
+        receptionMethod,
+      })
+      .getMany();
+  }
+
+  async updateReservaionStatusById(reservationId: number) {
+    return this.findOneBy({
+      id: reservationId,
+    });
+  }
+
 }

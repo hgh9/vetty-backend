@@ -31,6 +31,8 @@ import { CheckingDateCommand, SetTimeSlotCommand } from './dto/timeslot.dto';
 import TimeSlotMananger from './slot-manager/slot-manger.service';
 import { PaymentsService } from '@/payments/payments.service';
 
+
+
 @Controller('reservations')
 @ApiTags('Reservations')
 export class ReservationsController {
@@ -87,14 +89,13 @@ export class ReservationsController {
 
   @Get()
   @HttpCode(200)
-  // @UseInterceptors(CustomInterceptor)
   async getReservations(
     @Query() param: ReservationSearchDto,
   ): Promise<Reservation[]> {
     try {
       const validationResult = param.validate();
       if (validationResult.length > 0) {
-        throw new BisunessException(validationResult, '', '404');
+        throw new BusinessException(validationResult, '', '404');
       }
 
       // TODO : Auth -> Claims.UserId
@@ -108,16 +109,6 @@ export class ReservationsController {
       return reservations;
     } catch (e) {
       throw e;
-      // switch (e.name) {
-      //   case 'NotFoundException':
-      //     throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-      //   case 'BadRequestException':
-      //     throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-      //   case 'ForbiddenException':
-      //     throw new HttpException(e.message, HttpStatus.FORBIDDEN);
-      //   default:
-      //     throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
-      // }
     }
   }
 }

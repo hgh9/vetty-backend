@@ -4,6 +4,7 @@ import { Vet } from '../src/vets/entity/vet.entity';
 import { User } from '../src/users/entity/users.entity';
 import { TimeSlot } from '../src/vets/entity/timeslot.entity';
 import * as dotenv from 'dotenv';
+import { TreatmentResult } from '@/diagnosis/entity/TreatmentResult.entity';
 import { Payment } from '../src/payments/entity/payments.entity';
 dotenv.config({ path: './../.env' });
 
@@ -23,7 +24,7 @@ export default () => ({
     // logging: Boolean(JSON.parse(process.env.DB_LOGGING)),
     logging: true,
     synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
-    entities: [User, Pet, Vet, TimeSlot, Reservation, Payment],
+    entities: [User, Pet, Vet, TimeSlot, Reservation, Payment, TreatmentResult],
   },
 
   NEST: {

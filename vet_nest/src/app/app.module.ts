@@ -72,7 +72,6 @@ import { TimeSlotReposiotory } from '../reservations/repository/timeslot-reposit
     VetsController,
     PaymentsController,
     UsersController,
-    DisgnosisController,
   ],
   providers: [
     AppService,
@@ -82,7 +81,6 @@ import { TimeSlotReposiotory } from '../reservations/repository/timeslot-reposit
     PaymentsService,
     PaymentsRepository,
     UsersService,
-    DiagnosisService,
     UsersRepository,
     JwtService,
     ExceptionsService,
