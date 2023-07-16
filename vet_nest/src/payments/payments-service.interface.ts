@@ -8,7 +8,7 @@ export interface IPaymentService {
   // getPaymentsByUserId(userId: number, searchOption: SearchPaymentDto);
   // getPaymentsByVetId(vetId: number, searchOption: SearchPaymentDto);
   // getPaymentsByReservationId(reservationId: number): Promise<Payment[]>;
-  createPayment(createPaymentDto: object): Promise<Payment>;
+  // createPayment(createPaymentDto: object): Promise<Payment>;
   cancelPayment(paymentId: number): Promise<Payment>;
   cancelPaymentsByReservationId(reservationId: number): Promise<Payment[]> 
 }
