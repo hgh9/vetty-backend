@@ -10,9 +10,10 @@ import { PaymentsModule } from '@/payments/payments.module';
 import { PaymentsService } from '@/payments/payments.service';
 import { PaymentsRepository } from '@/payments/repository/payments.repository';
 import { PgApiCaller } from '@/payments/pg-api-caller';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, HttpModule],
   controllers: [ReservationCancelationController, ReservationsController],
   providers: [
     ReservationCancelationService,

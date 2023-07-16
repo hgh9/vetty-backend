@@ -31,6 +31,7 @@ import { ExceptionsService } from '../exceptions/exceptions.service';
 import { currentModeProviders } from './providers/currentMode.provider';
 import { PaymentsRepository } from '../payments/repository/payments.repository';
 import { HttpModule } from '@nestjs/axios';
+import { FakePgModule } from '@/fake-pg/fake-pg.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { HttpModule } from '@nestjs/axios';
     UsersModule,
     ExceptionsModule,
     HttpModule,
+    FakePgModule,
   ],
   providers: [
     AppService,
