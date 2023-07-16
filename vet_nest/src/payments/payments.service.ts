@@ -13,53 +13,6 @@ export class PaymentsService implements IPaymentService {
     private readonly paymentsRepository: PaymentsRepository,
     private readonly pgApiCaller: PgApiCaller
   ) {}
-  
-  async getPaymentsByReservationId(reservationId: number): Promise<Payment[]> {
-    
-    return this.paymentsRepository.findBy({
-      reservationId: reservationId
-    });
-  }
-
-  createPayment(createPaymentDto: object): Promise<Payment> {
-    throw new Error('Method not implemented.');
-  }
-  
-  async cancelPayment(paymentId: number): Promise<Payment> {
-    
-    const payment = await this.paymentsRepository.findOneBy({paymentId: paymentId});
-    const result = await this.pgApiCaller.cancelPayment(payment.appId);
-    
-    if (result.resultCode != 'OK') { 
-      throw new BusinessException(payment, 'PG 결제 오류', '500');
-    }
-    payment.cancel(); 
-    this.paymentsRepository.save(payment);
-    return Promise.resolve(payment);
-  }
-
-  async cancelPayments(paymentIds: number[]): Promise<Payment[]> {
-    
-    const canceledPayments = await Promise.all(
-      paymentIds.map(async (paymentId) => {
-        return await this.cancelPayment(paymentId);
-      }));
-    
-    if (!canceledPayments.every((payment) => payment.isCanceled())) {
-      throw new BusinessException(canceledPayments, 'PG 결제 오류', '500');
-    }
-
-    return canceledPayments;
-  }
-
-  async cancelPaymentsByReservationId(reservationId: number): Promise<Payment[]> {
-    
-    const paymentIds = (await this.getPaymentsByReservationId(reservationId))
-      .map((payment) => payment.paymentId);
-    
-    const canceledPayments = await this.cancelPayments(paymentIds);
-    return canceledPayments;
-  }
 
   async create(dto: CreatePaymentDto) {
     
@@ -73,5 +26,45 @@ export class PaymentsService implements IPaymentService {
     if (targetPayment && targetPayment.status === PaymentStatus.COMPLETE) {
       throw new Error('payment has already made');
     }
+  }
+  
+  getPaymentsByReservationId = async(reservationId: number): Promise<Payment[]>  => 
+    this.paymentsRepository.findBy({
+      reservationId: reservationId
+    });
+  
+  cancelPayment = async(paymentId: number): Promise<Payment> => {
+    
+    const payment = await this.paymentsRepository.findOneBy({paymentId: paymentId});
+    const pgResult = await this.pgApiCaller.cancelPayment(payment.appId);
+    if (pgResult.resultCode != 'OK') {
+      throw new BusinessException(pgResult, 'PG-ERROR', '500');
+    }
+    payment.cancel(); 
+    this.paymentsRepository.save(payment);
+    return Promise.resolve(payment);
+  }
+
+  cancelPayments = async(paymentIds: number[]): Promise<Payment[]> => {
+    
+    const canceledPayments = await Promise.all(
+      paymentIds.map(async (paymentId) => 
+        await this.cancelPayment(paymentId)));
+
+    if (!canceledPayments.every((payment) => payment.isCanceled())) {
+      throw new BusinessException(canceledPayments, 'PG 결제 오류', '500');
+    }
+
+    return canceledPayments;
+  }
+
+  cancelPaymentsByReservationId = async(reservationId: number): Promise<Payment[]> => {
+    
+    const paymentIds = (await 
+      this.getPaymentsByReservationId(reservationId))
+      .map((payment) => payment.paymentId);
+    
+    const canceledPayments = await this.cancelPayments(paymentIds);
+    return canceledPayments;
   }
 }
