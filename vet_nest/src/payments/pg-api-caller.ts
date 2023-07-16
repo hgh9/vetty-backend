@@ -16,20 +16,15 @@ export class PgApiCaller implements IFakePgApi
   constructor(private httpClient: HttpService) {
     
   }
-  async pay(param: PgPaymentRequest): Promise<any> {
+  async pay(param: PgPaymentRequest): Promise<PgPaymentResponse> {
     //TODO: parameter 만들어져서 넘어와야 하는가? or DTO 받아서 parameter 만들어야 하는가?
+    const { data } = await firstValueFrom(
+      await this.httpClient.post(`${this.PG_API_ADDRESS}/create`, param).pipe(
+        catchError((error: AxiosError) => {
+          throw new BusinessException(error, 'PG-ERROR', '500')
+        })));
     
-    this.httpClient.post(`${this.PG_API_ADDRESS}/create`, param)
-      .pipe()
-      .subscribe({
-        next: (res: any) => {
-          const response = new PgPaymentResponse(res);
-          return Promise.resolve(response);
-        },
-        error: (error: any) => {
-          throw new BusinessException(error, 'PG-ERROR', '500');
-        }
-      });
+    return Promise.resolve(data);
   }
 
   async cancelPayment(uuid: string): Promise<PgCancelPaymentResponse> {
