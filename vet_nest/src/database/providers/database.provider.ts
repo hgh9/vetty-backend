@@ -16,6 +16,7 @@ import {
 } from '../../reservations/entity/reservation.entity';
 import * as moment from 'moment';
 import { ConfigService } from '@nestjs/config';
+import { Payment, PaymentMethod, PaymentStatus } from '@/payments/entity/payments.entity';
 
 export const databaseProviders = [
   {
@@ -159,5 +160,16 @@ export async function dbInitializeCallback(db: DataSource) {
       treatmentStatus: DignosisCategory.NORMAL,
       amount: 20000,
     },
+  ]);
+
+  const paymentRepo = db.getRepository(Payment);
+  paymentRepo.save([{
+    paymentId: 1,
+    appId: 'APP-11111',
+    method: PaymentMethod.CARD,
+    amount: 5000, 
+    status: PaymentStatus.COMPLETE,
+    reservationId: 1
+  }, 
   ]);
 }

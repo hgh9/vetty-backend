@@ -19,25 +19,14 @@ export class ReservationFacade {
           reservationId,
         );
       
-      const payments = await this.reservationService.getPaymentsByReservationId(
-        canceledReservation.id,
-      );
+      console.log(`reservation:${JSON.stringify(canceledReservation)}`);
+      console.log(`reservation.id:${JSON.stringify(canceledReservation.id)}`);
+      
+      const canceledPayments = await this.paymentService.cancelPaymentsByReservationId(
+          canceledReservation.id, 
+        );
 
-      // 1:N - 예약금, 진료비 ( 예약 상태일 경우에는 무조건 1개 이지 않을까? )
-      const cancelPaymentResults = await payments.map(
-        async (payment) => await this.paymentService.cancelPayment(payment),
-      );
-
-      //모든 값이 예약 취소면 ? 뭘 해야하나
-      //1. transaction.commit
-      //2. 취소된 예약 정보 return;
-      // const allPaymentCanceled = await cancelPaymentResults.every((payment) => {
-      //     return (await payment).isCanceled();
-      // });
-
-      // if (!allPaymentCanceled) {
-
-      // }
+      canceledReservation.payments = canceledPayments;
       return Promise.resolve(canceledReservation);
     } 
     catch (e) {

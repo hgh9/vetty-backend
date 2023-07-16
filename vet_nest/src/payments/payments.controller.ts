@@ -18,9 +18,9 @@ export class PaymentsController {
 
   @Post('refund')
   async refund(@Body() refundPaymentDto) {
-    await this.PaymentsService.refund(refundPaymentDto).catch((error) => {
-      throw new HttpException({ result: false, message: error.message }, 400);
-    });
+    // await this.PaymentsService.refund(refundPaymentDto).catch((error) => {
+    //   throw new HttpException({ result: false, message: error.message }, 400);
+    // });
 
     return { result: true, code: 200, message: '/payments/refund' };
   }

@@ -6,12 +6,13 @@ import { ReservationReposiotory } from '@/reservations/repository/reservation-re
 import { ReservationService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
 import { ReservationFacade } from './reservation-facade';
+import { PaymentsModule } from '@/payments/payments.module';
 import { PaymentsService } from '@/payments/payments.service';
-import { PaymentsRepository } from '../payments/repository/payments.repository';
-import { HttpModule } from '@nestjs/axios';
+import { PaymentsRepository } from '@/payments/repository/payments.repository';
+import { PgApiCaller } from '@/payments/pg-api-caller';
 
 @Module({
-  imports: [DatabaseModule, HttpModule],
+  imports: [DatabaseModule],
   controllers: [ReservationCancelationController, ReservationsController],
   providers: [
     ReservationCancelationService,
@@ -20,8 +21,7 @@ import { HttpModule } from '@nestjs/axios';
     ReservationFacade,
     PaymentsService,
     PaymentsRepository,
-
-    // ReservationMapperProfile
+    PgApiCaller
   ],
 })
 export class ReservationsModule {}

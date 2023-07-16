@@ -20,13 +20,11 @@ import { PetsController } from '../pets/pets.controller';
 import { VetsController } from '../vets/vets.controller';
 import { PaymentsController } from '../payments/payments.controller';
 import { UsersController } from '../users/users.controller';
-import { DisgnosisController } from '../diagnosis/diagnosis.controller';
 import { PetsService } from '../pets/pets.service';
 import { PetsRepository } from '../pets/repository/pets.repository';
 import { VetsService } from '../vets/vets.service';
 import { PaymentsService } from '../payments/payments.service';
 import { UsersService } from '../users/users.service';
-import { DiagnosisService } from '../diagnosis/diagnosis.service';
 import { UsersRepository } from '../users/repository/users.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ExceptionsService } from '../exceptions/exceptions.service';
@@ -56,31 +54,18 @@ import { HttpModule } from '@nestjs/axios';
       ],
     }),
     DatabaseModule,
+    PaymentsModule,
     ReservationsModule,
     DiagnosisModule,
     PetsModule,
     VetsModule,
-    PaymentsModule,
     UsersModule,
     ExceptionsModule,
     HttpModule,
   ],
-  controllers: [
-    AppController,
-    PetsController,
-    VetsController,
-    PaymentsController,
-    UsersController,
-  ],
   providers: [
     AppService,
-    PetsService,
-    PetsRepository,
     VetsService,
-    PaymentsService,
-    PaymentsRepository,
-    UsersService,
-    UsersRepository,
     JwtService,
     ExceptionsService,
     currentModeProviders,
