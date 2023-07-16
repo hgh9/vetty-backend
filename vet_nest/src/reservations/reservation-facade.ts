@@ -15,16 +15,10 @@ export class ReservationFacade {
   async cancelReservation(reservationId: number): Promise<Reservation> {
     try {
       const canceledReservation =
-        await this.reservationCancelationService.cancelReservation(
-          reservationId,
-        );
-      
-      console.log(`reservation:${JSON.stringify(canceledReservation)}`);
-      console.log(`reservation.id:${JSON.stringify(canceledReservation.id)}`);
-      
-      const canceledPayments = await this.paymentService.cancelPaymentsByReservationId(
-          canceledReservation.id, 
-        );
+        await this.reservationCancelationService.cancelReservation(reservationId);
+
+      const canceledPayments = await 
+        this.paymentService.cancelPaymentsByReservationId(canceledReservation.id);
 
       canceledReservation.payments = canceledPayments;
       return Promise.resolve(canceledReservation);

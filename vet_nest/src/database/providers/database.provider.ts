@@ -165,7 +165,7 @@ export async function dbInitializeCallback(db: DataSource) {
   const paymentRepo = db.getRepository(Payment);
   paymentRepo.save([{
     paymentId: 1,
-    appId: 'APP-11111',
+    appId: '1280ad9c-31d9-4342-a7b2-3126a5ff738f',
     method: PaymentMethod.CARD,
     amount: 5000, 
     status: PaymentStatus.COMPLETE,
