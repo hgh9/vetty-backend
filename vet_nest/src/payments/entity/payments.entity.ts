@@ -48,8 +48,8 @@ export class Payment {
 }
 
 export enum PaymentStatus {
-  COMPLETE = 'Complete', 
-  CANCELD = 'Cancel'
+  COMPLETE = 'COMPLETED',
+  CANCELD  = 'CANCELED'
 }
 
 export enum PaymentMethod {
