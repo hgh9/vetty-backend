@@ -19,7 +19,8 @@ export class PgApiCaller implements IFakePgApi
   async pay(param: PgPaymentRequest): Promise<PgPaymentResponse> {
     //TODO: parameter 만들어져서 넘어와야 하는가? or DTO 받아서 parameter 만들어야 하는가?
     const { data } = await firstValueFrom(
-      await this.httpClient.post(`${this.PG_API_ADDRESS}/create`, param).pipe(
+      await this.httpClient.post(`${this.PG_API_ADDRESS}/create`, param)
+      .pipe(
         catchError((error: AxiosError) => {
           throw new BusinessException(error, 'PG-ERROR', '500')
         })));
@@ -31,12 +32,13 @@ export class PgApiCaller implements IFakePgApi
     const param = new PgCancelPaymentRequest();
     param.uuid = uuid;
     const { data }  = await firstValueFrom(
-      await this.httpClient.patch<PgCancelPaymentResponse>(`${this.PG_API_ADDRESS}/cancel`, param).pipe(
+      await this.httpClient.patch<PgCancelPaymentResponse>(`${this.PG_API_ADDRESS}/cancel`, param)
+      .pipe(
         catchError((error: AxiosError) => {
           throw new BusinessException(error, 'PG-ERROR', '500');
         })
       ));
-    console.log(`PG-API: ${JSON.stringify(data)}`);
+    
     return Promise.resolve(data);
   }
 }
