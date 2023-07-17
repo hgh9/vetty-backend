@@ -1,30 +1,20 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
   HttpCode,
-  HttpException,
-  HttpStatus,
   Logger,
-  Param,
   Post,
   Query,
-  UseFilters,
-  UseInterceptors,
 } from '@nestjs/common';
 import {
-  ReservastionsDto,
   ReservationProcessDto as ReservationProcessCommand,
 } from './dto/reservations.dto';
 import { ReservationService } from './reservations.service';
 import { Reservation } from './entity/reservation.entity';
 import { ReservationSearchDto } from './dto/reservation-search.dto';
-import * as moment from 'moment';
-import { MapPipe } from '@automapper/nestjs';
 import {
-  BisunessException,
-  NotEnoughParameterError,
+  BusinessException
 } from 'util/exception.util';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CheckingDateCommand, SetTimeSlotCommand } from './dto/timeslot.dto';
