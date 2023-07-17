@@ -149,8 +149,8 @@ export class ReservastionsDto {
     name: 'treatmentStatus',
     description: '예약종류',
   })
-  @IsEnum(TreatmentStatus)
-  treatmentStatus: TreatmentStatus;
+  @IsEnum(DignosisCategory)
+  treatmentStatus: DignosisCategory;
 
   @ApiProperty({
     default: 30000,

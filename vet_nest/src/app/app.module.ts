@@ -1,6 +1,5 @@
-import { Logger, Module, LoggerService } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as winston from 'winston';
 import {
@@ -16,24 +15,13 @@ import { VetsModule } from '../vets/vets.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { UsersModule } from '../users/users.module';
 import { ExceptionsModule } from '../exceptions/exceptions.module';
-import { PetsController } from '../pets/pets.controller';
-import { VetsController } from '../vets/vets.controller';
-import { PaymentsController } from '../payments/payments.controller';
-import { UsersController } from '../users/users.controller';
-import { DisgnosisController } from '../diagnosis/diagnosis.controller';
-import { PetsService } from '../pets/pets.service';
-import { PetsRepository } from '../pets/repository/pets.repository';
 import { VetsService } from '../vets/vets.service';
-import { PaymentsService } from '../payments/payments.service';
-import { UsersService } from '../users/users.service';
-import { DiagnosisService } from '../diagnosis/diagnosis.service';
-import { UsersRepository } from '../users/repository/users.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ExceptionsService } from '../exceptions/exceptions.service';
 import { currentModeProviders } from './providers/currentMode.provider';
-import { PaymentsRepository } from '../payments/repository/payments.repository';
 import { HttpModule } from '@nestjs/axios';
 import { TimeSlotReposiotory } from '../reservations/repository/timeslot-repository';
+import { FakePgModule } from '@/fake-pg/fake-pg.module';
 
 @Module({
   imports: [
@@ -57,31 +45,19 @@ import { TimeSlotReposiotory } from '../reservations/repository/timeslot-reposit
       ],
     }),
     DatabaseModule,
+    PaymentsModule,
     ReservationsModule,
     DiagnosisModule,
     PetsModule,
     VetsModule,
-    PaymentsModule,
     UsersModule,
     ExceptionsModule,
     HttpModule,
-  ],
-  controllers: [
-    AppController,
-    PetsController,
-    VetsController,
-    PaymentsController,
-    UsersController,
+    FakePgModule,
   ],
   providers: [
     AppService,
-    PetsService,
-    PetsRepository,
     VetsService,
-    PaymentsService,
-    PaymentsRepository,
-    UsersService,
-    UsersRepository,
     JwtService,
     ExceptionsService,
     currentModeProviders,

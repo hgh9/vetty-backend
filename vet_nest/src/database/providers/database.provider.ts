@@ -16,6 +16,7 @@ import {
 } from '../../reservations/entity/reservation.entity';
 import * as moment from 'moment';
 import { ConfigService } from '@nestjs/config';
+import { Payment, PaymentMethod, PaymentStatus } from '@/payments/entity/payments.entity';
 
 export const databaseProviders = [
   {
@@ -115,7 +116,7 @@ export async function dbInitializeCallback(db: DataSource) {
       id: 1,
       receptionMethod: ReceptionMethod.RESERVATION,
       status: TreatmentStatus.RESERVATION_COMPLETED,
-      reservedAt: moment(new Date()).add(1.5, 'hours').add(9, 'hours').toDate(),
+      reservedAt: moment(new Date()).add(1.5, 'hours').toDate(),
       vetId: 1,
       slotId: 1,
       petId: '263df66a-c1e0-4ad3-94e7-bf8236ec3f09',
@@ -125,9 +126,9 @@ export async function dbInitializeCallback(db: DataSource) {
     },
     {
       id: 2,
-      receptionMethod: ReceptionMethod.ON_SITE,
+      receptionMethod: ReceptionMethod.RESERVATION,
       status: TreatmentStatus.RESERVATION_COMPLETED,
-      reservedAt: moment().add(0.5, 'hours').add(9, 'hours').toDate(),
+      reservedAt: moment().add(0.5, 'hours').toDate(),
       vetId: 1,
       slotId: 1,
       petId: '263df66a-c1e0-4ad3-94e7-bf8236ec3f09',
@@ -138,8 +139,8 @@ export async function dbInitializeCallback(db: DataSource) {
     {
       id: 3,
       receptionMethod: ReceptionMethod.RESERVATION,
-      status: TreatmentStatus.RESERVATION_COMPLETED,
-      reservedAt: moment(new Date()).add(1.5, 'hours').add(9, 'hours').toDate(),
+      status: TreatmentStatus.RESERVATION_CANCELED,
+      reservedAt: moment(new Date()).add(1.5, 'hours').toDate(),
       vetId: 1,
       slotId: 1,
       petId: '263df66a-c1e0-4ad3-94e7-bf8236ec3f09',
@@ -159,5 +160,17 @@ export async function dbInitializeCallback(db: DataSource) {
       treatmentStatus: DignosisCategory.NORMAL,
       amount: 20000,
     },
+  ]);
+
+  const paymentRepo = db.getRepository(Payment);
+  paymentRepo.save([{
+    paymentId: 1,
+    appId: '1280ad9c-31d9-4342-a7b2-3126a5ff738f',
+    method: PaymentMethod.CARD,
+    amount: 5000, 
+    status: PaymentStatus.COMPLETE,
+    reservationId: 1, 
+    userId: 1
+  }, 
   ]);
 }

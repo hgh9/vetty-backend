@@ -6,8 +6,10 @@ import { ReservationReposiotory } from '@/reservations/repository/reservation-re
 import { ReservationService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
 import { ReservationFacade } from './reservation-facade';
+import { PaymentsModule } from '@/payments/payments.module';
 import { PaymentsService } from '@/payments/payments.service';
-import { PaymentsRepository } from '../payments/repository/payments.repository';
+import { PaymentsRepository } from '@/payments/repository/payments.repository';
+import { PgApiCaller } from '@/payments/pg-api-caller';
 import { HttpModule } from '@nestjs/axios';
 import { TimeSlotReposiotory } from './repository/timeslot-repository';
 
@@ -21,11 +23,8 @@ import { TimeSlotReposiotory } from './repository/timeslot-repository';
     ReservationFacade,
     PaymentsService,
     PaymentsRepository,
-
-    // ReservationMapperProfile
-    TimeSlotReposiotory,
-    // PaymentFactoryService,
-    // FakePaymentService,
+    TimeSlotReposiotory, 
+    PgApiCaller
   ],
 })
 export class ReservationsModule {}

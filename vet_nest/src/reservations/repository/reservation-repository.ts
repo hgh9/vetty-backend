@@ -5,6 +5,7 @@ import { CheckingDateCommand } from '../dto/timeslot.dto';
 import { TimeSlot } from '../../vets/entity/timeslot.entity';
 import { plainToInstance } from 'class-transformer';
 import { ReservastionsDto } from '../dto/reservations.dto';
+import { Payment } from '@/payments/entity/payments.entity';
 
 
 @EntityRepository(Reservation)
@@ -60,4 +61,11 @@ export class ReservationReposiotory extends Repository<Reservation> {
     });
   }
 
+  async getPaymentsByReservationId(reservationId: number): Promise<Payment[]> {
+    const reservation = await this.findOne({
+      where: {id: reservationId}, 
+      relations: ['Payment']
+    });
+    return Promise.resolve(reservation.payments);
+  }
 }

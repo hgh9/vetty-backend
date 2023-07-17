@@ -1,5 +1,5 @@
 import { Repository, DataSource, EntityRepository } from 'typeorm';
-import { Payment } from '../entity/payments.entity';
+import { Payment, PaymentMethod, PaymentStatus } from '../entity/payments.entity';
 import { Inject, Logger } from '@nestjs/common';
 
 @EntityRepository(Payment)
@@ -26,19 +26,25 @@ export class PaymentsRepository extends Repository<Payment>
     return await this.findOneById(paymentId);
   }
 
-  async createPayment(reservationId, amount, appId) {
-    const newPayment = this.create({
-      reservationId,
-      amount,
-      appId,
-      status: 'done',
-      method: 'CARD',
-    });
+  async createPayment(reservationId: number, amount, appId) {
+    const newPayment = new Payment();
+    newPayment.reservationId = reservationId;
+    newPayment.amount = amount;
+    newPayment.appId = appId; 
+    newPayment.status = PaymentStatus.COMPLETE;
+    newPayment.method = PaymentMethod.CARD;
+    // const newPayment = this.create({
+    //   reservationId: reservationId,
+    //   amount: amount,
+    //   appId: appId,
+    //   status: 'done',
+    //   method: 'CARD',
+    // });
     await this.save(newPayment);
     return newPayment;
   }
   
   async refund(paymentId) {
-    return await this.update(paymentId, { status: 'refund' });
+    // return await this.update(paymentId, { status: 'refund' });
   }
 }

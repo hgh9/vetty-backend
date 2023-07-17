@@ -1,6 +1,6 @@
 import * as moment from "moment";
 import { Reservation, TreatmentStatus } from "../entity/reservation.entity";
-import { BusinessException } from "util/exception.util";
+import { BusinessException } from "../../../util/exception.util";
 
 export default class ReservationCancelationValidator {
 

@@ -7,7 +7,6 @@ import {
   TreatmentStatus,
 } from '../entity/reservation.entity';
 import {
-  ReservastionsDto,
   ReservationProcessDto,
 } from '../dto/reservations.dto';
 import {

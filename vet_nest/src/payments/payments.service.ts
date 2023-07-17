@@ -1,69 +1,88 @@
 import { Injectable } from '@nestjs/common';
 import { PaymentsRepository } from './repository/payments.repository';
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
-import { PaymentDto } from './dto/payment.dto';
+import { Payment, PaymentStatus } from './entity/payments.entity';
+import { IPaymentService } from './payments-service.interface';
+import { PgApiCaller } from './pg-api-caller';
+import { BusinessException } from 'util/exception.util';
+import { CreatePaymentDto } from './dto/create-payment.dto';
+import { SearchPaymentDto } from './dto/search-payment.dto';
 
 @Injectable()
-export class PaymentsService {
+export class PaymentsService implements IPaymentService {
+  
   constructor(
     private readonly paymentsRepository: PaymentsRepository,
-    private readonly httpService: HttpService,
+    private readonly pgApiCaller: PgApiCaller
   ) {}
 
-  async create(createPaymentDto: PaymentDto) {
-    if (!(createPaymentDto.reservationId && createPaymentDto.amount)) {
+  async getPaymentsByUserId(userId: number, searchParam: SearchPaymentDto): Promise<Payment[]> {
+    let query = await this.paymentsRepository
+      .createQueryBuilder('payments')
+      .where(`payments.userId = :id`, {id: userId});
+
+    if (searchParam.startDate && searchParam.endDate) {
+      // query = query
+      //   .andWhere(`paymenets.createdAt >= Date(:startDate)`, 
+      //   {startDate: searchParam.startDate});
+      // query = query
+      //   .andWhere(`Date(paymenets.createdAt) <= Date(:endDate)`, 
+      //   {endDate: searchParam.endDate});
+    }
+    return query.getMany();
+  }
+  
+  
+  async create(dto: CreatePaymentDto) {
+    
+    if (!(dto.reservationId && dto.amount)) {
       throw new Error('invalid data');
     }
 
     const targetPayment = await this.paymentsRepository.findByReservationId(
-      createPaymentDto.reservationId,
+      dto.reservationId,
     );
-    if (targetPayment && targetPayment.status === 'done') {
+    if (targetPayment && targetPayment.status === PaymentStatus.COMPLETE) {
       throw new Error('payment has already made');
     }
-
-    const pgCreateUrl = 'http://localhost:3001/pg/create';
-    const pgCreateBody = {
-      reservationId: createPaymentDto.reservationId,
-      amount: createPaymentDto.amount,
-    };
-
-    const pgResponse = (
-      await firstValueFrom(this.httpService.post(pgCreateUrl, pgCreateBody))
-    ).data;
-    if (pgResponse.code !== 201) {
-      throw new Error('pg error');
+  }
+  
+  getPaymentsByReservationId = async(reservationId: number): Promise<Payment[]>  => 
+    this.paymentsRepository.findBy({
+      reservationId: reservationId
+    });
+  
+  cancelPayment = async(paymentId: number): Promise<Payment> => {
+    
+    const payment = await this.paymentsRepository.findOneBy({paymentId: paymentId});
+    const pgResult = await this.pgApiCaller.cancelPayment(payment.appId);
+    if (pgResult.resultCode != 'OK') {
+      throw new BusinessException(pgResult, 'PG-ERROR', '500');
     }
-
-    return this.paymentsRepository.createPayment(
-      createPaymentDto.reservationId,
-      createPaymentDto.amount,
-      pgResponse.result.appId,
-    );
+    payment.cancel(); 
+    this.paymentsRepository.save(payment);
+    return Promise.resolve(payment);
   }
 
-  async refund(refundPaymentDto) {
-    if (!refundPaymentDto.paymentId) {
-      throw new Error('paymentId is required');
+  cancelPayments = async(paymentIds: number[]): Promise<Payment[]> => {
+    
+    const canceledPayments = await Promise.all(
+      paymentIds.map(async (paymentId) => 
+        await this.cancelPayment(paymentId)));
+
+    if (!canceledPayments.every((payment) => payment.isCanceled())) {
+      throw new BusinessException(canceledPayments, 'PG 결제 오류', '500');
     }
 
-    const targetPayment = await this.paymentsRepository.findByPaymentId(
-      refundPaymentDto.paymentId,
-    );
-    if (!targetPayment || targetPayment.status === 'refund') {
-      throw new Error('payment is not refundable');
-    }
+    return canceledPayments;
+  }
 
-    const pgRefundUrl = 'http://localhost:3001/pg/refund';
-    const pgRefundBody = { appId: targetPayment.appId };
-    const result = (
-      await firstValueFrom(this.httpService.post(pgRefundUrl, pgRefundBody))
-    ).data;
-    if (result.code !== 200) {
-      throw new Error('pg error');
-    }
-
-    return this.paymentsRepository.refund(refundPaymentDto.paymentId);
+  cancelPaymentsByReservationId = async(reservationId: number): Promise<Payment[]> => {
+    
+    const paymentIds = (await 
+      this.getPaymentsByReservationId(reservationId))
+      .map((payment) => payment.paymentId);
+    
+    const canceledPayments = await this.cancelPayments(paymentIds);
+    return canceledPayments;
   }
 }

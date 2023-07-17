@@ -1,26 +1,21 @@
-import { HttpCode, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Reservation } from './entity/reservation.entity';
 import { ReservastionsDto as ReservastionsCommand } from './dto/reservations.dto';
 import { ReservationSearchDto } from './dto/reservation-search.dto';
 import { ReservationReposiotory } from './repository/reservation-repository';
-import TimeSlotMananger, {
-  ITimeSlot,
-} from './slot-manager/slot-manger.service';
+import  TimeSlotMananger, { ITimeSlot} from './slot-manager/slot-manger.service';
 import { CheckingDateCommand, SetTimeSlotCommand } from './dto/timeslot.dto';
 import { TimeSlotReposiotory } from './repository/timeslot-repository';
 import { FailedPost } from '../../util/exception.util';
-import { STATUS_CODES } from 'http';
+import { Payment } from '@/payments/entity/payments.entity';
 
 @Injectable()
 export class ReservationService {
-  // private reservationRepository: Repository<Reservation>;
-  logger = new Logger();
+  
   constructor(
     private readonly reservationRepository: ReservationReposiotory,
     private readonly timeSlotRepository: TimeSlotReposiotory,
-  ) {
-    // this.reservationRepository = this.dataSource.getRepository(Reservation);
-  }
+  ) {}
 
   async setReserveTime(timeSlotInfo: SetTimeSlotCommand): Promise<boolean> {
     const result = await this.timeSlotRepository.setTimeSlots(timeSlotInfo);
@@ -55,7 +50,11 @@ export class ReservationService {
     return this.reservationRepository.getReservationsByUser(
       userId,
       searchQuery.startDate,
-      searchQuery.endDate,
-    );
+      searchQuery.endDate);
   }
+
+  async getPaymentsByReservationId(reservationId: number): Promise<Payment[]> {
+    return await this.reservationRepository.getPaymentsByReservationId(reservationId);
+  }
+  
 }
