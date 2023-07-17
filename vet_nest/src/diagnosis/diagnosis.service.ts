@@ -31,6 +31,7 @@ export class DiagnosisService {
       );
     const isValid = await ReservationValidator.reservationValidate(
       allReservation,
+
       receptionMethod,
     );
     try {

@@ -5,8 +5,12 @@ import { User } from '../src/users/entity/users.entity';
 import { TimeSlot } from '../src/vets/entity/timeslot.entity';
 import * as dotenv from 'dotenv';
 import { TreatmentResult } from '@/diagnosis/entity/TreatmentResult.entity';
+<<<<<<< HEAD
 import { Payment } from '../src/payments/entity/payments.entity';
 dotenv.config({ path: './../.env' });
+=======
+dotenv.config({ path: '../.env' });
+>>>>>>> feature/diagnosis2
 
 export default () => ({
   MODE: process.env.REACT_APP_ENV,

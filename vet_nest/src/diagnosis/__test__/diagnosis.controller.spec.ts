@@ -10,6 +10,7 @@ import { ReceptionMethod } from '../../reservations/entity/reservation.entity';
 
 describe('DisgnosisController', () => {
   let app: INestApplication;
+  let disgnosisController;
 
   beforeAll(async () => {
     //앱모듈을 실행
@@ -24,6 +25,7 @@ describe('DisgnosisController', () => {
       request('http://localhost:3001')
         .get(`/diagnosis/${vetId}/reservation`)
         .send({ receptionMethod: ReceptionMethod.RESERVATION })
+
         .then((res: request.Response) => {
           expect(res.status).toBe(HttpStatus.OK);
         });

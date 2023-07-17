@@ -13,6 +13,7 @@ export class DiagnosisRepository {
   }
 
   // 진료완료
+
   // async updateDignosisStatusById(reservationId: number) {
   //   const result = this.reservationRepository.findOneBy({
   //     id: reservationId,
