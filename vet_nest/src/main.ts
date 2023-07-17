@@ -15,7 +15,6 @@ import dotenv = require('dotenv');
 import { AllExceptionsFilter } from './diagnosis/exceptions/all-http-exception.filter';
 dotenv.config();
 
-
 async function nestFactoryCreate() {
   const server = express();
 
@@ -49,7 +48,7 @@ async function nestFactoryCreate() {
     }),
   );
   app.useGlobalFilters(new AllExceptionsFilter());
-  
+
   return app;
 }
 

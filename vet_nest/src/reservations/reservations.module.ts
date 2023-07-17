@@ -11,6 +11,7 @@ import { PaymentsService } from '@/payments/payments.service';
 import { PaymentsRepository } from '@/payments/repository/payments.repository';
 import { PgApiCaller } from '@/payments/pg-api-caller';
 import { HttpModule } from '@nestjs/axios';
+import { TimeSlotReposiotory } from './repository/timeslot-repository';
 
 @Module({
   imports: [DatabaseModule, HttpModule],
@@ -22,6 +23,7 @@ import { HttpModule } from '@nestjs/axios';
     ReservationFacade,
     PaymentsService,
     PaymentsRepository,
+    TimeSlotReposiotory, 
     PgApiCaller
   ],
 })

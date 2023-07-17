@@ -1,12 +1,28 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import {
+  IsDate,
+  IsEnum,
+  IsNotEmptyObject,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import {
   DignosisCategory,
+  ReceptionMethod,
   TreatmentStatus,
 } from '../entity/reservation.entity';
 import { PetDto } from '../../pets/dto/pet.dto';
 import { VetDto } from '../../vets/dto/vet.dto';
 import { ReservationUserDto, UserDto } from '../../users/dto/user.dto';
+import { TimeSlot } from '../../vets/entity/timeslot.entity';
+import { Payment } from '../entity/payment.entity';
+import { Type } from 'class-transformer';
+import { PaymentDto } from '../../payments/dto/payment.dto';
+import { TimeSlotDto } from './timeslot.dto';
 
 export class ReservastionsDto {
   @IsOptional()
@@ -23,7 +39,7 @@ export class ReservastionsDto {
     name: 'firstVisit',
     description: '초진',
   })
-  @IsOptional()
+  @IsEnum(DignosisCategory)
   firstVisit?: DignosisCategory;
 
   @ApiProperty({
@@ -33,7 +49,7 @@ export class ReservastionsDto {
     name: 'reVisit',
     description: '재방문자',
   })
-  @IsOptional()
+  @IsEnum(DignosisCategory)
   reVisit?: DignosisCategory;
 
   @ApiProperty({
@@ -43,7 +59,7 @@ export class ReservastionsDto {
     name: 'name',
     description: '사용자 이름',
   })
-  @IsOptional()
+  @IsEnum(TreatmentStatus)
   status: TreatmentStatus;
 
   @ApiProperty({
@@ -53,7 +69,7 @@ export class ReservastionsDto {
     name: 'updatedAt',
     description: '배포가 되었나요?',
   })
-  @IsOptional()
+  @IsDate()
   updatedAt?: Date | null;
 
   @ApiProperty({
@@ -63,38 +79,58 @@ export class ReservastionsDto {
     name: 'reservedAt',
     description: '예약날짜',
   })
-  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
   reservedAt?: Date | null;
 
   @ApiProperty({
-    default: '',
+    default: ReceptionMethod.RESERVATION,
     required: true,
-    type: 'array',
-    name: 'payments',
-    description: '결제정보',
+    type: 'enum',
+    name: 'receptionMethod',
+    description: '예약방법',
   })
-  @IsOptional()
-  paymentId: number;
+  @IsEnum(ReceptionMethod)
+  receptionMethod: ReceptionMethod;
+  // @ApiProperty({
+  //   default: '',
+  //   required: true,
+  //   type: 'array',
+  //   name: 'payments',
+  //   description: '결제정보',
+  // })
+  // @IsOptional()
+  // paymentId: number;
 
   @ApiProperty({
     default: '',
     required: true,
-    type: 'object',
+    type: 'string',
     name: 'pet',
     description: 'Pet정보',
   })
-  @IsOptional()
-  petId: number;
+  @IsUUID()
+  petId: string;
 
   @ApiProperty({
-    default: '',
+    default: 1,
     required: true,
     type: 'number',
-    name: 'vet',
+    name: 'vetId',
     description: 'vet정보',
   })
-  @IsOptional()
+  @IsNumber()
   vetId: number;
+
+  @ApiProperty({
+    default: 1,
+    required: true,
+    type: 'number',
+    name: 'slotId',
+    description: 'vet정보',
+  })
+  @IsNumber()
+  slotId: number;
 
   @ApiProperty({
     default: '',
@@ -103,8 +139,69 @@ export class ReservastionsDto {
     name: 'user',
     description: 'user정보',
   })
-  @IsOptional()
+  @IsNumber()
   userId: number;
+
+  @ApiProperty({
+    default: TreatmentStatus.TREATMENT_COMPLETED,
+    required: true,
+    type: 'enum',
+    name: 'treatmentStatus',
+    description: '예약종류',
+  })
+  @IsEnum(DignosisCategory)
+  treatmentStatus: DignosisCategory;
+
+  @ApiProperty({
+    default: 30000,
+    required: true,
+    type: 'number',
+    name: 'amount',
+    description: '결제 금액',
+  })
+  @IsNumber()
+  amount: number;
+}
+
+export class ReservationProcessDto extends PickType(ReservastionsDto, [
+  'id',
+  'firstVisit',
+  'reVisit',
+  'reservedAt',
+  'userId',
+  'vetId',
+  'petId',
+  'slotId',
+  'status',
+  'receptionMethod',
+  'treatmentStatus',
+  'amount'
+]) {
+  @ApiProperty({
+    // default: '2023-01-02',
+    required: true,
+    type: 'object',
+    name: 'timeSlot',
+    description: '예약 시간',
+  })
+  @IsObject({ each: true })
+  @IsNotEmptyObject()
+  // @ValidateNested()
+  @Type(() => TimeSlotDto)
+  timeSlot?: TimeSlotDto;
+
+  @ApiProperty({
+    // default: '2023-01-02',
+    required: true,
+    type: 'object',
+    name: 'object',
+    description: '결제 정보',
+  })
+  @IsObject({ each: true })
+  @IsNotEmptyObject()
+  // @ValidateNested()
+  @Type(() => PaymentDto)
+  payments?: PaymentDto;
 }
 
 // export class findByEmailDto extends PickType(ReservastionsDto, ['vetHahah']) {}
