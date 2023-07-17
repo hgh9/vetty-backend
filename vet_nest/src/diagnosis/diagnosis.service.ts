@@ -2,11 +2,15 @@ import { User } from '../users/entity/users.entity';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { TreatmentResult } from './entity/TreatmentResult.entity';
-import { Reservation } from '../reservations/entity/reservation.entity';
+import {
+  Reservation,
+  TreatmentStatus,
+} from '../reservations/entity/reservation.entity';
 import { ReservationReposiotory } from '../reservations/repository/reservation-repository';
 import { DiagnosisRepository } from './repository/diagnosis-repository';
 import ReservationValidator from './validator/diagnosis.validator';
 import { TreatmentDto } from './dto/TreatmentResult.dto';
+import { ReservastionsDto } from '../reservations/dto/reservations.dto';
 @Injectable()
 export class DiagnosisService {
   private treatmentRepository: Repository<TreatmentResult>;
@@ -20,39 +24,34 @@ export class DiagnosisService {
   }
 
   public async getAllReservation(vetId: number, receptionMethod: string) {
-    const reservationList =
-      await this.reservationRepository.getAllReservationByVetId(
+    const allReservation =
+      await this.reservationRepository.getReservationByVetId(
         vetId,
         receptionMethod,
       );
-    const isValid = await ReservationValidator.ReservationListValidate(
-      reservationList,
+    const isValid = await ReservationValidator.reservationValidate(
+      allReservation,
       receptionMethod,
     );
     try {
       if (isValid) {
-        return reservationList;
+        return allReservation;
       }
     } catch (e) {
-      //모지?
       throw e;
     }
   }
 
-  // 예약 상태를 진료중으로 변경한다.
   public async updateReservaionStatus(reservationId: number) {
-    // 진료중으로 변경
     const reservationStatus =
-      await this.reservationRepository.updateReservaionStatusById(
-        reservationId,
-      );
+      await this.reservationRepository.getReservationById(reservationId);
 
     const isValid = await ReservationValidator.ReservationStatusvalidate(
       reservationStatus,
     );
     try {
       if (isValid) {
-        reservationStatus.status = 2;
+        reservationStatus.status = TreatmentStatus.IN_TREATMENT;
         reservationStatus.updatedAt = new Date();
         await this.reservationRepository.save(reservationStatus);
         return reservationStatus;
@@ -62,13 +61,13 @@ export class DiagnosisService {
     }
   }
 
-  // 진료를 완료 한다.
   public async completeDignosis(
     reservationId: number,
     treatmentResult: string,
   ) {
-    const diagnosisStatus =
-      await this.diagnosisRepository.updateDignosisStatusById(reservationId);
+    const diagnosisStatus = await this.reservationRepository.getReservationById(
+      reservationId,
+    );
 
     const isValid = await ReservationValidator.DignosisStatusvalidate(
       treatmentResult,
@@ -76,7 +75,7 @@ export class DiagnosisService {
     );
     try {
       if (isValid) {
-        diagnosisStatus.status = 3;
+        diagnosisStatus.status = TreatmentStatus.TREATMENT_COMPLETED;
         diagnosisStatus.updatedAt = new Date();
         await this.reservationRepository.save(diagnosisStatus);
         await this.treatmentRepository.save({
@@ -91,22 +90,18 @@ export class DiagnosisService {
   }
 
   //카테고리값으로 넘어와서 카테고리별 조회
-  public async getDiagnosisList(vetId: number, treatmentStatus: number) {
-    const getDiagnosisList =
-      await this.diagnosisRepository.getDiagnosisListByVetId(
-        vetId,
-        treatmentStatus,
-      );
-    console.log(getDiagnosisList);
-    const isValid = await ReservationValidator.TreatmentStatusvalidate(
+  public async getAllDiagnosis(vetId: number, treatmentStatus: number) {
+    const allDiagnosis = await this.diagnosisRepository.getDiagnosisByVetId(
       vetId,
       treatmentStatus,
-      getDiagnosisList,
     );
-
+    const isValid = await ReservationValidator.TreatmentStatusvalidate(
+      treatmentStatus,
+      allDiagnosis,
+    );
     try {
       if (isValid) {
-        return getDiagnosisList;
+        return allDiagnosis;
       }
     } catch (e) {
       e;
@@ -145,8 +140,9 @@ export class DiagnosisService {
   }
 
   public async getDiagnosisByUser(userId: number) {
-    const diagnosisByUser =
-      await this.diagnosisRepository.getDiagnosisListByUser(userId);
+    const diagnosisByUser = await this.reservationRepository.getReservationById(
+      userId,
+    );
     const isValid = await ReservationValidator.DiagnosisByUser(diagnosisByUser);
 
     try {
@@ -172,7 +168,6 @@ export class DiagnosisService {
     const isValid = await ReservationValidator.DiagnosisDetailByUser(
       diagnosisDetail,
     );
-
     try {
       if (isValid) {
         return diagnosisDetail;
@@ -180,7 +175,6 @@ export class DiagnosisService {
     } catch (e) {
       e;
     }
-
     return diagnosisDetail;
   }
 }

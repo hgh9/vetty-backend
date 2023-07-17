@@ -13,14 +13,14 @@ export class DiagnosisRepository {
   }
 
   // 진료완료
-  async updateDignosisStatusById(reservationId: number) {
-    const result = this.reservationRepository.findOneBy({
-      id: reservationId,
-    });
-    return result;
-  }
+  // async updateDignosisStatusById(reservationId: number) {
+  //   const result = this.reservationRepository.findOneBy({
+  //     id: reservationId,
+  //   });
+  //   return result;
+  // }
 
-  async getDiagnosisListByVetId(vetId: number, treatmentStatus: number) {
+  async getDiagnosisByVetId(vetId: number, treatmentStatus: number) {
     const list = await this.reservationRepository
       .createQueryBuilder('reservation')
       .where('reservation.vetId = :vetId', { vetId: vetId })
@@ -32,15 +32,14 @@ export class DiagnosisRepository {
     return list;
   }
 
-  //고객 아이디에 대한 내역 다 가져오기 + 예약걸러내기
-  async getDiagnosisListByUser(userId: number) {
-    const list = await this.reservationRepository
-      .createQueryBuilder('reservation')
-      .where('reservation.id = :userId', { userId })
-      .getMany();
+  // async getDiagnosisByUser(userId: number) {
+  //   const list = await this.reservationRepository
+  //     .createQueryBuilder('reservation')
+  //     .where('reservation.id = :userId', { userId })
+  //     .getMany();
 
-    return list;
-  }
+  //   return list;
+  // }
 
   // 진료내역가져와야해
   async getDiagnosisDetailByUser(userId, treatmentStatus) {

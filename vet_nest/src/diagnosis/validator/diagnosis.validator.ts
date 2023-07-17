@@ -1,11 +1,15 @@
+import {
+  ReceptionMethod,
+  TreatmentStatus,
+} from '../../reservations/entity/reservation.entity';
 import { BadRequestException } from '@nestjs/common';
 
 export default class ReservationValidator {
-  static ReservationListValidate(reservationList, receptionMethod) {
-    if (reservationList.length === 0) {
+  static reservationValidate(allReservation, receptionMethod) {
+    if (allReservation.length === 0) {
       throw new BadRequestException('존재하지 않는 병원입니다.');
     }
-    if (receptionMethod !== 'R') {
+    if (receptionMethod !== ReceptionMethod.RESERVATION) {
       throw new BadRequestException('예약 접수가 아닙니다.');
     }
     return true;
@@ -13,20 +17,20 @@ export default class ReservationValidator {
 
   static ReservationStatusvalidate(reservationStatus) {
     const result = this.checkReservationStatus_cancle(reservationStatus.status);
-    return true;
+    return result;
   }
 
   static checkReservationStatus_cancle(reservationStatus: number) {
-    if (reservationStatus === 2) {
+    if (reservationStatus === TreatmentStatus.RESERVATION_COMPLETED) {
       throw new BadRequestException('진료 중인 상태입니다.');
     }
-    if (reservationStatus === 3) {
+    if (reservationStatus === TreatmentStatus.RESERVATION_COMPLETED) {
       throw new BadRequestException('진료 완료 상태입니다.');
     }
-    if (reservationStatus === -1) {
+    if (reservationStatus === TreatmentStatus.RESERVATION_COMPLETED) {
       throw new BadRequestException('예약이 취소된 상태입니다.');
     }
-    if (reservationStatus === -2) {
+    if (reservationStatus === TreatmentStatus.RESERVATION_CANCELED) {
       throw new BadRequestException('진료가 취소된 상태입니다.');
     }
     return true;
@@ -42,7 +46,7 @@ export default class ReservationValidator {
     return true;
   }
 
-  static TreatmentStatusvalidate(vetId, treatmentStatus, getDiagnosisList) {
+  static TreatmentStatusvalidate(treatmentStatus, getDiagnosisList) {
     if (treatmentStatus > 4) {
       throw new BadRequestException('존재하지 않는 진료내역 입니다.');
     }

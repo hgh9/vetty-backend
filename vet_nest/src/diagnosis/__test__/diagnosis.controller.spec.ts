@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import * as request from 'supertest';
 import exp from 'constants';
+import { ReceptionMethod } from '../../reservations/entity/reservation.entity';
 
 describe('DisgnosisController', () => {
   let app: INestApplication;
-  let disgnosisController;
 
   beforeAll(async () => {
     //앱모듈을 실행
@@ -18,37 +18,45 @@ describe('DisgnosisController', () => {
     await app.init();
   });
 
-  describe('예약조회', () => {
-    it('예약정보가 전체 목록을 불러온다.', async () => {
+  describe('GET /diagnosis/${vetId}/reservation - 예약목록 조회', () => {
+    it('정상적으로 조회된 경우 200을 반환한다. ', async () => {
       const vetId = 1;
-      request('http://localhost:3001/diagnosis/')
-        .get(`${vetId}/reservation`)
+      request('http://localhost:3001')
+        .get(`/diagnosis/${vetId}/reservation`)
+        .send({ receptionMethod: ReceptionMethod.RESERVATION })
         .then((res: request.Response) => {
           expect(res.status).toBe(HttpStatus.OK);
         });
     });
 
-    it('병원 정보가 잘못되었을 때', async () => {
+    it('예약 목록이 없을 경우 400을 반환한다. ', async () => {
       const vetId = 2;
-      request('http://localhost:3001/diagnosis/')
-        .get(`${vetId}/reservation`)
+      request('http://localhost:3001')
+        .get(`/diagnosis/${vetId}/reservation`)
+        .send({ receptionMethod: ReceptionMethod.RESERVATION })
+        .then((res: request.Response) => {
+          expect(res.status).toBe(HttpStatus.EXPECTATION_FAILED);
+        });
+    });
+
+    it('접수 방식이 예약이 아닌 경우 400을 반환한다.', async () => {
+      const vetId = 1;
+      request('http://localhost:3001')
+        .get(`/diagnosis/${vetId}/reservation`)
+        .send({ receptionMethod: ReceptionMethod.ON_SITE })
         .then((res: request.Response) => {
           expect(res.status).toBe(HttpStatus.EXPECTATION_FAILED);
         });
     });
   });
 
-  describe('예약에서 진료중으로 상태 변경', () => {
+  describe('PUT /diagnosis/${reservationId}/status - 진료중으로 상태변경', () => {
     it('진료중 상태로 변경된 경우. - 성공', async () => {
       const reservationId = 1;
-      request('http://localhost:3001/diagnosis/')
-        .put(`${reservationId}/status`)
+      request('http://localhost:3001')
+        .put(`/diagnosis/${reservationId}`)
         .then((res: request.Response) => {
-          expect(res.status).toBe(HttpStatus.OK); // 성공케이스 객체(엔티티값)가 반환 되었을 때
-          //실패케이스
-          // 상태값이 동일할 때 -> 새로바뀐값이랑 기존값이랑 같을 때
-          // 아이디값이 일치하지 않을 경우
-          // paramr값이 정상적으로 들어오지 않을 경우
+          expect(res.status).toBe(HttpStatus.OK);
         });
     });
     it('변경 전 상태가 예약중이 아닐 경우 - 실패', async () => {
@@ -59,23 +67,6 @@ describe('DisgnosisController', () => {
         .then((res: request.Response) => {
           expect(res.status).toBe(HttpStatus.EXPECTATION_FAILED);
         });
-
-      // it('예약정보가 조회되지 않는다.', async () => {
-      //   request('http://localhost:3001')
-      //     .put('check/:id')
-      //     .then((res: request.Response) => {
-      //       expect(res.statusCode).toBe(404);
-      //       expect(res.body.param).not.toBeNull();
-      //     });
-      // });
-
-      // it('관리지만 요청 가능하다.', async () => {
-      //   request('http://localhost:3001')
-      //     .put('check/:id')
-      //     .then((res: request.Response) => {
-      //       expect(res.statusCode).toBe(200);
-      //     });
-      // });
     });
   });
 

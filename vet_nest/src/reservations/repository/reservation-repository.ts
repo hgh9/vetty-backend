@@ -32,7 +32,7 @@ export class ReservationReposiotory extends Repository<Reservation> {
     return this.findBy(query);
   }
 
-  async getAllReservationByVetId(
+  async getReservationByVetId(
     vetId: number,
     receptionMethod: string,
   ): Promise<Reservation[]> {
