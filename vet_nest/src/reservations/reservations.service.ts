@@ -8,11 +8,10 @@ import { CheckingDateCommand, SetTimeSlotCommand } from './dto/timeslot.dto';
 import { TimeSlotReposiotory } from './repository/timeslot-repository';
 import { FailedPost } from '../../util/exception.util';
 import { Payment } from '@/payments/entity/payments.entity';
-import { Logger } from 'winston';
 
 @Injectable()
 export class ReservationService {
-  logger = new Logger();
+  
   constructor(
     private readonly reservationRepository: ReservationReposiotory,
     private readonly timeSlotRepository: TimeSlotReposiotory,
