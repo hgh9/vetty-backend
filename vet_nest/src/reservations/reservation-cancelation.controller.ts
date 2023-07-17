@@ -3,9 +3,6 @@ import {
   Get,
   Param
 } from '@nestjs/common';
-import { DataSource } from 'typeorm';
-import { Reservation } from './entity/reservation.entity';
-import { ReservationCancelationService } from './reservation-cancelation.service';
 import { ApiTags } from '@nestjs/swagger';
 import { ReservationFacade } from './reservation-facade';
 

@@ -5,6 +5,7 @@ import { IPaymentService } from './payments-service.interface';
 import { PgApiCaller } from './pg-api-caller';
 import { BusinessException } from 'util/exception.util';
 import { CreatePaymentDto } from './dto/create-payment.dto';
+import { SearchPaymentDto } from './dto/search-payment.dto';
 
 @Injectable()
 export class PaymentsService implements IPaymentService {
@@ -14,6 +15,23 @@ export class PaymentsService implements IPaymentService {
     private readonly pgApiCaller: PgApiCaller
   ) {}
 
+  async getPaymentsByUserId(userId: number, searchParam: SearchPaymentDto): Promise<Payment[]> {
+    let query = await this.paymentsRepository
+      .createQueryBuilder('payments')
+      .where(`payments.userId = :id`, {id: userId});
+
+    if (searchParam.startDate && searchParam.endDate) {
+      // query = query
+      //   .andWhere(`paymenets.createdAt >= Date(:startDate)`, 
+      //   {startDate: searchParam.startDate});
+      // query = query
+      //   .andWhere(`Date(paymenets.createdAt) <= Date(:endDate)`, 
+      //   {endDate: searchParam.endDate});
+    }
+    return query.getMany();
+  }
+  
+  
   async create(dto: CreatePaymentDto) {
     
     if (!(dto.reservationId && dto.amount)) {

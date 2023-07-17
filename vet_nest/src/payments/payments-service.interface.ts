@@ -5,7 +5,7 @@ import { PgCancelPaymentRequest } from "./dto/pg-cancel-payment.request";
 import { PgCancelPaymentResponse } from "./dto/pg-cancel-payment.response";
 import { PgPaymentResponse } from "./dto/pg-payment.response";
 export interface IPaymentService {
-  // getPaymentsByUserId(userId: number, searchOption: SearchPaymentDto);
+  getPaymentsByUserId(userId: number, searchOption: SearchPaymentDto): Promise<Payment[]>;
   // getPaymentsByVetId(vetId: number, searchOption: SearchPaymentDto);
   // getPaymentsByReservationId(reservationId: number): Promise<Payment[]>;
   // createPayment(createPaymentDto: object): Promise<Payment>;

@@ -1,5 +1,6 @@
-import { PrimaryGeneratedColumn, Entity, Column, ManyToOne } from 'typeorm';
+import { PrimaryGeneratedColumn, Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Reservation } from '../../reservations/entity/reservation.entity';
+import { User } from '../../users/entity/users.entity';
 
 @Entity()
 export class Payment {
@@ -31,12 +32,19 @@ export class Payment {
   @Column()
   reservationId: number;
 
+  @Column()
+  userId: number;
+
   @ManyToOne(() => Reservation, (reservation) => reservation.payments, {
     nullable: false,
     onDelete: 'CASCADE',
   })
   reservation: Reservation;
 
+  @ManyToOne(() => User, (user) => user)
+  @JoinColumn({ name: 'id' })
+  userInfo?: User;
+  
   isCanceled(): boolean {
     return this.status == PaymentStatus.CANCELD;
   }

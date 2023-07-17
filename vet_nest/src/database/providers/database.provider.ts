@@ -169,7 +169,8 @@ export async function dbInitializeCallback(db: DataSource) {
     method: PaymentMethod.CARD,
     amount: 5000, 
     status: PaymentStatus.COMPLETE,
-    reservationId: 1
+    reservationId: 1, 
+    userId: 1
   }, 
   ]);
 }
