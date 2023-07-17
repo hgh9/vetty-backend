@@ -1,8 +1,6 @@
 import {
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Param
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
@@ -15,7 +13,6 @@ import { ReservationFacade } from './reservation-facade';
 @ApiTags('Reservation-cancelation')
 export class ReservationCancelationController {
   constructor(
-    // private reservationCancelationService: ReservationCancelationService,
     private reservationFacadeService: ReservationFacade
   ) {}
 

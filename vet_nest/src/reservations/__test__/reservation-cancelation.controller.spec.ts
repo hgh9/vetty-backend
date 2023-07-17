@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import * as request from 'supertest';
 
-describe('ReservationCancelationController', () => {
+describe('예약취소 컨트롤러 - ReservationCancelationController', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -42,9 +42,10 @@ describe('ReservationCancelationController', () => {
       //Arrange
       const reservationId = 2;
       //Act
-      const res = await request('http://localhost:3001/')
+      const res = await request('http://localhost:3001')
         .get(`/reservation-cancelation/${reservationId}`);
       //Assert
+      console.log(`error:${JSON.stringify(res)}`);
       expect(res.status).toBe(HttpStatus.FORBIDDEN);
     });
 

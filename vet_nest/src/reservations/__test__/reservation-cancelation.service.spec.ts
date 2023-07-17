@@ -6,7 +6,6 @@ import { Reservation, TreatmentStatus } from '../entity/reservation.entity';
 import { ReservationReposiotory } from '../repository/reservation-repository';
 import { MockReservationRepository } from '../repository/reservation-repository.mock';
 import ReservationCancelationValidator from '../validator/reservation-cancelation.validator';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
 
 describe('예약취소 서비스 - ReservationCancelationService', () => {
   let dataSource: DataSource;
@@ -43,33 +42,34 @@ describe('예약취소 서비스 - ReservationCancelationService', () => {
   });
 
   describe('예약취소 정책', () => {
-    it('예약 Id에 해당하는 예약 정보가 없을 경우, NotFoundException을 발생 시킨다.', () => {
+    it('예약 Id에 해당하는 예약 정보가 없을 경우, 404 Error가 발생된다.', () => {
       try {
         ReservationCancelationValidator.validate(null);
       } catch (e) {
-        expect(e.name).toEqual(NotFoundException.name);
+        console.log(`e: ${JSON.stringify(e)}`);
+        expect(e.stack).toEqual('404');
         expect(e.message).toEqual('예약정보를 찾을 수 없습니다.');
       }
     });
 
-    it('예약 시간까지 남은 시간이 한 시간 이내인 경우 ForbiddenException을 발생시킨다.', async () => {
+    it('예약 시간까지 남은 시간이 한 시간 이내인 경우 403 Error가 발생된다.', async () => {
       const reservation = await repository.getReservationById(2);
       try {
         ReservationCancelationValidator.validate(reservation);
         throw Error('');
       } catch (e) {
-        expect(e.name).toEqual(ForbiddenException.name);
+        expect(e.stack).toEqual('403');
         expect(e.message).toEqual('취소 가능 시간이 아닙니다.');
       }
     });
 
-    it('예약완료 상태가 아닌 경우 ForbiddenException을 발생시킨다.', async () => {
+    it('예약완료 상태가 아닌 경우 403 Error가 발생된다.', async () => {
       const reservation = await repository.getReservationById(3);
       try {
         ReservationCancelationValidator.validate(reservation);
         throw Error('');
       } catch (e) {
-        expect(e.name).toEqual(ForbiddenException.name);
+        expect(e.stack).toEqual('403');
         expect(e.message).toEqual('취소 가능 상태가 아닙니다.');
       }
     });
