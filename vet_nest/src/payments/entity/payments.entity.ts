@@ -41,8 +41,8 @@ export class Payment {
   })
   reservation: Reservation;
 
-  @ManyToOne(() => User, (user) => user)
-  @JoinColumn({ name: 'id' })
+  @ManyToOne(() => User, (user) => user.id)
+  @JoinColumn({ name: 'userId' })
   userInfo?: User;
   
   isCanceled(): boolean {
