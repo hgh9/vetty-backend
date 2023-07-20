@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Put,
-  UseFilters,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Put } from '@nestjs/common';
 
 import { DiagnosisService } from './diagnosis.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -18,14 +10,8 @@ export class DisgnosisController {
   constructor(private DiagnosisService: DiagnosisService) {}
 
   @Get(':vetId/reservations')
-  async getAllReservation(
-    @Param('vetId') vetId: number,
-    @Body('receptionMethod') receptionMethod: string,
-  ) {
-    const result = await this.DiagnosisService.getAllReservation(
-      vetId,
-      receptionMethod,
-    );
+  async getAllReservation(@Param('vetId') vetId: number) {
+    const result = await this.DiagnosisService.getAllReservation(vetId);
     return {
       result: result,
       message: '예약조회가 완료되었습니다.',
@@ -33,13 +19,13 @@ export class DisgnosisController {
   }
 
   @Put('/:reservationId')
-  async updateReservaionStatus(@Param('reservationId') reservationId: number) {
-    const result = await this.DiagnosisService.updateReservaionStatus(
+  async updateTreatmnetStatus(@Param('reservationId') reservationId: number) {
+    const result = await this.DiagnosisService.updateTreatmnetStatus(
       reservationId,
     );
     return {
       result: result,
-      message: '상태변경이 완료 되었습니다.',
+      message: '진료중으로 변경되었습니다.',
     };
   }
 
@@ -58,10 +44,10 @@ export class DisgnosisController {
     };
   }
 
-  @Get(':vetId/vetlist') //병원의 진료목록조회
+  @Get(':vetId/:treatmentStatus') //병원의 진료목록조회
   async getAllDiagnosis(
-    @Param('vetId') vetId: number,
-    @Body('treatmentStatus') treatmentStatus: number,
+    @Param('vetId,treatmentStatus') vetId: number,
+    treatmentStatus: number,
   ) {
     const result = await this.DiagnosisService.getAllDiagnosis(
       vetId,
@@ -71,7 +57,6 @@ export class DisgnosisController {
       result: result,
       message: '진료목록 조회 완료되었습니다.',
     };
-    //파라미터값 에러
   }
 
   // @Post('/:reservationId/payments') // 진료비 결제 요청
@@ -85,7 +70,7 @@ export class DisgnosisController {
   //   };
   // }
 
-  @Get('/:userId/diagnosis') // 고객의 진료 목록 조회 //예약빼고
+  @Get('/:userId/diagnosis') // 고객의 진료 목록 조회
   async getDiagnosisListByUser(@Param('userId') userId: number) {
     const result = await this.DiagnosisService.getDiagnosisByUser(userId);
     return {
@@ -95,15 +80,8 @@ export class DisgnosisController {
   }
 
   @Get('/:userId/diagnosis/detail') // 고객의 진료 상세 조회
-  async getDetailDiagnosisByUser(
-    @Param() param: { userId: number },
-    @Body() body: { reservationid: number; treatmentStatus: number },
-  ) {
-    const result = await this.DiagnosisService.getDiagnosisDetail(
-      param.userId,
-      body.reservationid,
-      body.treatmentStatus,
-    );
+  async getDetailDiagnosisByUser(@Param() param: { userId: number }) {
+    const result = await this.DiagnosisService.getDiagnosisDetail(param.userId);
     return {
       result: result,
       message: `${param.userId}의 진료 상세 내역을 조회하였습니다.`,

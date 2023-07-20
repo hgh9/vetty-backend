@@ -1,5 +1,5 @@
 import { DataSource, EntityRepository, Raw, Repository } from 'typeorm';
-import { Reservation } from '../entity/reservation.entity';
+import { ReceptionMethod, Reservation } from '../entity/reservation.entity';
 import { Inject, Injectable } from '@nestjs/common';
 
 @EntityRepository(Reservation)
@@ -32,21 +32,15 @@ export class ReservationReposiotory extends Repository<Reservation> {
     return this.findBy(query);
   }
 
-  async getReservationByVetId(
-    vetId: number,
-    receptionMethod: string,
-  ): Promise<Reservation[]> {
+  async getReservationByVetId(vetId: number): Promise<Reservation[]> {
     return await this.createQueryBuilder('reservation')
       .where('reservation.vetId = :vetId', { vetId: vetId })
-      .andWhere('reservation.receptionMethod = :receptionMethod', {
-        receptionMethod,
-      })
       .getMany();
   }
 
-  async updateReservaionStatusById(reservationId: number) {
-    return this.findOneBy({
-      id: reservationId,
-    });
-  }
+  // async updateReservaionStatusById(reservationId: number) {
+  //   return this.findOneBy({
+  //     id: reservationId,
+  //   });
+  // }
 }

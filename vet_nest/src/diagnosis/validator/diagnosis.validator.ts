@@ -5,32 +5,33 @@ import {
 import { BadRequestException } from '@nestjs/common';
 
 export default class ReservationValidator {
-  static reservationValidate(allReservation, receptionMethod) {
+  static reservationValidate(allReservation) {
     if (allReservation.length === 0) {
       throw new BadRequestException('존재하지 않는 병원입니다.');
     }
-    if (receptionMethod !== ReceptionMethod.RESERVATION) {
-      throw new BadRequestException('예약 접수가 아닙니다.');
-    }
+
     return true;
   }
 
   static ReservationStatusvalidate(reservationStatus) {
+    console.log(reservationStatus);
     const result = this.checkReservationStatus_cancle(reservationStatus.status);
     return result;
   }
 
   static checkReservationStatus_cancle(reservationStatus: number) {
-    if (reservationStatus === TreatmentStatus.RESERVATION_COMPLETED) {
+    console.log(reservationStatus);
+    console.log(TreatmentStatus.RESERVATION_COMPLETED);
+    if (reservationStatus === TreatmentStatus.IN_TREATMENT) {
       throw new BadRequestException('진료 중인 상태입니다.');
     }
-    if (reservationStatus === TreatmentStatus.RESERVATION_COMPLETED) {
+    if (reservationStatus === TreatmentStatus.TREATMENT_COMPLETED) {
       throw new BadRequestException('진료 완료 상태입니다.');
     }
-    if (reservationStatus === TreatmentStatus.RESERVATION_COMPLETED) {
+    if (reservationStatus === TreatmentStatus.RESERVATION_CANCELED) {
       throw new BadRequestException('예약이 취소된 상태입니다.');
     }
-    if (reservationStatus === TreatmentStatus.RESERVATION_CANCELED) {
+    if (reservationStatus === TreatmentStatus.TREATMENT_CANCELED) {
       throw new BadRequestException('진료가 취소된 상태입니다.');
     }
     return true;

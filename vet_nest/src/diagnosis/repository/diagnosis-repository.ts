@@ -1,4 +1,7 @@
-import { Reservation } from '../../reservations/entity/reservation.entity';
+import {
+  Reservation,
+  TreatmentStatus,
+} from '../../reservations/entity/reservation.entity';
 import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
@@ -33,26 +36,23 @@ export class DiagnosisRepository {
     return list;
   }
 
-  // async getDiagnosisByUser(userId: number) {
-  //   const list = await this.reservationRepository
-  //     .createQueryBuilder('reservation')
-  //     .where('reservation.id = :userId', { userId })
-  //     .getMany();
+  async getDiagnosisByuserId(userId: number) {
+    const list = await this.reservationRepository
+      .createQueryBuilder('reservation')
+      .where('reservation.userId = :userId', { userId })
+      // .andWhere('reservation.status = :status', {
+      //   status: TreatmentStatus.TREATMENT_COMPLETED,
+      // })
+      .getMany();
 
-  //   return list;
-  // }
+    return list;
+  }
 
   // 진료내역가져와야해
-  async getDiagnosisDetailByUser(userId, treatmentStatus) {
+  async getDiagnosisDetailByUser(userId) {
     const list = await this.reservationRepository
       .createQueryBuilder('reservation')
       .where('reservation.id = :userId', { userId })
-      .andWhere('reservation.treatmentStatus = :treatmentStatus', {
-        treatmentStatus,
-      })
-      .andWhere('reservation.treatmentStatus = :treatmentStatus', {
-        treatmentStatus,
-      })
       .getMany();
 
     return list;

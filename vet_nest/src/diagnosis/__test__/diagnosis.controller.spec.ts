@@ -23,21 +23,18 @@ describe('DisgnosisController', () => {
     it('정상적으로 조회된 경우 200을 반환한다. ', async () => {
       const vetId = 1;
       request('http://localhost:3001')
-        .get(`/diagnosis/${vetId}/reservation`)
-        .send({ receptionMethod: ReceptionMethod.RESERVATION })
-
+        .get(`/diagnosis/${vetId}/reservations`)
         .then((res: request.Response) => {
           expect(res.status).toBe(HttpStatus.OK);
         });
     });
 
     it('예약 목록이 없을 경우 400을 반환한다. ', async () => {
-      const vetId = 2;
+      const vetId = 1;
       request('http://localhost:3001')
-        .get(`/diagnosis/${vetId}/reservation`)
-        .send({ receptionMethod: ReceptionMethod.RESERVATION })
+        .get(`/diagnosis/${vetId}/reservations`)
         .then((res: request.Response) => {
-          expect(res.status).toBe(HttpStatus.EXPECTATION_FAILED);
+          expect(res.status).toBe(400);
         });
     });
 

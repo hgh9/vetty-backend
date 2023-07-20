@@ -23,17 +23,14 @@ export class DiagnosisService {
     this.treatmentRepository = this.dataSource.getRepository(TreatmentResult);
   }
 
-  public async getAllReservation(vetId: number, receptionMethod: string) {
+  public async getAllReservation(vetId: number) {
     const allReservation =
-      await this.reservationRepository.getReservationByVetId(
-        vetId,
-        receptionMethod,
-      );
+      await this.reservationRepository.getReservationByVetId(vetId);
+    console.log('여기', allReservation);
     const isValid = await ReservationValidator.reservationValidate(
       allReservation,
-
-      receptionMethod,
     );
+
     try {
       if (isValid) {
         return allReservation;
@@ -43,7 +40,7 @@ export class DiagnosisService {
     }
   }
 
-  public async updateReservaionStatus(reservationId: number) {
+  public async updateTreatmnetStatus(reservationId: number) {
     const reservationStatus =
       await this.reservationRepository.getReservationById(reservationId);
 
@@ -141,7 +138,7 @@ export class DiagnosisService {
   }
 
   public async getDiagnosisByUser(userId: number) {
-    const diagnosisByUser = await this.reservationRepository.getReservationById(
+    const diagnosisByUser = await this.diagnosisRepository.getDiagnosisByuserId(
       userId,
     );
     const isValid = await ReservationValidator.DiagnosisByUser(diagnosisByUser);
@@ -155,16 +152,9 @@ export class DiagnosisService {
     }
   }
 
-  public async getDiagnosisDetail(
-    userId: number,
-    reservationId: number,
-    treatmentStatus: number,
-  ) {
+  public async getDiagnosisDetail(userId: number) {
     const diagnosisDetail =
-      await this.diagnosisRepository.getDiagnosisDetailByUser(
-        userId,
-        treatmentStatus,
-      );
+      await this.diagnosisRepository.getDiagnosisDetailByUser(userId);
 
     const isValid = await ReservationValidator.DiagnosisDetailByUser(
       diagnosisDetail,
