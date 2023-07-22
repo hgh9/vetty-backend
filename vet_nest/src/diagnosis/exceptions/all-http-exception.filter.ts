@@ -1,17 +1,21 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from "@nestjs/common";
 import { BaseError } from "util/exception.util";
+import { Logger } from '@nestjs/common';
 
 @Catch(BaseError)
 export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: BaseError, host: ArgumentsHost): void {
     
+    const logger = new Logger();
+    logger.error(`business exception: ${JSON.stringify(exception)}`);
+
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
     let status = (exception.stack && parseInt(exception.stack) != Number.NaN) 
       ? parseInt(exception.stack) 
       : 500;
-
+    
     response.status(status).json({
       error: exception.data,
       message: exception.message,
