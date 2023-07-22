@@ -35,6 +35,11 @@ spec:
         image: headitapps.azurecr.io/hgh9/vetty-backend:latest
         ports:
         - containerPort: 3001
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            cpu: 200m
         # env:
         # - name: NODE_ENV
         #   value: "production"

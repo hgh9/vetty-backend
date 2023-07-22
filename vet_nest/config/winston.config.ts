@@ -50,6 +50,7 @@ export const winstonSetting = {
       }),
       new AzureApplicationInsightsLogger({
         key: config().AZURE.AZURE_INSTRUMENT_KEY,
+        sendErrorsAsExceptions: true
       }),
     ],
   }),
