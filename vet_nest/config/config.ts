@@ -6,25 +6,22 @@ import { TimeSlot } from '../src/vets/entity/timeslot.entity';
 import * as dotenv from 'dotenv';
 import { TreatmentResult } from '@/diagnosis/entity/TreatmentResult.entity';
 import { Payment } from '../src/payments/entity/payments.entity';
-dotenv.config({ path: './../.env' });
+dotenv.config({ path: './.env' });
 
 export default () => ({
   MODE: process.env.REACT_APP_ENV,
   DB: {
-    type: process.env.DB_TYPE === 'mariadb' ? 'mariadb' : 'mysql',
-    host:
-      process.env.REACT_APP_ENV === 'local'
-        ? '127.0.0.1'
-        : process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT),
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
+    type: 'mariadb',
+    host: 'hanghae-vet-db.mariadb.database.azure.com',
+    port: 3306,
+    username: 'hanghae@hanghae-vet-db',
+    password: 'gkdgovmffjtm9wh@@',
+    database: 'test',
     timezone: '+00:00',
     // entities: ['dist/**/*.entity.js'],
     // logging: Boolean(JSON.parse(process.env.DB_LOGGING)),
     logging: true,
-    synchronize: process.env.DB_SYNCHRONIZE === 'true' ? true : false,
+    synchronize: true,
     entities: [User, Pet, Vet, TimeSlot, Reservation, Payment, TreatmentResult],
   },
 

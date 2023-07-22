@@ -15,11 +15,6 @@ import {
   ReceptionMethod,
   TreatmentStatus,
 } from '../entity/reservation.entity';
-import { PetDto } from '../../pets/dto/pet.dto';
-import { VetDto } from '../../vets/dto/vet.dto';
-import { ReservationUserDto, UserDto } from '../../users/dto/user.dto';
-import { TimeSlot } from '../../vets/entity/timeslot.entity';
-import { Payment } from '../entity/payment.entity';
 import { Type } from 'class-transformer';
 import { PaymentDto } from '../../payments/dto/payment.dto';
 import { TimeSlotDto } from './timeslot.dto';

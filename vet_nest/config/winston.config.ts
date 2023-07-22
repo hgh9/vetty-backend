@@ -48,9 +48,9 @@ export const winstonSetting = {
         maxSize: '20m',
         maxFiles: '14d',
       }),
-      new AzureApplicationInsightsLogger({
-        key: config().AZURE.AZURE_INSTRUMENT_KEY,
-      }),
+      // new AzureApplicationInsightsLogger({
+      //   key: config().AZURE.AZURE_INSTRUMENT_KEY,
+      // }),
     ],
   }),
 };

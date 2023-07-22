@@ -35,9 +35,9 @@ export class Payment {
   @Column()
   userId: number;
 
-  @ManyToOne(() => Reservation, (reservation) => reservation.payments, {
-    nullable: false,
-    onDelete: 'CASCADE',
+  @ManyToOne(() => Reservation, (reservation) => reservation.id)
+  @JoinColumn({
+    name: 'reservationId'
   })
   reservation: Reservation;
 

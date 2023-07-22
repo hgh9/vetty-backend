@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vet-backend-svc
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  selector:
+    app: vet-backend
+  
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vet-backend
+  labels:
+    app: vet-backend
+spec:
+  selector:
+    matchLabels:
+      app: vet-backend
+  template:
+    metadata:
+      labels:
+        app: vet-backend
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: vet-backend
+        image: headit.azurecr.io/vetty-backend-backend:latest
+        ports:
+        - containerPort: 3000
+        # env:
+        # - name: NODE_ENV
+        #   value: "production"
+        
+        # imagePullPolicy: Always
+      # serviceAccountName: default

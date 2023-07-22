@@ -63,11 +63,11 @@ export class Reservation {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt?: Date;
 
-  @ManyToOne(() => TimeSlot, (slot) => slot)
+  @ManyToOne(() => TimeSlot, (slot) => slot.id)
   @JoinColumn({ name: 'slotId' })
   slotInfo?: TimeSlot;
 
-  @ManyToOne(() => Pet, (pet) => pet)
+  @ManyToOne(() => Pet, (pet) => pet.petId)
   @JoinColumn({ name: 'petId' })
   petInfo?: Pet;
 
