@@ -32,7 +32,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: vet-backend
-        image: headitapp.azurecr.io/vetty-backend:latest
+        image: headitapps.azurecr.io/vetty-backend:latest
         ports:
         - containerPort: 3000
         # env:
