@@ -15,16 +15,11 @@ export class ReservationCancelationService {
 
   async cancelReservation(reservationId: number): Promise<Reservation> {
     const reservation = await this.reservationRepository.getReservationById(reservationId);
-    try {
-      const isValid = await ReservationCancelationValidator.validate(reservation);
-      if (isValid) {
-        reservation.cancel();  
-        this.reservationRepository.save(reservation);
-      }
-      return Promise.resolve(reservation);
+    const isValid = await ReservationCancelationValidator.validate(reservation);
+    if (isValid) {
+      reservation.cancel();  
+      this.reservationRepository.save(reservation);
     }
-    catch(e) {
-      throw e;
-    }
+    return Promise.resolve(reservation);
   }
 }
